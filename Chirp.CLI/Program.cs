@@ -3,7 +3,6 @@
     if (args.Length < 2 || args[1] == "")
     {
         throw new Exception("What is your message?");
-        return;
     }
     
 
