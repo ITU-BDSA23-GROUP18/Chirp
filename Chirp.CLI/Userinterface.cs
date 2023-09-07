@@ -1,9 +1,9 @@
 namespace Chirp.CLI;
 
-static class Userinterface{
-    static void PrintCheeps(IEnumerable<Cheep> cheeps){
+public static class Userinterface{
+    public static void PrintCheeps(IEnumerable<Cheep> cheeps){
 
-        cheeps.Read().ToList().ForEach(cheep =>
+        cheeps.ToList().ForEach(cheep =>
         {
         Console.WriteLine($"{cheep.Author} @ {cheep.Timestamp}: {cheep.Message}");
         });

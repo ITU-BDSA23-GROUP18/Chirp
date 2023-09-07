@@ -5,8 +5,7 @@ IDatabaseRepository<Cheep> databaseRepository = new CSVDatabase<Cheep>();
 
 
 if (args[0] == "read")
-{
-
+{   
     // Read cheeps
     Userinterface.PrintCheeps(databaseRepository.Read());
 }
