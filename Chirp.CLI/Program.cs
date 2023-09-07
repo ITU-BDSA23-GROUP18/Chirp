@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Chirp.CLI;
+﻿using Chirp.CLI;
 using SimpleDB;
 
 IDatabaseRepository<Cheep> databaseRepository = new CSVDatabase<Cheep>();
