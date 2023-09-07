@@ -3,13 +3,12 @@ using SimpleDB;
 
 IDatabaseRepository<Cheep> databaseRepository = new CSVDatabase<Cheep>();
 
+
 if (args[0] == "read")
 {
+
     // Read cheeps
-    databaseRepository.Read().ToList().ForEach(cheep =>
-    {
-        Console.WriteLine($"{cheep.Author} @ {cheep.Timestamp}: {cheep.Message}");
-    });   
+    Userinterface.PrintCheeps(databaseRepository.Read());
 }
 
 // Post a cheep
