@@ -16,9 +16,7 @@ Options:
 ";
 
 var arguments = new Docopt().Apply(usage, args, version: "Chirp 0.1", exit: true)!;
-foreach (var (key, value) in arguments)
-    Console.WriteLine("{0} = {1}", key, value);
-    
+
 IDatabaseRepository<Cheep> databaseRepository = new CSVDatabase<Cheep>();
 
 if (arguments["read"].IsTrue)
