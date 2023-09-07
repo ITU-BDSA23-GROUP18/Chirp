@@ -21,11 +21,9 @@ IDatabaseRepository<Cheep> databaseRepository = new CSVDatabase<Cheep>();
 
 if (arguments["read"].IsTrue)
 {
+
     // Read cheeps
-    databaseRepository.Read().ToList().ForEach(cheep =>
-    {
-        Console.WriteLine($"{cheep.Author} @ {cheep.Timestamp}: {cheep.Message}");
-    });   
+    Userinterface.PrintCheeps(databaseRepository.Read());
 }
 
 // Post a cheep
@@ -37,7 +35,9 @@ if (arguments["cheep"].IsTrue)
     {
         throw new Exception("What is your message?");
     }
-    var cheep = new Cheep(Environment.UserName, arguments["<message>"].ToString(), DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+
+    var cheep = Userinterface.CreateCheep(args[1]); 
+
     databaseRepository.Store(cheep);
     //store the data
     
