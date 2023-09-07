@@ -36,7 +36,7 @@ if (arguments["cheep"].IsTrue)
         throw new Exception("What is your message?");
     }
 
-    var cheep = Userinterface.CreateCheep(args[1]); 
+    var cheep = Userinterface.CreateCheep(arguments["<message>"].ToString()); 
 
     databaseRepository.Store(cheep);
     //store the data
