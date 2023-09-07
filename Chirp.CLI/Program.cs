@@ -19,7 +19,7 @@ if (args[0] == "cheep")
     {
         throw new Exception("What is your message?");
     }
-    var cheep = new Cheep(Environment.UserName, args[1], DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+    var cheep = Userinterface.CreateCheep(args[1]); 
     databaseRepository.Store(cheep);
     //store the data
     
