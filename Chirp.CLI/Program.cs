@@ -1,9 +1,27 @@
 ﻿using Chirp.CLI;
 using SimpleDB;
+using DocoptNet;
 
+const string usage = @"Chirp.
+
+Usage:
+  chirp.exe cheep <message>
+  chirp.exe read
+ 
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+
+";
+
+var arguments = new Docopt().Apply(usage, args, version: "Chirp 0.1", exit: true)!;
+foreach (var (key, value) in arguments)
+    Console.WriteLine("{0} = {1}", key, value);
+    
 IDatabaseRepository<Cheep> databaseRepository = new CSVDatabase<Cheep>();
 
-if (args[0] == "read")
+if (arguments["read"].IsTrue)
 {
     // Read cheeps
     databaseRepository.Read().ToList().ForEach(cheep =>
@@ -13,15 +31,15 @@ if (args[0] == "read")
 }
 
 // Post a cheep
-if (args[0] == "cheep")
+if (arguments["cheep"].IsTrue)
 {
     
     // Check for enough command line arguments
-    if (args.Length < 2 || args[1] == "")
+    if (arguments["<message>"].IsNullOrEmpty || arguments["<message>"].ToString() == "")
     {
         throw new Exception("What is your message?");
     }
-    var cheep = new Cheep(Environment.UserName, args[1], DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+    var cheep = new Cheep(Environment.UserName, arguments["<message>"].ToString(), DateTimeOffset.UtcNow.ToUnixTimeSeconds());
     databaseRepository.Store(cheep);
     //store the data
     
