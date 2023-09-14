@@ -41,7 +41,6 @@ jobs:
         run: dotnet publish --runtime osx-arm64 --self-contained
         run: zip -r osx-arm64.zip SimpleDB/bin/Debug/net7.0/osx-arm64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/
         working-directory: src
-
       
       - name: Release
         uses: softprops/action-gh-release@v1
