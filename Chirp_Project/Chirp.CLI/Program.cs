@@ -29,16 +29,16 @@ if (arguments["read"].IsTrue)
 // Post a cheep
 if (arguments["cheep"].IsTrue)
 {
-    
+
     // Check for enough command line arguments
     if (arguments["<message>"].IsNullOrEmpty || arguments["<message>"].ToString() == "")
     {
         throw new Exception("What is your message?");
     }
 
-    var cheep = Userinterface.CreateCheep(arguments["<message>"].ToString()); 
+    var cheep = Userinterface.CreateCheep(arguments["<message>"].ToString());
 
     databaseRepository.Store(cheep);
     //store the data
-    
+
 }
