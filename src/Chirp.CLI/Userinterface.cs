@@ -10,9 +10,4 @@ public static class Userinterface
             Console.WriteLine($"{cheep.Author} @ {cheep.Timestamp}: {cheep.Message}");
         });
     }
-    public static Cheep CreateCheep(string message)
-    {
-        var cheep = new Cheep(Environment.UserName, message, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-        return cheep;
-    }
 }
