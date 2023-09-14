@@ -10,8 +10,44 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: build and test
-        uses: ./.github/workflows/build_and_test.yml
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: src
+      - name: Build
+        run: dotnet build --no-restore
+        working-directory: src
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+        working-directory: src
 
-      #- name: Release
-      #  uses: softprops/action-gh-release@v1
+      - name: Publish Linux
+        run: dotnet publish --runtime linux-x64 --self-contained
+        run: zip -r linux.zip SimpleDB/bin/Debug/net7.0/linux-x64/publish/ Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/
+        working-directory: src
+      - name: Publish Windows
+        run: dotnet publish --runtime win-x64 --self-contained
+        run: zip -r windows.zip SimpleDB/bin/Debug/net7.0/win-x64/publish/ Chirp.CLI/bin/Debug/net7.0/win-x64/publish/
+        working-directory: src
+      - name: Publish OSX x64
+        run: dotnet publish --runtime osx-x64 --self-contained
+        run: zip -r osx-64.zip SimpleDB/bin/Debug/net7.0/osx-x64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/
+        working-directory: src
+      - name: Publish OSX arm
+        run: dotnet publish --runtime osx-arm64 --self-contained
+        run: zip -r osx-arm64.zip SimpleDB/bin/Debug/net7.0/osx-arm64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/
+        working-directory: src
+      
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            linux.zip
+            windows.zip
+            osx-64.zip
+            osx-arm64.zip
+        working-directory: src
