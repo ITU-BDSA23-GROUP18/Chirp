@@ -26,22 +26,26 @@ jobs:
         working-directory: src
 
       - name: Publish Linux
-        run: dotnet publish --runtime linux-x64 --self-contained
-        run: zip -r linux.zip SimpleDB/bin/Debug/net7.0/linux-x64/publish/ Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/
+        run: |
+          dotnet publish --runtime linux-x64 --self-contained
+          zip -r linux.zip SimpleDB/bin/Debug/net7.0/linux-x64/publish/ Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/
         working-directory: src
       - name: Publish Windows
-        run: dotnet publish --runtime win-x64 --self-contained
-        run: zip -r windows.zip SimpleDB/bin/Debug/net7.0/win-x64/publish/ Chirp.CLI/bin/Debug/net7.0/win-x64/publish/
+        run: |
+          dotnet publish --runtime win-x64 --self-contained
+          zip -r windows.zip SimpleDB/bin/Debug/net7.0/win-x64/publish/ Chirp.CLI/bin/Debug/net7.0/win-x64/publish/
         working-directory: src
       - name: Publish OSX x64
-        run: dotnet publish --runtime osx-x64 --self-contained
-        run: zip -r osx-64.zip SimpleDB/bin/Debug/net7.0/osx-x64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/
+        run: |
+          dotnet publish --runtime osx-x64 --self-contained
+          zip -r osx-64.zip SimpleDB/bin/Debug/net7.0/osx-x64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/
         working-directory: src
       - name: Publish OSX arm
-        run: dotnet publish --runtime osx-arm64 --self-contained
-        run: zip -r osx-arm64.zip SimpleDB/bin/Debug/net7.0/osx-arm64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/
+        run: |
+          dotnet publish --runtime osx-arm64 --self-contained
+          zip -r osx-arm64.zip SimpleDB/bin/Debug/net7.0/osx-arm64/publish/ Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/
         working-directory: src
-      
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
