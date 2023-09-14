@@ -35,6 +35,7 @@ public class ReadAndWriteCheep
     public void Delete_Cheep_From_Database()
     {
         var controller = new CSVDatabase<Cheep>();
+        controller.Delete(_cheep4);
 
         var actual = controller.Read();
         var expected = new List<Cheep>(){_cheep1, _cheep2, _cheep3};
@@ -57,5 +58,7 @@ public class ReadAndWriteCheep
         var expected = new List<Cheep>(){_cheep1, _cheep2, _cheep3, _cheep4, _cheepTest};
 
         Assert.Equal(expected, actual);
+        
+        controller.Delete(_cheepTest);
     }
 }
