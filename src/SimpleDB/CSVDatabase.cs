@@ -35,7 +35,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         }
     }
     
-    public IEnumerable<T> Read(int? limit = null)
+    public IEnumerable<T> Read(int limit)
     {
         using var reader = new StreamReader(_path);
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
