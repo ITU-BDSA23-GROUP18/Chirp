@@ -2,7 +2,8 @@ namespace SimpleDB;
 using CsvHelper;
 using System.Globalization;
 
-public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
+public sealed class CSVDatabase<T> : IDatabaseRepository<T>
+{
     private static CSVDatabase<T>? instance = null;
     private static readonly object padlock = new object();
 
@@ -13,7 +14,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
     {
         get
         {
-            lock(padlock)
+            lock (padlock)
             {
                 if (instance == null)
                 {
@@ -21,7 +22,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
                 }
                 return instance;
             }
-            
+
         }
     }
     public IEnumerable<T> Read(int? limit = null)
@@ -31,7 +32,8 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
         var records = csv.GetRecords<T>().ToList();
         return records;
     }
-    public void Store(T record){
+    public void Store(T record)
+    {
         using (var writer = new StreamWriter("../chirp_cli_db.csv", append: true))
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
         {
