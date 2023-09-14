@@ -1,7 +1,29 @@
 namespace SimpleDB;
 using CsvHelper;
 using System.Globalization;
+
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
+    private static CSVDatabase<T>? instance = null;
+    private static readonly object padlock = new object();
+
+    /*
+    https://csharpindepth.com/articles/singleton
+    */
+    public static CSVDatabase<T> Instance
+    {
+        get
+        {
+            lock(padlock)
+            {
+                if (instance == null)
+                {
+                    instance = new CSVDatabase<T>();
+                }
+                return instance;
+            }
+            
+        }
+    }
     public IEnumerable<T> Read(int? limit = null)
     {
         using var reader = new StreamReader("../chirp_cli_db.csv");
