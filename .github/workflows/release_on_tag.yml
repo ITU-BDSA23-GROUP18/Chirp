@@ -1,0 +1,17 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build and test
+        uses: ./.github/workflows/build_and_test.yml
+
+      #- name: Release
+      #  uses: softprops/action-gh-release@v1
