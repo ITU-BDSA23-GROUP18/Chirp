@@ -54,4 +54,3 @@ jobs:
             windows.zip
             osx-64.zip
             osx-arm64.zip
-        working-directory: src
