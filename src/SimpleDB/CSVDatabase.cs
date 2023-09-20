@@ -39,8 +39,18 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
         using var reader = new StreamReader(_path);
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        var records = csv.GetRecords<T>().ToList();
-        return records;
+        csv.Read();
+        csv.ReadHeader();
+        int i = 0;
+        while (csv.Read())
+        {
+            if (limit != 0) i++;
+            if (i > limit) yield break;
+            var record = csv.GetRecord<T>();
+            if (record != null) {
+                yield return record;
+            }
+        }
     }
     
     public void Store(T record)
