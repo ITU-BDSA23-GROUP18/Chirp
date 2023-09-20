@@ -1,0 +1,14 @@
+Critical:
+    - '(critical|urgent)'
+
+Bug-fix:
+    - '(bug|fix)'
+
+Refactoring:
+    - '/(refactoring|refactor|restructure|restructuring)/i'
+
+Feature:
+    - '/(add|feature)/i'
+
+Improvement:
+    - '/(use|update|automate)/i'
