@@ -6,7 +6,7 @@ const string usage = @"Chirp.
 
 Usage:
   chirp.exe cheep <message>
-  chirp.exe read
+  chirp.exe read [<readLimit>]
 
 Options:
   -h --help     Show this screen.
@@ -20,8 +20,12 @@ IDatabaseRepository<Cheep> databaseRepository = CSVDatabase<Cheep>.Instance;
 
 if (arguments["read"].IsTrue)
 {
+    int limit = 0;
+    if (!arguments["<readLimit>"].IsNullOrEmpty) {
+        limit = int.Parse(arguments["<readLimit>"].ToString());
+    } 
     // Read cheeps
-    Userinterface.PrintCheeps(databaseRepository.Read());
+    Userinterface.PrintCheeps(databaseRepository.Read(limit));
 }
 
 // Post a cheep
