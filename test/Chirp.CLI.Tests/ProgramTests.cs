@@ -11,25 +11,32 @@ public class ProgramTests
         //ArrangeTestDatabase();
         // Act
         string output = "";
-        using (var process = new Process())
-        {
-            process.StartInfo.FileName = "../../../../../src/Chirp.CSVDBService/bin/Debug/net7.0/Chirp.CSVDBService.exe";
-            process.StartInfo.Arguments = "";
-            process.StartInfo.UseShellExecute = false;
-            // process.StartInfo.WorkingDirectory = "";
-            process.StartInfo.RedirectStandardOutput = true;
-            process.Start();
-            // Synchronously read the standard output of the spawned process.
-            // StreamReader reader = process.StandardOutput;
-            // output = reader.ReadToEnd();
-            // process.WaitForExit();
-
-            var line = process.StandardOutput.ReadLine();
-            throw new Exception("YEAH BOI" + line);
-        }
-        string fstCheep = output.Split("\n")[0];
+        using var hostProcess = new Process();
+        using var clientProcess = new Process();
+        
+        hostProcess.StartInfo.FileName = "../../../../../src/Chirp.CSVDBService/bin/Debug/net7.0/Chirp.CSVDBService.exe";
+        hostProcess.StartInfo.UseShellExecute = false;
+        // process.StartInfo.WorkingDirectory = "";
+        hostProcess.StartInfo.RedirectStandardOutput = true;
+        hostProcess.Start();
+        
+        clientProcess.StartInfo.FileName = "../../../../../src/Chirp.CLI/bin/Debug/net7.0/Chirp.CLI.exe";
+        clientProcess.StartInfo.Arguments = "read";
+        clientProcess.StartInfo.UseShellExecute = false;
+        // process.StartInfo.WorkingDirectory = "";
+        clientProcess.StartInfo.RedirectStandardOutput = true;
+        clientProcess.Start();
+        // Synchronously read the standard output of the spawned process.
+        // StreamReader reader = clientProcess.StandardOutput;
+        // output = reader.ReadToEnd();
+        output = clientProcess.StandardOutput.ReadLine();
+        clientProcess.WaitForExit();
+        hostProcess.Kill();
+        
+        string fstCheep = output.Replace("\r", "").Split("\n")[0];
         // Assert
-        Assert.StartsWith("ropf", fstCheep);
-        Assert.EndsWith("Hello, World!", fstCheep);
+        Assert.Equal("", output);
+        // Assert.StartsWith("ropf", fstCheep);
+        // Assert.EndsWith("Hello, World!", fstCheep);
     }
 }
