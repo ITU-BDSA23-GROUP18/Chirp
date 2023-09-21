@@ -7,7 +7,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     private static CSVDatabase<T>? _instance;
     private readonly string _path;
 
-    private CSVDatabase(string path)
+    public CSVDatabase(string path)
     {
         _path = path;
     }
@@ -50,6 +50,24 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         {
             csv.WriteRecord(record);
             csv.NextRecord();
+        }
+    }
+    
+    public void Delete(T record)
+    {
+        var cheeps = Read(0);
+        var newCheeps = new List<T>();
+        foreach (var cheep in cheeps)
+        {
+            if (!cheep!.Equals(record)) 
+            { 
+                newCheeps.Add(cheep); 
+            }
+        }
+        using (var writer = new StreamWriter(Path.GetFullPath(_path), append: false))
+        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+        {
+            csv.WriteRecords(newCheeps);
         }
     }
 }
