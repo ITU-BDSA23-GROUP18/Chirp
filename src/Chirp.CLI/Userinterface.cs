@@ -6,7 +6,7 @@ public static class Userinterface
     {
         cheeps.ToList().ForEach(cheep =>
         {
-            Console.WriteLine($"{cheep.Author} @ {DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).DateTime}: {cheep.Message}");
+            Console.WriteLine($"{cheep.Author} @ {DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).DateTime.ToString("dd-MM-yyyy HH:mm:ss")}: {cheep.Message}");
         });
     }
 }

@@ -40,7 +40,6 @@ public class CheepControllerTest
         return path;
     }
     
-    
     [Fact]
     public void Read_All_Cheeps_From_Database()
     {
