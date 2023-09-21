@@ -22,29 +22,32 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build --verbosity normal
+      - name: Set tag
+        run: |
+          echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
 
       - name: Publish Linux
         run: |
-          dotnet publish --runtime linux-x64 --self-contained
-          zip -r linux.zip src/SimpleDB/bin/Debug/net7.0/linux-x64/publish/ src/Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/
+          dotnet publish --runtime linux-x64 --no-self-contained src/Chirp.CLI
+          zip -rj Chirp.CLI-$tag-linux-x64.zip src/Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/Chirp.CLI
       - name: Publish Windows
         run: |
-          dotnet publish --runtime win-x64 --self-contained
-          zip -r windows.zip src/SimpleDB/bin/Debug/net7.0/win-x64/publish/ src/Chirp.CLI/bin/Debug/net7.0/win-x64/publish/
+          dotnet publish --runtime win-x64 --no-self-contained src/Chirp.CLI
+          zip -rj Chirp.CLI-$tag-win-x64.zip src/Chirp.CLI/bin/Debug/net7.0/win-x64/publish/Chirp.CLI.exe
       - name: Publish OSX x64
         run: |
-          dotnet publish --runtime osx-x64 --self-contained
-          zip -r osx-64.zip src/SimpleDB/bin/Debug/net7.0/osx-x64/publish/ src/Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/
+          dotnet publish --runtime osx-x64 --no-self-contained src/Chirp.CLI
+          zip -rj Chirp.CLI-$tag-osx-x64.zip src/Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/Chirp.CLI
       - name: Publish OSX arm
         run: |
-          dotnet publish --runtime osx-arm64 --self-contained
-          zip -r osx-arm64.zip src/SimpleDB/bin/Debug/net7.0/osx-arm64/publish/ src/Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/
+          dotnet publish --runtime osx-arm64 --no-self-contained src/Chirp.CLI
+          zip -rj Chirp.CLI-$tag-osx-arm64.zip src/Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/Chirp.CLI
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            linux.zip
-            windows.zip
-            osx-64.zip
-            osx-arm64.zip
+            Chirp.CLI-${{ env.tag }}-linux-x64.zip
+            Chirp.CLI-${{ env.tag }}-windows-x64.zip
+            Chirp.CLI-${{ env.tag }}-osx-x64.zip
+            Chirp.CLI-${{ env.tag }}-osx-arm-x64.zip
