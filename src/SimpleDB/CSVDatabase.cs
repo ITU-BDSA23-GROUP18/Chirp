@@ -21,7 +21,15 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         {
             if (_instance == null)
             {
-                _instance = new CSVDatabase<T>("../../data/chirp_cli_db.csv");
+                var defaultCSVDatabasePath = "../../data/chirp_cli_db.csv";
+                if (File.Exists(defaultCSVDatabasePath)) {
+                    _instance = new CSVDatabase<T>(defaultCSVDatabasePath);
+                } else {
+                    var file = File.CreateText("./chirp_cli_db.csv");
+                    file.WriteLine("Author,Message,Timestamp");
+                    file.Close();
+                    _instance = new CSVDatabase<T>("./chirp_cli_db.csv");
+                }
             }
             return _instance;
         }

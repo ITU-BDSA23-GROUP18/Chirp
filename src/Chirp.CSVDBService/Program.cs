@@ -5,7 +5,7 @@ var app = builder.Build();
 
 app.MapGet("/cheeps", () => CSVDatabase<Cheep>.Instance.Read(-1));
 
-app.MapPost("/cheep", (Cheep cheep) => {new NotImplementedException();});
+app.MapPost("/cheep", (Cheep cheep) => {CSVDatabase<Cheep>.Instance.Store(cheep);});
 
 app.Run();
 
