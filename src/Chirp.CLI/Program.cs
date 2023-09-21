@@ -21,7 +21,7 @@ IDatabaseRepository<Cheep> databaseRepository = CSVDatabase<Cheep>.Instance;
 if (arguments["read"].IsTrue)
 {
     // Read cheeps
-    Userinterface.PrintCheeps(databaseRepository.Read());
+    Userinterface.PrintCheeps(databaseRepository.Read(0));
 }
 
 // Post a cheep
