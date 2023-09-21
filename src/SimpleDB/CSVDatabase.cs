@@ -41,11 +41,11 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
         csv.Read();
         csv.ReadHeader();
-        int i = 0;
-        while (csv.Read())
+        
+        while (csv.Read() && limit != 0)
         {
-            if (limit != 0) i++;
-            if (i > limit) yield break;
+            limit--;
+            
             var record = csv.GetRecord<T>();
             if (record != null) {
                 yield return record;

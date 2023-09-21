@@ -20,7 +20,7 @@ IDatabaseRepository<Cheep> databaseRepository = CSVDatabase<Cheep>.Instance;
 
 if (arguments["read"].IsTrue)
 {
-    int limit = 0;
+    int limit = -1;
     if (!arguments["<readLimit>"].IsNullOrEmpty) {
         limit = int.Parse(arguments["<readLimit>"].ToString());
     } 
