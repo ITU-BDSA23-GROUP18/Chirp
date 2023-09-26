@@ -1,4 +1,7 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Net.Http;
 using Chirp.CLI;
 using DocoptNet;
 using System.Net.Http.Headers;
