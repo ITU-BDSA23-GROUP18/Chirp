@@ -48,6 +48,6 @@ jobs:
         with:
           files: |
             Chirp.CLI-${{ env.tag }}-linux-x64.zip
-            Chirp.CLI-${{ env.tag }}-windows-x64.zip
+            Chirp.CLI-${{ env.tag }}-win-x64.zip
             Chirp.CLI-${{ env.tag }}-osx-x64.zip
-            Chirp.CLI-${{ env.tag }}-osx-arm-x64.zip
+            Chirp.CLI-${{ env.tag }}-osx-arm64.zip
