@@ -11,58 +11,21 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
+    //if no args create data base in tmp 
 
-    string sqlDBFilePath = "data/cheepDatabase.db";
+    //else if given path CHIRPDBPATH=./mychirp.db create db in current directory under the file name mychirp.db.
+    static string path = Environment.GetEnvironmentVariable("CHIRPDBPATH");
+    
+    private readonly DBFacade db = new(path);
 
     //add limit later
     public List<CheepViewModel> GetCheeps()
     {
-        string sqlQuery = @"SELECT user.username, message.text, message.pub_date FROM message 
-                            JOIN user on user.user_id=message.author_id
-                            ORDER by message.pub_date desc";
-
-
-        return getCheepsFromQuery(sqlQuery);
+        return db.GetCheeps();
     }
  
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
-    {
-        //prone to sql in
-        string sqlQuery = 
-            @$"SELECT user.username, message.text, message.pub_date 
-            FROM message 
-            JOIN user on user.user_id=message.author_id
-            WHERE user.username = '{author}'
-            ORDER by message.pub_date desc";
-            
-        return getCheepsFromQuery(sqlQuery);
-    }
-    private List<CheepViewModel> getCheepsFromQuery(string sqlQuery){
-        List<CheepViewModel> result = new();
-
-        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}")) {
-            connection.Open();
-
-            var command = connection.CreateCommand();
-            command.CommandText = sqlQuery;
-
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                var dataRecord = (IDataRecord)reader;
-                Console.WriteLine(dataRecord.GetString(0) + " " + dataRecord.GetString(1)+ " " +dataRecord.GetInt64(2));
-                //cast to CheepViewModel
-                result.Add(new CheepViewModel(dataRecord.GetString(0),dataRecord.GetString(1),UnixTimeStampToDateTimeString(dataRecord.GetInt64(2))));
-            }
-        }
-        return result;
-    }
-
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
-    }
+    {   
+        return db.GetCheepsFromAuthor(author);
+    }    
 }
