@@ -1,14 +1,62 @@
 using Microsoft.Data.Sqlite;
 using System.Data;
+using System.Diagnostics;
 
 
 public class DBFacade {
     private string _sqlDBFilePath;
     public DBFacade(string sqlDBFilePath) {
-        if(sqlDBFilePath == null) sqlDBFilePath = "/tmp/cheepDatabase.db";
+        if(sqlDBFilePath == null){
+            sqlDBFilePath = "/tmp/cheepDatabase.db";
+        }
+        InitDB(sqlDBFilePath);
         _sqlDBFilePath = sqlDBFilePath;
-
     }
+    /*
+    * modified this a little 
+    * https://stackoverflow.com/questions/20764049/how-do-i-execute-a-shell-script-in-c
+    */
+    private void InitDB(string dbPath)
+    {
+        string schemaPath = "data/schema.sql";
+        string dumpPath = "data/dump.sql";
+
+        ExecuteSqliteCommand(dbPath,schemaPath);
+        ExecuteSqliteCommand(dbPath, dumpPath);
+        
+    }
+    private void ExecuteSqliteCommand(string dbPath, string sqlPath){
+        //insted of running a script we can just run the sqlite3 commands here such. 
+        //such that if "CHIRPDBPATH=./mychirp.db dotnet run" is run the mychirp.db is still initialized 
+        ProcessStartInfo startInfo = new()
+        {
+            FileName = "/bin/sh",
+            Arguments = $"-c \"sqlite3 {dbPath} < {sqlPath}",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+
+        Process process = new Process { StartInfo = startInfo };
+        try
+        {
+            process.Start();
+            // To capture the script's errors:
+            string errors = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+            if (!string.IsNullOrEmpty(errors))
+            {
+                Console.WriteLine($"Errors: {errors}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+
     public List<CheepViewModel> GetCheeps()
     {
         string sqlQuery = @"SELECT user.username, message.text, message.pub_date FROM message 
