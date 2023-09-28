@@ -1,3 +1,6 @@
+using Microsoft.Data.Sqlite;
+using System.Data;
+
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
@@ -8,23 +11,51 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    // These would normally be loaded from a database for example
-    private static readonly List<CheepViewModel> _cheeps = new()
-        {
-            new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Rasmus", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Benjamin - From the future", "Neeeemt at hardcode en list.", UnixTimeStampToDateTimeString(1897896848))
-        };
 
+    string sqlDBFilePath = "data/cheepDatabase.db";
+
+    //add limit later
     public List<CheepViewModel> GetCheeps()
     {
-        return _cheeps;
-    }
+        string sqlQuery = @"SELECT user.username, message.text, message.pub_date FROM message 
+                            JOIN user on user.user_id=message.author_id
+                            ORDER by message.pub_date desc";
 
+
+        return getCheepsFromQuery(sqlQuery);
+    }
+ 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)
     {
-        // filter by the provided author name
-        return _cheeps.Where(x => x.Author == author).ToList();
+        //prone to sql in
+        string sqlQuery = 
+            @$"SELECT user.username, message.text, message.pub_date 
+            FROM message 
+            JOIN user on user.user_id=message.author_id
+            WHERE user.username = '{author}'
+            ORDER by message.pub_date desc";
+            
+        return getCheepsFromQuery(sqlQuery);
+    }
+    private List<CheepViewModel> getCheepsFromQuery(string sqlQuery){
+        List<CheepViewModel> result = new();
+
+        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}")) {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = sqlQuery;
+
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var dataRecord = (IDataRecord)reader;
+                Console.WriteLine(dataRecord.GetString(0) + " " + dataRecord.GetString(1)+ " " +dataRecord.GetInt64(2));
+                //cast to CheepViewModel
+                result.Add(new CheepViewModel(dataRecord.GetString(0),dataRecord.GetString(1),UnixTimeStampToDateTimeString(dataRecord.GetInt64(2))));
+            }
+        }
+        return result;
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
@@ -34,5 +65,4 @@ public class CheepService : ICheepService
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
-
 }
