@@ -18,7 +18,6 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps(int page)
     {
-
         if (page == 1 && _cheeps.Count <= CheepsPerPage)
         {
             return _cheeps;
@@ -31,7 +30,6 @@ public class CheepService : ICheepService
         {
             return new List<CheepViewModel>();
         }
-        
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
