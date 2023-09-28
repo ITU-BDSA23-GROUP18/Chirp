@@ -1,4 +1,7 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Net.Http;
 using Chirp.CLI;
 using DocoptNet;
 using System.Net.Http.Headers;
@@ -20,6 +23,7 @@ var arguments = new Docopt().Apply(usage, args, version: "Chirp 0.1", exit: true
 
 // Create an HTTP client object
 var baseURL = "http://localhost:5263";
+
 using HttpClient client = new();
 client.DefaultRequestHeaders.Accept.Clear();
 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
