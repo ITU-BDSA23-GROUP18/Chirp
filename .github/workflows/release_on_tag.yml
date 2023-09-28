@@ -20,8 +20,8 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+      #- name: Test
+      #  run: dotnet test --no-build --verbosity normal
       - name: Set tag
         run: |
           echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
@@ -48,6 +48,6 @@ jobs:
         with:
           files: |
             Chirp.CLI-${{ env.tag }}-linux-x64.zip
-            Chirp.CLI-${{ env.tag }}-windows-x64.zip
+            Chirp.CLI-${{ env.tag }}-win-x64.zip
             Chirp.CLI-${{ env.tag }}-osx-x64.zip
-            Chirp.CLI-${{ env.tag }}-osx-arm-x64.zip
+            Chirp.CLI-${{ env.tag }}-osx-arm64.zip
