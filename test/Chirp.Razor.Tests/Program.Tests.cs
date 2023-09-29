@@ -1,9 +1,6 @@
 namespace Chirp.Razor.Tests;
 
-using Chirp.Razor;
-using Microsoft.AspNetCore.Mvc.Testing;
-
-public class TestAPI : IClassFixture<WebApplicationFactory<Chirp.Razor.Program>>
+public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
@@ -41,7 +38,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Chirp.Razor.Program>>
     [Theory]
     [InlineData("", "-1")]
     [InlineData("Helge", "1")]
-    [InlineData("Rasmus", "ondfisk")]
+    [InlineData("Rasmus", "OndFisk")]
     public async void CanSeePage1(string endpoint, string page)
     {
         var response = await _client.GetAsync($"/{endpoint}?page={page}");
