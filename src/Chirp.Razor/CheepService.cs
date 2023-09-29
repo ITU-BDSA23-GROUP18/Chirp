@@ -20,6 +20,7 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps(int page)
     {
+        page = page <= 0 ? 1 : page;
         if (page == 1 && _cheeps.Count <= CheepsPerPage)
         {
             return _cheeps;
@@ -36,6 +37,7 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
     {
+        page = page <= 0 ? 1 : page; 
         // filter by the provided author name
        var list = _cheeps.Where(x => x.Author == author).ToList();
        if (page == 1 && list.Count <= CheepsPerPage)

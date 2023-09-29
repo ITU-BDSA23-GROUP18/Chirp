@@ -17,7 +17,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Chirp.Razor.Program>>
     [Fact]
     public async void CanSeePublicTimeline()
     {
-        var response = await _client.GetAsync("/public");
+        var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
@@ -36,5 +36,31 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Chirp.Razor.Program>>
 
         Assert.Contains("Chirp!", content);
         Assert.Contains($"{author}'s Timeline", content);
+    }
+
+    [Theory]
+    [InlineData("", "-1")]
+    [InlineData("Helge", "1")]
+    [InlineData("Rasmus", "ondfisk")]
+    public async void CanSeePage1(string endpoint, string page)
+    {
+        var response = await _client.GetAsync($"/{endpoint}?page={page}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        Assert.DoesNotContain($"There are no cheeps so far.", content);
+    }
+    
+    [Theory]
+    [InlineData("", "2")]
+    [InlineData("Helge", "3")]
+    [InlineData("Rasmus", "4")]
+    public async void CanSeeEmptyPage(string endpoint, string page)
+    {
+        var response = await _client.GetAsync($"/{endpoint}?page={page}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        Assert.Contains($"There are no cheeps so far.", content);
     }
 }
