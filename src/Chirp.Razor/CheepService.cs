@@ -1,3 +1,5 @@
+namespace Chirp.Razor;
+
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
@@ -18,12 +20,14 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps(int page)
     {
+        page = page <= 0 ? 1 : page;
         return _cheeps.Skip(CheepsPerPage * (page - 1)).Take(CheepsPerPage).ToList();
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
     {
-        // filter by the provided author name
+       page = page <= 0 ? 1 : page; 
+       // filter by the provided author name
        var list = _cheeps.Where(x => x.Author == author).ToList();
        return list.Skip(CheepsPerPage * (page - 1)).Take(CheepsPerPage).ToList();
     }
