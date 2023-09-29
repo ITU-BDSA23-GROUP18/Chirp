@@ -8,7 +8,7 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    const int CheepsPerPage = 32;
+    private const int CheepsPerPage = 32;
     // These would normally be loaded from a database for example
     private static readonly List<CheepViewModel> _cheeps = new()
         {
@@ -18,36 +18,14 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps(int page)
     {
-        if (page == 1 && _cheeps.Count <= CheepsPerPage)
-        {
-            return _cheeps;
-        }
-        if (_cheeps.Count >= (page * CheepsPerPage))
-        {
-            return _cheeps.GetRange((page * CheepsPerPage) - CheepsPerPage, CheepsPerPage);
-        }
-        else
-        {
-            return new List<CheepViewModel>();
-        }
+        return _cheeps.Skip(CheepsPerPage * (page - 1)).Take(CheepsPerPage).ToList();
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
     {
         // filter by the provided author name
        var list = _cheeps.Where(x => x.Author == author).ToList();
-       if (page == 1 && list.Count <= CheepsPerPage)
-       {
-           return list;
-       }
-       if (list.Count >= (page * CheepsPerPage))
-       {
-           return list.GetRange((page * CheepsPerPage) - CheepsPerPage, CheepsPerPage);
-       }
-       else
-       {
-           return new List<CheepViewModel>();
-       }
+       return list.Skip(CheepsPerPage * (page - 1)).Take(CheepsPerPage).ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
