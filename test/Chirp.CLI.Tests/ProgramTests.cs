@@ -18,7 +18,7 @@ public class ProgramTests
         using var hostProcess = new Process();
         using var clientProcess = new Process();
         
-        hostProcess.StartInfo.FileName = "../../../../../src/Chirp.CSVDBService/bin/Debug/net7.0/Chirp.CSVDBService.exe";
+        hostProcess.StartInfo.FileName = "../../../../../src/Chirp.CSVDBService/bin/Debug/net7.0/Chirp.CSVDBService";
         hostProcess.StartInfo.Arguments = "--urls=http://localhost:5263";
         hostProcess.StartInfo.UseShellExecute = false;
         // process.StartInfo.WorkingDirectory = "";
@@ -27,7 +27,7 @@ public class ProgramTests
         
         System.Threading.Thread.Sleep(1000);
 
-        clientProcess.StartInfo.FileName = "../../../../../src/Chirp.CLI/bin/Debug/net7.0/win-x64/Chirp.CLI.exe";
+        clientProcess.StartInfo.FileName = "../../../../../src/Chirp.CLI/bin/Debug/net7.0/linux-x64/Chirp.CLI";
         clientProcess.StartInfo.Arguments = "read";
         clientProcess.StartInfo.UseShellExecute = false;
         // process.StartInfo.WorkingDirectory = "";
@@ -45,12 +45,13 @@ public class ProgramTests
         output = clientProcess.StandardOutput.ReadToEnd();
         clientProcess.WaitForExit();
         hostProcess.Kill();
-
-        var fstCheep = output.Replace("\r", "").Split("\n")[0];
+        var cheepArray = output.Replace("\r", "").Split("\n");
+        var fstCheep = cheepArray[0];
+        var lastCheep = cheepArray[3];
         // Assert
-        //TestContext.WriteLine(output);
-        Assert.Equal("", output);
         Assert.StartsWith("ropf", fstCheep);
-        // Assert.EndsWith("Hello, World!", fstCheep);
+        Assert.EndsWith("Hello, BDSA students!", fstCheep);
+        Assert.StartsWith("ropf", lastCheep);
+        Assert.EndsWith("Cheeping cheeps on Chirp :)", lastCheep);
     }
 }

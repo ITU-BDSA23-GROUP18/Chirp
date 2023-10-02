@@ -18,33 +18,13 @@ public class CheepControllerTest
         _testOutputHelper = testOutputHelper;
     }
     
-    //insert local absolut path to csv file
-    private static string? _path = "";
-    
-    private static string finalPath = Init_path_link();
-    CSVDatabase<Cheep> controller = new(finalPath);
+    CSVDatabase<Cheep> controller = CSVDatabase<Cheep>.Instance;
 
-    public static string Init_path_link()
-    {
-        string path = "";
-        if (_path == "")
-        {
-            Console.WriteLine("insert absolut path:");
-            path = Console.ReadLine();
-        }
-        else
-        {
-            path = _path;
-        }
-
-        return path;
-    }
-    
     [Fact]
     public void Read_All_Cheeps_From_Database()
     {
         
-        var actual = controller.Read(0);
+        var actual = controller.Read(-1);
         
         var expected = new List<Cheep>(){_cheep1, _cheep2, _cheep3, _cheep4};
 
@@ -57,7 +37,7 @@ public class CheepControllerTest
     {
         controller.Delete(_cheep4);
 
-        var actual = controller.Read(0);
+        var actual = controller.Read(-1);
         var expected = new List<Cheep>(){_cheep1, _cheep2, _cheep3};
         
         Assert.Equal(expected, actual);
@@ -70,7 +50,7 @@ public class CheepControllerTest
     {
         controller.Store(_cheepTest);
         
-        var actual = controller.Read(0);
+        var actual = controller.Read(-1);
         var expected = new List<Cheep>(){_cheep1, _cheep2, _cheep3, _cheep4, _cheepTest};
 
         Assert.Equal(expected, actual);

@@ -12,6 +12,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         _path = path;
     }
 
+    private static readonly string defaultCsvFileData = "Author,Message,Timestamp\nropf,\"Hello, BDSA students!\",1690891760\nrnie,\"Welcome to the course!\",1690978778\nrnie,\"I hope you had a good summer.\",1690979858\nropf,\"Cheeping cheeps on Chirp :)\",1690981487";
     /*
     https://csharpindepth.com/articles/singleton
     */
@@ -25,10 +26,10 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
                 if (File.Exists(defaultCSVDatabasePath)) {
                     _instance = new CSVDatabase<T>(defaultCSVDatabasePath);
                 } else {
-                    var file = File.CreateText("./chirp_cli_db.csv");
-                    file.WriteLine("Author,Message,Timestamp");
+                    var file = File.CreateText("/tmp/chirp_cli_db.csv");
+                    file.Write(defaultCsvFileData);
                     file.Close();
-                    _instance = new CSVDatabase<T>("./chirp_cli_db.csv");
+                    _instance = new CSVDatabase<T>("/tmp/chirp_cli_db.csv");
                 }
             }
             return _instance;
@@ -73,7 +74,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     
     public void Delete(T record)
     {
-        var cheeps = Read(0);
+        var cheeps = Read(-1);
         var newCheeps = new List<T>();
         foreach (var cheep in cheeps)
         {
