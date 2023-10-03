@@ -1,7 +1,7 @@
 using Microsoft.Data.Sqlite;
 using System.Data;
 using System.Diagnostics;
-
+namespace Chirp.Razor;
 
 public class DBFacade {
     private string _sqlDBFilePath;
