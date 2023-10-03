@@ -4,7 +4,7 @@ namespace SimpleDB.Tests;
 
 public record Cheep(string Author, string Message, long Timestamp);
 
-public class CheepControllerTest
+public class CheepControllerTests
 {
     private readonly ITestOutputHelper _testOutputHelper;
     private readonly Cheep _cheep1 = new Cheep(Author: "ropf", Message: "Hello, BDSA students!", Timestamp: 1690891760);
@@ -13,7 +13,7 @@ public class CheepControllerTest
     private readonly Cheep _cheep4 = new Cheep("ropf","Cheeping cheeps on Chirp :)",1690981487);
     private readonly Cheep _cheepTest = new Cheep("John Doe", "Testing...123", 1690991457);
 
-    public CheepControllerTest(ITestOutputHelper testOutputHelper)
+    public CheepControllerTests(ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
     }
