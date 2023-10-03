@@ -5,7 +5,7 @@ namespace Chirp.Razor;
 
 public class DBFacade {
     private string _sqlDBFilePath;
-    public DBFacade(string sqlDBFilePath) {
+    public DBFacade(string? sqlDBFilePath) {
         if(sqlDBFilePath == null){
             sqlDBFilePath = "/tmp/cheepDatabase.db";
         }
