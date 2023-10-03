@@ -17,21 +17,23 @@ public class DBFacade {
 
     private static void SeedNewDB(string dbPath)
     {
-        using var connection = new SqliteConnection($"Data Source={dbPath}");
-        connection.Open();
-        var sqlFilesToRun = new string[] { "Chirp.Razor.data.schema.sql", "Chirp.Razor.data.dump.sql" };
-        var assembly = Assembly.GetExecutingAssembly();
-        foreach (var filePath in sqlFilesToRun)
+        using( var connection = new SqliteConnection($"Data Source={dbPath}"))
         {
-            var fileStream = assembly.GetManifestResourceStream(filePath);
-            if (fileStream == null)
+            connection.Open();
+            var sqlFilesToRun = new string[] { "Chirp.Razor.data.schema.sql", "Chirp.Razor.data.dump.sql" };
+            var assembly = Assembly.GetExecutingAssembly();
+            foreach (var filePath in sqlFilesToRun)
             {
-                throw new FileNotFoundException("SQL File not found: " + filePath);
+                var fileStream = assembly.GetManifestResourceStream(filePath);
+                if (fileStream == null)
+                {
+                    throw new FileNotFoundException("SQL File not found: " + filePath);
+                }
+                var data = new StreamReader(fileStream).ReadToEnd();
+                var commmand = connection.CreateCommand();
+                commmand.CommandText = data;
+                commmand.ExecuteNonQuery();
             }
-            var data = new StreamReader(fileStream).ReadToEnd();
-            var commmand = connection.CreateCommand();
-            commmand.CommandText = data;
-            commmand.ExecuteNonQuery();
         }
     }
     public List<CheepViewModel> GetCheeps(int skip, int count)
