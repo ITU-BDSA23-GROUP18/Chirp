@@ -16,7 +16,6 @@ public class CheepService : ICheepService
     // These would normally be loaded from a database for example
     private static readonly DBFacade _cheepsDB = new(Environment.GetEnvironmentVariable("CHIRPDBPATH"));
 
-
     public List<CheepViewModel> GetCheeps(int page)
     {
         page = page <= 0 ? 1 : page;

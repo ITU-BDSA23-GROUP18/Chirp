@@ -22,8 +22,7 @@ public class DBFacade {
         string dumpPath = "data/dump.sql";
 
         ExecuteSqliteCommand(dbPath,schemaPath);
-        ExecuteSqliteCommand(dbPath, dumpPath);
-        
+        ExecuteSqliteCommand(dbPath, dumpPath);   
     }
     private void ExecuteSqliteCommand(string dbPath, string sqlPath){
         //insted of running a script we can just run the sqlite3 commands here such. 
@@ -55,8 +54,6 @@ public class DBFacade {
             Console.WriteLine($"Error: {ex.Message}");
         }
     }
-
-
     public List<CheepViewModel> GetCheeps(int skip, int count)
     {
         string sqlQuery = @"SELECT user.username, message.text, message.pub_date FROM message 
@@ -112,5 +109,4 @@ public class DBFacade {
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
-
 }
