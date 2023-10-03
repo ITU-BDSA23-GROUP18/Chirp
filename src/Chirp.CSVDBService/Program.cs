@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Builder;
 using SimpleDB;
 
 var builder = WebApplication.CreateBuilder(args);
