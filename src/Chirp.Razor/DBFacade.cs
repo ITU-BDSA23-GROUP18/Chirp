@@ -57,36 +57,43 @@ public class DBFacade {
     }
 
 
-    public List<CheepViewModel> GetCheeps()
+    public List<CheepViewModel> GetCheeps(int skip, int count)
     {
         string sqlQuery = @"SELECT user.username, message.text, message.pub_date FROM message 
                             JOIN user on user.user_id=message.author_id
-                            ORDER by message.pub_date desc";
-
-
-        return getCheepsFromQuery(sqlQuery);
+                            ORDER by message.pub_date desc
+                            LIMIT $skip, $count;";
+                            
+        var skipParam = new SqliteParameter("$skip", skip);
+        var countParam = new SqliteParameter("$count", count);
+        return GetCheepsFromQuery(sqlQuery, skipParam, countParam);
     }
  
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int skip, int count)
     {
         //prone to sql in
         string sqlQuery = 
-            @$"SELECT user.username, message.text, message.pub_date 
+            @"SELECT user.username, message.text, message.pub_date 
             FROM message 
             JOIN user on user.user_id=message.author_id
-            WHERE user.username = '{author}'
-            ORDER by message.pub_date desc";
-            
-        return getCheepsFromQuery(sqlQuery);
+            WHERE user.username = $author
+            ORDER by message.pub_date desc
+            LIMIT $skip, $count;";
+
+        var authorParam = new SqliteParameter("$author", author);
+        var skipParam = new SqliteParameter("$skip", skip);
+        var countParam = new SqliteParameter("$count", count);
+        return GetCheepsFromQuery(sqlQuery, authorParam, skipParam, countParam);
     }
-     private List<CheepViewModel> getCheepsFromQuery(string sqlQuery){
+     private List<CheepViewModel> GetCheepsFromQuery(string sqlQuery, params SqliteParameter[] paramArray){
         List<CheepViewModel> result = new();
 
         using (var connection = new SqliteConnection($"Data Source={_sqlDBFilePath}")) {
             connection.Open();
-
+            
             var command = connection.CreateCommand();
             command.CommandText = sqlQuery;
+            command.Parameters.AddRange(paramArray);
 
             using var reader = command.ExecuteReader();
             while (reader.Read())
