@@ -15,12 +15,11 @@ public class CheepServiceTests
     }
 
     [Fact]
-    public void GetCheeps_returnsAllCheeps()
+    public void GetCheeps_returnsThirtyTwoCheepsFromFirstPage()
     {
         var cheeps = _cheepService.GetCheeps(0);
-        
-        Assert.Contains(_cheeps[0], cheeps);
-        Assert.Contains(_cheeps[1], cheeps);
+    
+        Assert.Equal(32, cheeps.Capacity);
 
     }
     

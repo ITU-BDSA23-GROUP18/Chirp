@@ -49,9 +49,9 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     }
     
     [Theory]
-    [InlineData("", "2")]
-    [InlineData("Helge", "3")]
-    [InlineData("Rasmus", "4")]
+    [InlineData("", "9999999")]
+    [InlineData("Helge", "30")]
+    [InlineData("Rasmus", "40")]
     public async void CanSeeEmptyPage(string endpoint, string page)
     {
         var response = await _client.GetAsync($"/{endpoint}?page={page}");
