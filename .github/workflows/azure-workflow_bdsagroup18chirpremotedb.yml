@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup18chirpremotedb
+name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup18chirprazor
 
 on:
   push:
@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'bdsagroup18chirprazor'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_2142751aba424d82bb794f6cbff2370b }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9F9929627E5C4F3FB8F6D7AEDA069C4C }}
           package: .
