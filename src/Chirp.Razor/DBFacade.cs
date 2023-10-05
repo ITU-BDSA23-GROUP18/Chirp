@@ -6,26 +6,6 @@ using System.Reflection;
 namespace Chirp.Razor;
 
 public class DBFacade {
-    public DBFacade() {
-        using var db = new CheepContext();
-        //create a author
-
-        var author = new Author { Name = "Test Author", Email = "hans@grete.com"};
-        db.Authors.Add(author);
-
-        //create a cheep for the author
-        var Cheep = new Cheep {Author = author, Text = "Hello World", TimeStamp = DateTime.UtcNow};
-        db.Cheeps.Add(Cheep);
-        db.SaveChanges();
-        //get all cheeps and display
-        var cheeps = db.Cheeps.Include(c => c.Author).ToList();
-        
-        foreach (var c in cheeps)
-        {
-            Debug.WriteLine($"{c.Author?.Name} - {c.Text} - {c.TimeStamp}");
-        }
-    }
-
     public List<CheepViewModel> GetCheeps(int skip, int count)
     {
         using var db = new CheepContext();
