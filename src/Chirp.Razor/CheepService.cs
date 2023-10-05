@@ -18,8 +18,8 @@ public class CheepService : ICheepService
 
     public List<CheepViewModel> GetCheeps(int page)
     {
-        page = page < 0 ? 0 : page;
-        return _cheepsDB.GetCheeps(CheepsPerPage * page, CheepsPerPage);
+        page = page <= 0 ? 1 : page;
+        return _cheepsDB.GetCheeps(CheepsPerPage * (page - 1), CheepsPerPage);
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
