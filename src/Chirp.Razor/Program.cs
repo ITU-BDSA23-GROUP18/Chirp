@@ -1,9 +1,13 @@
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+
 namespace Chirp.Razor;
 
 public class Program
 {
     public static void Main(string[] args)
     {
+
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.

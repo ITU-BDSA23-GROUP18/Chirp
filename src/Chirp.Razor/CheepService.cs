@@ -14,7 +14,7 @@ public class CheepService : ICheepService
 {
     private const int CheepsPerPage = 32;
     // These would normally be loaded from a database for example
-    private static readonly DBFacade _cheepsDB = new(Environment.GetEnvironmentVariable("CHIRPDBPATH"));
+    private static readonly DBFacade _cheepsDB = new();
 
     public List<CheepViewModel> GetCheeps(int page)
     {
