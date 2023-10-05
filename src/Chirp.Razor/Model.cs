@@ -1,6 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 namespace Chirp.Razor
-{
+using Microsoft.EntityFrameworkCore;
+
+
+
     public class CheepContext : DbContext
     {
         public DbSet<Cheep> Cheeps { get; set; }
@@ -22,13 +24,25 @@ namespace Chirp.Razor
         public required Author Author { get; set; }
         public required string Text { get; set; }
         public DateTime TimeStamp { get; set; }
+        
+        public Cheep(Author author, string text, DateTime timeStamp)
+        {
+            Author = author;
+            Text = text;
+            TimeStamp = timeStamp;
+        }
     }
 
     public class Author
     {
         public int AuthorId { get; set; }
         public required string Name { get; set; }
-        public required string Email { get; set; }
-        public List<Cheep> Cheeps { get; set;} = new List<Cheep>();
+    public string Email { get; set; }
+    public List<Cheep> Cheeps { get; set;} = new ();
+
+    public Author(string name, string email)
+    {
+        Name = name;
+        Email = email;
     }
 }

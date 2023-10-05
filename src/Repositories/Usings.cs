@@ -1,0 +1,1 @@
+﻿global using Chirp.Razor;
