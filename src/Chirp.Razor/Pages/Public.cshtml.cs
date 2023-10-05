@@ -12,6 +12,7 @@ public class PublicModel : PageModel
 
     public PublicModel(ICheepService service)
     {
+        Cheeps = new List<CheepViewModel>();
         _service = service;
     }
     
