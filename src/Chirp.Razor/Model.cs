@@ -1,18 +1,34 @@
-
-class Cheep
+using Microsoft.EntityFrameworkCore;
+namespace Chirp.Razor
 {
-    public int CheepId { get; set; }
-    public Author Author { get; set; }
-    public string Text { get; set; }
-    public DateTime TimeStamp { get; set; }
-}
-class Author
-{
-    public int AuthorId { get; set; }
-    public string Name { get; set; }
+    public class CheepContext : DbContext
+    {
+        public DbSet<Cheep> Cheeps { get; set; }
+        public DbSet<Author> Authors { get; set; }
+        public string? DbPath { get; }
 
-    public string Email { get; set; }
-    public List<Cheep> Cheeps { get; set;} = new List<Cheep>();    
-}
+        public CheepContext() : base()
+        {
+            DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
+        }
 
-//Cheep and Author.
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.UseSqlite($"Data Source={DbPath}");
+    }
+
+    public class Cheep
+    {
+        public int CheepId { get; set; }
+        public Author? Author { get; set; }
+        public string? Text { get; set; }
+        public DateTime TimeStamp { get; set; }
+    }
+
+    public class Author
+    {
+        public int AuthorId { get; set; }
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public List<Cheep> Cheeps { get; set;} = new List<Cheep>();
+    }
+}
