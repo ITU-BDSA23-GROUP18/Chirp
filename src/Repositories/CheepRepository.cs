@@ -1,20 +1,33 @@
 ﻿namespace Repositories;
 
-public class CheepRepository : IRepository<Cheep, Author>
+public class CheepRepository : IRepository<Cheep, Author>, IDisposable
 {
-    private readonly DBFacade _cheepDB;
+    private readonly CheepContext _cheepDB;
 
-    public CheepRepository(DBFacade cheepDB)
+    public CheepRepository()
     {
-        _cheepDB = cheepDB;
+        _cheepDB = new CheepContext();
     }
 
-    public IEnumerable<Cheep> Get() =>
-        from c in _cheepDB.GetCheeps(0, 32)
-        select new Cheep(new Author(c.Author, ""), c.Message, DateTime.Parse(c.Timestamp));
+    public void Dispose()
+    {
+        _cheepDB.Dispose();
+    }
 
-    public IEnumerable<Cheep> GetFrom(Author attribute) =>
-        from c in _cheepDB.GetCheeps(0, 32)
-        where c.Author == attribute.Name
-        select new Cheep(new Author(c.Author, ""), c.Message, DateTime.Parse(c.Timestamp));
+    public async Task<IEnumerable<Cheep>> Get(int page = 0) =>
+        await _cheepDB.Cheeps
+            .Include(c => c.Author)
+            .Skip(32 * page)
+            .Take(32)
+            .Select(c => c)
+            .ToListAsync();
+
+    public async Task<IEnumerable<Cheep>> GetFrom(Author attribute, int page = 0) =>
+        await _cheepDB.Cheeps
+            .Include(c => c.Author)
+            .Where(c => c.Author == attribute)
+            .Skip(32 * page)
+            .Take(32)
+            .Select(c => c)
+            .ToListAsync();
 }
