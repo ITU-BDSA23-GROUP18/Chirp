@@ -2,6 +2,7 @@
 
 public class CheepRepository : IRepository<Cheep, Author>, IDisposable
 {
+    private const int CheepsPerPage = 32;
     private readonly CheepContext _cheepDB;
 
     public CheepRepository()
@@ -17,8 +18,8 @@ public class CheepRepository : IRepository<Cheep, Author>, IDisposable
     public async Task<IEnumerable<Cheep>> Get(int page = 0) =>
         await _cheepDB.Cheeps
             .Include(c => c.Author)
-            .Skip(32 * page)
-            .Take(32)
+            .Skip(CheepsPerPage * page)
+            .Take(CheepsPerPage)
             .Select(c => c)
             .ToListAsync();
 
@@ -26,8 +27,8 @@ public class CheepRepository : IRepository<Cheep, Author>, IDisposable
         await _cheepDB.Cheeps
             .Include(c => c.Author)
             .Where(c => c.Author == attribute)
-            .Skip(32 * page)
-            .Take(32)
+            .Skip(CheepsPerPage * page)
+            .Take(CheepsPerPage)
             .Select(c => c)
             .ToListAsync();
 }
