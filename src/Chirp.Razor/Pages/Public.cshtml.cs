@@ -18,7 +18,7 @@ public class PublicModel : PageModel
     public IActionResult OnGet([FromQuery]int page)
     {
         //If a page query is not given in the url set the page=1
-        Cheeps = _service.GetCheeps(page == 0 ? 1 : page);
+        Cheeps = _service.GetCheeps(page);
         return Page();
     }
 }
