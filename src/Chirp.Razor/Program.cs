@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+
 namespace Chirp.Razor;
 
 public class Program
