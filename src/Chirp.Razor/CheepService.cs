@@ -14,18 +14,18 @@ public class CheepService : ICheepService
 {
     private const int CheepsPerPage = 32;
     // These would normally be loaded from a database for example
-    private static readonly DBFacade _cheepsDB = new();
 
     public List<CheepViewModel> GetCheeps(int page)
     {
+        //send request to Repositories
         page = page < 0 ? 0 : page;
-        return _cheepsDB.GetCheeps(CheepsPerPage * page, CheepsPerPage);
+        return new List<CheepViewModel>();
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
     {
        page = page <= 0 ? 1 : page; 
-       return _cheepsDB.GetCheepsFromAuthor(author, CheepsPerPage * (page - 1), CheepsPerPage);
+       return new List<CheepViewModel>();
     }
 
 }
