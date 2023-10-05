@@ -11,6 +11,7 @@ public class UserTimelineModel : PageModel
 
     public UserTimelineModel(ICheepService service)
     {
+        Cheeps = new List<CheepViewModel>();
         _service = service;
     }
     
