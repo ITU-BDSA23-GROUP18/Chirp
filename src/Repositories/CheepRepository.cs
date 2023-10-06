@@ -25,7 +25,7 @@ public class CheepRepository : IRepository<Cheep, MainCheepDTO, Author>, IDispos
             .Select(c => new MainCheepDTO{
                 Author = c.Author.Name,
                 Message = c.Text,
-                Time = c.TimeStamp.ToString()
+                Timestamp = c.TimeStamp.ToString()
             })
             .ToListAsync();
     async Task<IEnumerable<MainCheepDTO>> IRepository<Cheep, MainCheepDTO, Author>.GetFrom(Author attribute, int page = 0) =>
@@ -38,7 +38,7 @@ public class CheepRepository : IRepository<Cheep, MainCheepDTO, Author>, IDispos
             {
                 Author = c.Author.Name,
                 Message = c.Text,
-                Time = c.TimeStamp.ToString()
+                Timestamp = c.TimeStamp.ToString()
             })
             .ToListAsync();
 }

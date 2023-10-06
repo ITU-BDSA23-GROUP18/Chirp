@@ -1,12 +1,9 @@
 namespace Repositories.DTO
 {
-    public interface CheepDTO{}
-
-    public interface AuthorDTO{}
-    public record MainCheepDTO : CheepDTO
+    public record MainCheepDTO
     {
        public required string Author {get; set;}
        public required string Message {get; set;}
-       public required string Time {get; set;}
+       public required string Timestamp {get; set;}
     }
 }
