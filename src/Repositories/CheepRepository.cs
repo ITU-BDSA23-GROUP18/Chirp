@@ -28,18 +28,17 @@ public class CheepRepository : IRepository<Cheep, MainCheepDTO, Author>, IDispos
                 Time = c.TimeStamp.ToString()
             })
             .ToListAsync();
-
-    public async Task<IEnumerable<Cheep>> GetFrom(Author attribute, int page = 0) =>
+    async Task<IEnumerable<MainCheepDTO>> IRepository<Cheep, MainCheepDTO, Author>.GetFrom(Author attribute, int page = 0) =>
         await _cheepDB.Cheeps
             .Include(c => c.Author)
             .Where(c => c.Author == attribute)
             .Skip(CheepsPerPage * page)
             .Take(CheepsPerPage)
-            .Select(c => c)
+            .Select(c => new MainCheepDTO
+            {
+                Author = c.Author.Name,
+                Message = c.Text,
+                Time = c.TimeStamp.ToString()
+            })
             .ToListAsync();
-
-    Task<IEnumerable<MainCheepDTO>> IRepository<Cheep, MainCheepDTO, Author>.GetFrom(Author attribute, int page)
-    {
-        throw new NotImplementedException();
-    }
 }
