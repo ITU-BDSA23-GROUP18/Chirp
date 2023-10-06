@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
+using Repositories.DTO;
 
 namespace Chirp.Razor;
 
@@ -12,7 +13,7 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddSingleton<IRepository<Cheep, Author>, CheepRepository>();
+        builder.Services.AddSingleton<IRepository<CheepDTO, AuthorDTO>, CheepRepository>();
 
 
         var app = builder.Build();
