@@ -1,6 +1,4 @@
-using System;
-using Repositories;
-using Repositories.DTO;
+namespace Repositories;
 
 public static class DbInitializer
 {
