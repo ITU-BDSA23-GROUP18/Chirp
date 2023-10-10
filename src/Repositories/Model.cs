@@ -9,6 +9,7 @@ public class CheepContext : DbContext
     public CheepContext() : base()
     {
         DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
+        
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
