@@ -13,7 +13,8 @@ public class UserTimelineModel : PageModel
 
     public UserTimelineModel(IRepository<Cheep, MainCheepDTO, Author> repository)
     {
-        _repository = repository;
+        Cheeps = new List<CheepViewModel>();
+        _service = service;
     }
     
     public ActionResult OnGet(string author, [FromQuery]int page)

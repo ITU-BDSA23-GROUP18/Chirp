@@ -14,7 +14,8 @@ public class PublicModel : PageModel
 
     public PublicModel(IRepository<Cheep,MainCheepDTO, Author> repository)
     {
-        _repository = repository;
+        Cheeps = new List<CheepViewModel>();
+        _service = service;
     }
     
     public IActionResult OnGet([FromQuery]int page)
