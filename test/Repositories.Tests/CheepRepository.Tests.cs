@@ -1,15 +1,27 @@
-﻿namespace Repositories.Tests;
+﻿using Repositories.DTO;
 
-public class CheepServiceTests
+namespace Repositories.Tests;
+
+public class CheepRepositories
 {
     private readonly IRepository<Cheep, MainCheepDTO, Author> _cheepService;
     private static readonly List<MainCheepDTO> _cheeps = new()
     {
-        new MainCheepDTO("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-        new MainCheepDTO("Rasmus", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
+        new MainCheepDTO
+        {
+            Author = "Helge",
+            Message = "Hello, BDSA students!",
+            Timestamp = UnixTimeStampToDateTimeString(1690892208)
+        },
+        new MainCheepDTO
+        {
+            Author = "Rasmus",
+            Message = "Hello, BDSA students!",
+            Timestamp = UnixTimeStampToDateTimeString(1690892208)
+        },
     };
     
-    public CheepServiceTests()
+    public CheepRepositories()
     {
         _cheepService = new CheepRepository();
     }
