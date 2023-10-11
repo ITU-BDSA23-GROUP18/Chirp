@@ -19,7 +19,9 @@ public class UserTimelineModel : PageModel
     
     public ActionResult OnGet(string author, [FromQuery]int page)
     {
-        Cheeps = _repository.GetFrom(new Author {Name = author, Email = ""}, page == 0 ? 1 : page).Result.ToList(); //TODO: Change to DTO
+        //If a page query is not given in the url set the page=1
+        page = page <= 1 ? 1 : page;
+        Cheeps = _repository.GetFrom(new Author {Name = author, Email = ""}, page).Result.ToList(); //TODO: Change to DTO
         return Page();
     }
 }

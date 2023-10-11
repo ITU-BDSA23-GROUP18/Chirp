@@ -31,7 +31,7 @@ public class CheepRepository : IRepository<MainCheepDTO, Author>, IDisposable
     public async Task<IEnumerable<MainCheepDTO>> GetFrom(Author attribute, int page = 0) =>
         await _cheepDB.Cheeps
             .Include(c => c.Author)
-            .Where(c => c.Author == attribute)
+            .Where(c => c.Author.Name == attribute.Name) //TODO: Change to DTO
             .Skip(CheepsPerPage * page)
             .Take(CheepsPerPage)
             .Select(c =>
