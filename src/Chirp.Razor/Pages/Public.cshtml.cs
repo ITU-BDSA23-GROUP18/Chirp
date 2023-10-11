@@ -8,14 +8,14 @@ namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly IRepository<Cheep, MainCheepDTO, Author> _repository;
+    private readonly IRepository<MainCheepDTO, Author> _repository;
     
     public List<MainCheepDTO> Cheeps {get; private set;}
 
-    public PublicModel(IRepository<Cheep,MainCheepDTO, Author> repository)
+    public PublicModel(IRepository<MainCheepDTO, Author> repository)
     {
-        Cheeps = new List<CheepViewModel>();
-        _service = service;
+        Cheeps = new List<MainCheepDTO>();
+        _repository = repository;
     }
     
     public IActionResult OnGet([FromQuery]int page)

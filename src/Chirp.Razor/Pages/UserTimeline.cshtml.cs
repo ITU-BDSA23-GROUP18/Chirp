@@ -7,14 +7,14 @@ namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly IRepository<Cheep, MainCheepDTO, Author> _repository;
+    private readonly IRepository<MainCheepDTO, Author> _repository;
 
     public List<MainCheepDTO> Cheeps { get; set; }
 
-    public UserTimelineModel(IRepository<Cheep, MainCheepDTO, Author> repository)
+    public UserTimelineModel(IRepository<MainCheepDTO, Author> repository)
     {
-        Cheeps = new List<CheepViewModel>();
-        _service = service;
+        Cheeps = new List<MainCheepDTO>();
+        _repository = repository;
     }
     
     public ActionResult OnGet(string author, [FromQuery]int page)
