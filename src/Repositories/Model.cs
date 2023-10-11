@@ -1,5 +1,4 @@
 namespace Repositories;
-
 public class CheepContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }
@@ -10,6 +9,14 @@ public class CheepContext : DbContext
     {
         DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
     }
+    public void InitializeDatabase(){
+        //if the database is not created 
+        if(!File.Exists(DbPath)){
+            Database.EnsureCreated();
+        }
+        DbInitializer.SeedDatabase(this);
+    }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
@@ -18,6 +25,7 @@ public class CheepContext : DbContext
 public class Cheep
 {
     public int CheepId { get; set; }
+    public required int AuthorId { get; set; }
     public required Author Author { get; set; }
     public required string Text { get; set; }
     public DateTime TimeStamp { get; set; }

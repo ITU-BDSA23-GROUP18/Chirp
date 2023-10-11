@@ -10,12 +10,14 @@ public class CheepRepository : IRepository<Cheep, MainCheepDTO, Author>, IDispos
     public CheepRepository()
     {
         _cheepDB = new CheepContext();
+        _cheepDB.InitializeDatabase();
     }
 
     public void Dispose()
     {
         _cheepDB.Dispose();
     }
+
 
     public async Task<IEnumerable<MainCheepDTO>> Get(int page = 0) =>
         await _cheepDB.Cheeps
