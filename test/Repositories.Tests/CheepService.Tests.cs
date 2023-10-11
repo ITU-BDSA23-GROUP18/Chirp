@@ -1,25 +1,26 @@
 ﻿namespace Chirp.Razor.Tests;
-
+using Repositories;
+using Repositories.DTO;
 public class CheepServiceTests
 {
-    private readonly ICheepService _cheepService;
-    private static readonly List<CheepViewModel> _cheeps = new()
+    private readonly IRepository<Cheep, MainCheepDTO, Author> _cheepService;
+    private static readonly List<MainCheepDTO> _cheeps = new()
     {
-        new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-        new CheepViewModel("Rasmus", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
+        new MainCheepDTO("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
+        new MainCheepDTO("Rasmus", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
     };
     
     public CheepServiceTests()
     {
-        _cheepService = new CheepService();
+        _cheepService = new CheepRepository();
     }
 
     [Fact]
     public void GetCheeps_returnsThirtyTwoCheepsFromFirstPage()
     {
-        var cheeps = _cheepService.GetCheeps(0);
+        var cheeps = _cheepService.Get(0);
     
-        Assert.Equal(32, cheeps.Capacity);
+        Assert.Equal(32, cheeps.Count);
 
     }
     
@@ -28,7 +29,7 @@ public class CheepServiceTests
     [InlineData("Rasmus")]
     public void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string author)
     {
-        var cheeps = _cheepService.GetCheepsFromAuthor(author, 0);
+        var cheeps = _cheepService.GetFrom(author, 0);
         
         Assert.Contains(_cheeps.Find(c => c.Author == author), cheeps);
         Assert.DoesNotContain(_cheeps.Find(c => c.Author != author), cheeps);
@@ -38,8 +39,7 @@ public class CheepServiceTests
     [InlineData("OndFisk")]
     public void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty(string author)
     {
-        var cheeps = _cheepService.GetCheepsFromAuthor(author, 0);
-        
+        var cheeps = _cheepService.GetFrom(author, 0);
         Assert.Empty(cheeps);
     }
     
