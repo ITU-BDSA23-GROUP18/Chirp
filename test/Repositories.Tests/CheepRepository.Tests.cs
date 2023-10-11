@@ -1,6 +1,5 @@
-﻿namespace Chirp.Razor.Tests;
-using Repositories;
-using Repositories.DTO;
+﻿namespace Repositories.Tests;
+
 public class CheepServiceTests
 {
     private readonly IRepository<Cheep, MainCheepDTO, Author> _cheepService;
