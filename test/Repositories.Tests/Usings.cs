@@ -1,3 +1,4 @@
 global using Xunit;
-global using Repositories;
+global using Microsoft.Data.Sqlite;
 global using Repositories.DTO;
+global using Microsoft.EntityFrameworkCore;

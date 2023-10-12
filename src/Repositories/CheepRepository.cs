@@ -7,9 +7,10 @@ public class CheepRepository : ICheepRepository
     private const int CheepsPerPage = 32;
     private readonly CheepContext _cheepDb;
 
-    public CheepRepository(CheepContext cheepDb)
+    public CheepRepository(CheepContext cheepDB)
     {
-        _cheepDb = cheepDb;
+        _cheepDb = cheepDB;
+        _cheepDb.InitializeDatabase();
     }
 
     public async Task<IEnumerable<MainCheepDTO>> GetCheep(int page = 0) =>
