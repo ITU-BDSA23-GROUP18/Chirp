@@ -1,20 +1,40 @@
-﻿namespace Repositories;
+﻿using Repositories.DTO;
 
-public class CheepRepository : IRepository<Cheep, Author>
+namespace Repositories;
+
+public class CheepRepository : IRepository<MainCheepDTO, Author>, IDisposable
 {
-    private readonly DBFacade _cheepDB;
+    private const int CheepsPerPage = 32;
+    private readonly CheepContext _cheepDB;
 
-    public CheepRepository(DBFacade cheepDB)
+    public CheepRepository()
     {
-        _cheepDB = cheepDB;
+        _cheepDB = new CheepContext();
+        _cheepDB.InitializeDatabase();
     }
 
-    public IEnumerable<Cheep> Get() =>
-        from c in _cheepDB.GetCheeps(0, 32)
-        select new Cheep(new Author(c.Author, ""), c.Message, DateTime.Parse(c.Timestamp));
+    public void Dispose()
+    {
+        _cheepDB.Dispose();
+    }
 
-    public IEnumerable<Cheep> GetFrom(Author attribute) =>
-        from c in _cheepDB.GetCheeps(0, 32)
-        where c.Author == attribute.Name
-        select new Cheep(new Author(c.Author, ""), c.Message, DateTime.Parse(c.Timestamp));
+
+    public async Task<IEnumerable<MainCheepDTO>> Get(int page = 0) =>
+        await _cheepDB.Cheeps
+            .Include(c => c.Author)
+            .Skip(CheepsPerPage * page)
+            .Take(CheepsPerPage)
+            .Select(c => 
+                new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
+            .ToListAsync();
+    
+    public async Task<IEnumerable<MainCheepDTO>> GetFrom(Author attribute, int page = 0) =>
+        await _cheepDB.Cheeps
+            .Include(c => c.Author)
+            .Where(c => c.Author.Name == attribute.Name) //TODO: Change to DTO
+            .Skip(CheepsPerPage * page)
+            .Take(CheepsPerPage)
+            .Select(c =>
+                new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
+            .ToListAsync();
 }

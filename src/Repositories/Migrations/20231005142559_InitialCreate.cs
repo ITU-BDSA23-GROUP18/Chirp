@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Chirp.Razor.Migrations
+namespace Repositories.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -17,8 +17,8 @@ namespace Chirp.Razor.Migrations
                 {
                     AuthorId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,8 +31,8 @@ namespace Chirp.Razor.Migrations
                 {
                     CheepId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AuthorId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Text = table.Column<string>(type: "TEXT", nullable: true),
+                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -42,7 +42,8 @@ namespace Chirp.Razor.Migrations
                         name: "FK_Cheeps_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
-                        principalColumn: "AuthorId");
+                        principalColumn: "AuthorId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

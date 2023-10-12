@@ -1,25 +1,28 @@
 ﻿using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Repositories;
+using Repositories.DTO;
 
 namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly IRepository<MainCheepDTO, Author> _repository;
     
-    public List<CheepViewModel> Cheeps {get; private set;}
+    public List<MainCheepDTO> Cheeps {get; private set;}
 
-    public PublicModel(ICheepService service)
+    public PublicModel(IRepository<MainCheepDTO, Author> repository)
     {
-        Cheeps = new List<CheepViewModel>();
-        _service = service;
+        Cheeps = new List<MainCheepDTO>();
+        _repository = repository;
     }
     
     public IActionResult OnGet([FromQuery]int page)
     {
         //If a page query is not given in the url set the page=1
-        Cheeps = _service.GetCheeps(page);
+        page = page <= 1 ? 1 : page;
+        Cheeps =  _repository.Get(page).Result.ToList();
         return Page();
     }
 }

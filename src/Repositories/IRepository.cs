@@ -1,7 +1,7 @@
 ﻿namespace Repositories;
 
-public interface IRepository<out T, in TFilter>
+public interface IRepository<TDto, in TFilter>
 {
-    public IEnumerable<T> Get();
-    public IEnumerable<T> GetFrom(TFilter attribute);
+    public Task<IEnumerable<TDto>> Get(int page = 0);
+    public Task<IEnumerable<TDto>> GetFrom(TFilter attribute, int page = 0);
 }
