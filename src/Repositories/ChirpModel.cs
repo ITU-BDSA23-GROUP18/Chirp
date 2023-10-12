@@ -20,6 +20,13 @@ public class ChirpContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Ensure the Name and Email property is unique
+        modelBuilder.Entity<Author>().HasIndex(e => e.Name).IsUnique(); 
+        modelBuilder.Entity<Author>().HasIndex(e => e.Email).IsUnique(); 
+    }
 }
 
 public class Cheep
@@ -38,3 +45,5 @@ public class Author
     public required string Email { get; set; }
     public List<Cheep> Cheeps { get; set;} = new ();
 }
+
+
