@@ -27,20 +27,24 @@ public class CheepRepositories
     }
 
     [Fact]
-    public void GetCheeps_returnsThirtyTwoCheepsFromFirstPage()
+    public async void GetCheeps_returnsThirtyTwoCheepsFromFirstPage()
     {
-        var cheeps = _cheepService.Get(0);
+        var cheeps = await  _cheepService.Get(0);
     
-        Assert.Equal(32, cheeps.Count);
+        Assert.Equal(32, cheeps.Count());
 
     }
     
     [Theory]
     [InlineData("Helge")]
     [InlineData("Rasmus")]
-    public void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string author)
+    public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string author)
     {
-        var cheeps = _cheepService.GetFrom(author, 0);
+        Author authorObject = new Author{
+            Name = $"{author}"
+        };
+
+        var cheeps = await _cheepService.GetFrom(authorObject, 0);
         
         Assert.Contains(_cheeps.Find(c => c.Author == author), cheeps);
         Assert.DoesNotContain(_cheeps.Find(c => c.Author != author), cheeps);
@@ -48,9 +52,14 @@ public class CheepRepositories
     
     [Theory]
     [InlineData("OndFisk")]
-    public void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty(string author)
+    public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty(string author)
     {
-        var cheeps = _cheepService.GetFrom(author, 0);
+         Author authorObject = new Author{
+            Name = $"{author}"
+        };
+
+
+        var cheeps = await _cheepService.GetFrom(authorObject, 0);
         Assert.Empty(cheeps);
     }
     
