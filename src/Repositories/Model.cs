@@ -18,8 +18,8 @@ public class CheepContext : DbContext
         DbInitializer.SeedDatabase(this);
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlite($"Data Source={DbPath}");
+    protected override void OnConfiguring(DbContextOptionsBuilder options) {}
+        
 }
 
 public class Cheep

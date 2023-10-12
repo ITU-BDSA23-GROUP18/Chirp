@@ -4,26 +4,21 @@ namespace Repositories.Tests;
 
 public class CheepRepositories
 {
-    private readonly IRepository<Cheep, MainCheepDTO, Author> _cheepService;
+    private readonly IRepository<MainCheepDTO, Author> _cheepService;
     private static readonly List<MainCheepDTO> _cheeps = new()
     {
-        new MainCheepDTO
-        {
-            Author = "Helge",
-            Message = "Hello, BDSA students!",
-            Timestamp = UnixTimeStampToDateTimeString(1690892208)
-        },
-        new MainCheepDTO
-        {
-            Author = "Rasmus",
-            Message = "Hello, BDSA students!",
-            Timestamp = UnixTimeStampToDateTimeString(1690892208)
-        },
+        new MainCheepDTO("Helge","Hello, BDSA students!",UnixTimeStampToDateTimeString(1690892208)),
+        new MainCheepDTO("Rasmus","Hello, BDSA students!",UnixTimeStampToDateTimeString(1690892208))
     };
     
     public CheepRepositories()
     {
         _cheepService = new CheepRepository();
+    }
+    
+    public CheepContext CreateInMemoryDatabase() {
+        
+        return null;
     }
 
     [Fact]
@@ -41,7 +36,8 @@ public class CheepRepositories
     public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string author)
     {
         Author authorObject = new Author{
-            Name = $"{author}"
+            Name = $"{author}",
+            Email = $"{author}@gmail.com"
         };
 
         var cheeps = await _cheepService.GetFrom(authorObject, 0);
@@ -55,7 +51,8 @@ public class CheepRepositories
     public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty(string author)
     {
          Author authorObject = new Author{
-            Name = $"{author}"
+            Name = $"{author}",
+            Email = $"{author}@gmail.com"
         };
 
 
