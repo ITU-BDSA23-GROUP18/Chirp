@@ -1,13 +1,8 @@
-﻿
-
-
-
-
 namespace Repositories.Tests;
 
 public class CheepRepositories
 {
-    private readonly IRepository<MainCheepDTO, Author> _cheepService;
+    private readonly ICheepRepository _cheepService;
     private static readonly List<MainCheepDTO> _cheeps = new()
     {
         new MainCheepDTO("Helge","Hello, BDSA students!",UnixTimeStampToDateTimeString(1690892208)),
@@ -28,7 +23,7 @@ public class CheepRepositories
     [Fact]
     public async void GetCheeps_returnsThirtyTwoCheepsFromFirstPage()
     {
-        var cheeps = await  _cheepService.Get(0);
+        var cheeps = await  _cheepService.GetCheep(0);
     
         Assert.Equal(32, cheeps.Count());
 
@@ -44,7 +39,7 @@ public class CheepRepositories
             Email = $"{author}@gmail.com"
         };
 
-        var cheeps = await _cheepService.GetFrom(authorObject, 0);
+        var cheeps = await _cheepService.GetCheepFromAuthor(authorObject, 0);
         
         Assert.Contains(_cheeps.Find(c => c.Author == author), cheeps);
         Assert.DoesNotContain(_cheeps.Find(c => c.Author != author), cheeps);
@@ -60,7 +55,7 @@ public class CheepRepositories
         };
 
 
-        var cheeps = await _cheepService.GetFrom(authorObject, 0);
+        var cheeps = await _cheepService.GetCheepFromAuthor(authorObject, 0);
         Assert.Empty(cheeps);
     }
     
