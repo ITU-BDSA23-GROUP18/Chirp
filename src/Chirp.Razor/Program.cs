@@ -13,7 +13,7 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddScoped<IRepository<MainCheepDTO, Author>, CheepRepository>();
+        builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 
         var app = builder.Build();

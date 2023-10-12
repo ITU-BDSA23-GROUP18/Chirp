@@ -8,11 +8,11 @@ namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly IRepository<MainCheepDTO, Author> _repository;
+    private readonly ICheepRepository _repository;
     
     public List<MainCheepDTO> Cheeps {get; private set;}
 
-    public PublicModel(IRepository<MainCheepDTO, Author> repository)
+    public PublicModel(ICheepRepository repository)
     {
         Cheeps = new List<MainCheepDTO>();
         _repository = repository;
@@ -22,7 +22,7 @@ public class PublicModel : PageModel
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
-        Cheeps =  _repository.Get(page).Result.ToList();
+        Cheeps =  _repository.GetCheep(page).Result.ToList();
         return Page();
     }
 }
