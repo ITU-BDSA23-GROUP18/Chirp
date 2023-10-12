@@ -9,6 +9,7 @@ public class CheepContext : DbContext
     {
         DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
     }
+    
     public void InitializeDatabase(){
         //if the database is not created 
         if(!File.Exists(DbPath)){
@@ -16,7 +17,6 @@ public class CheepContext : DbContext
         }
         DbInitializer.SeedDatabase(this);
     }
-
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
@@ -35,6 +35,6 @@ public class Author
 {
     public int AuthorId { get; set; }
     public required string Name { get; set; }
-    public string Email { get; set; }
+    public required string Email { get; set; }
     public List<Cheep> Cheeps { get; set;} = new ();
 }

@@ -7,18 +7,21 @@ namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly IRepository<Cheep, MainCheepDTO, Author> _repository;
+    private readonly IRepository<MainCheepDTO, Author> _repository;
 
     public List<MainCheepDTO> Cheeps { get; set; }
 
-    public UserTimelineModel(IRepository<Cheep, MainCheepDTO, Author> repository)
+    public UserTimelineModel(IRepository<MainCheepDTO, Author> repository)
     {
+        Cheeps = new List<MainCheepDTO>();
         _repository = repository;
     }
     
     public ActionResult OnGet(string author, [FromQuery]int page)
     {
-        Cheeps = _repository.GetFrom(new Author {Name = author, Email = ""}, page == 0 ? 1 : page).Result.ToList(); //TODO: Change to DTO
+        //If a page query is not given in the url set the page=1
+        page = page <= 1 ? 1 : page;
+        Cheeps = _repository.GetFrom(new Author {Name = author, Email = ""}, page).Result.ToList(); //TODO: Change to DTO
         return Page();
     }
 }
