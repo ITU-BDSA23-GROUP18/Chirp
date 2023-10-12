@@ -1,78 +1,113 @@
 namespace Repositories.Tests;
 
-public class CheepRepositories
+public class CheepRepositoryTests
 {
     private readonly ICheepRepository _repository;
-
+    
     public CheepRepositoryTests()
-    {
-        new MainCheepDTO("Helge","Hello, BDSA students!",UnixTimeStampToDateTimeString(1690892208)),
-        new MainCheepDTO("Rasmus","Hello, BDSA students!",UnixTimeStampToDateTimeString(1690892208))
-    };
-    
-    
-    public CheepRepository CreateInMemoryDatabase() {
-        // Arrange
-        using var connection = new SqliteConnection("Filename=:memory:");
+    {   
+        var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
         var builder = new DbContextOptionsBuilder<CheepContext>().UseSqlite(connection);
-        using var context = new CheepContext(builder.Options);
+        var context = new CheepContext(builder.Options);
         context.Database.EnsureCreated();
         _repository = new CheepRepository(context);
-        // Seed databse
-        var author1 = new Author {Name = "Helge", Email = "ropf@itu.dk"};
-        var author2 = new Author { Name = "OndFisk", Email = "rasmus@microsoft.com" };
-        context.Add(new Cheep {Author = author1, Text = "Hello everybody!"});
-        context.Add(new Cheep {Author = author1, Text = "Welcome to the course ;)"});
-        context.Add(new Cheep {Author = author2, Text = "Write clean code!"});
-        context.Add(new Cheep {Author = author2, Text = "I like VS Code <3"});
+        // Seed database
+        DbInitializer.SeedDatabase(context);
         context.SaveChanges();
     }
 
-    [Fact]
-    public async void GetCheeps_returnsThirtyTwoCheepsFromFirstPage()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async void GetCheeps_returns32Cheeps(int page)
     {
-        var cheeps = await  _cheepService.GetCheep(0);
+        var cheeps = await  _repository.GetCheep(page);
     
+        Assert.Equal(32, cheeps.Count());
+    }
+    
+    [Fact]
+    public async void GetCheeps_onFirstPage_returns32FirstCheeps()
+    {
+        var cheeps = await  _repository.GetCheep(); // page = 1
+
+        var first32Cheeps = new List<MainCheepDTO>();
+        foreach (var c in DbInitializer.Cheeps.Take(32))
+        {
+            first32Cheeps.Add(new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
+        }
+        Assert.All(cheeps, c => Assert.Contains(c, first32Cheeps));
+    }
+    
+    [Fact]
+    public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
+    {
+        var cheeps = await  _repository.GetCheep(666);
+    
+        Assert.Empty(cheeps);
+    }
+    
+    [Theory]
+    [InlineData("Helge", "ropf@itu.dk")]
+    [InlineData("Rasmus", "rnie@itu.dk")]
+    public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
+    {
+        var author = new Author{
+            Name = name,
+            Email = email
+        };
+
+        var cheeps = await _repository.GetCheepFromAuthor(author);
+
+        var aCheeps = new List<MainCheepDTO>();
+        foreach (var c in DbInitializer.Cheeps.Where(c => c.Author.Name == author.Name).Take(32))
+        {
+            aCheeps.Add(new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
+        }
+        Assert.All(cheeps, c => Assert.Contains(c, aCheeps));
+    }
+    
+    [Theory]
+    [InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 1)]
+    [InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 2)]
+
+    public async void GetCheepsFromAuthor_givenAuthorAndPage_returns32Cheeps(string name, string email, int page)
+    {
+        var author = new Author{
+            Name = name,
+            Email = email
+        };
+
+        var cheeps = await _repository.GetCheepFromAuthor(author);
+
         Assert.Equal(32, cheeps.Count());
 
     }
     
-    [Theory]
-    [InlineData("Helge")]
-    [InlineData("Rasmus")]
-    public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string author)
+    [Fact]
+    public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty()
     {
-        Author authorObject = new Author{
-            Name = $"{author}",
-            Email = $"{author}@gmail.com"
-        };
-
-        var cheeps = await _cheepService.GetCheepFromAuthor(authorObject, 0);
+         var author = new Author{
+            Name = "OndFisk",
+            Email = "rasmus@microsoft.com"
+         };
+         
+        var cheeps = await _repository.GetCheepFromAuthor(author);
         
-        Assert.Contains(_cheeps.Find(c => c.Author == author), cheeps);
-        Assert.DoesNotContain(_cheeps.Find(c => c.Author != author), cheeps);
-    }
-    
-    [Theory]
-    [InlineData("OndFisk")]
-    public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty(string author)
-    {
-         Author authorObject = new Author{
-            Name = $"{author}",
-            Email = $"{author}@gmail.com"
-        };
-
-
-        var cheeps = await _cheepService.GetCheepFromAuthor(authorObject, 0);
         Assert.Empty(cheeps);
     }
     
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
+    [Fact]
+    public async void GetCheepsFromAuthor_onAPageOutOfRange_returnsEmpty()
     {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
+        var author = new Author{
+            Name = "Helge",
+            Email = "ropf@itu.dk"
+        };
+        
+        var cheeps = await  _repository.GetCheepFromAuthor(author, 666);
+    
+        Assert.Empty(cheeps);
     }
 }

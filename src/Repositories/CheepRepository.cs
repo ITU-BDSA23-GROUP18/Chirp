@@ -13,16 +13,16 @@ public class CheepRepository : ICheepRepository
         _cheepDb.InitializeDatabase();
     }
 
-    public async Task<IEnumerable<MainCheepDTO>> GetCheep(int page = 0) =>
+    public async Task<IEnumerable<MainCheepDTO>> GetCheep(int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
-            .Skip(CheepsPerPage * page)
+            .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
             .Select(c => 
                 new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
             .ToListAsync();
     
-    public async Task<IEnumerable<MainCheepDTO>> GetCheepFromAuthor(Author attribute, int page = 0) =>
+    public async Task<IEnumerable<MainCheepDTO>> GetCheepFromAuthor(Author attribute, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
             .Where(c => c.Author.Name == attribute.Name) //TODO: Change to DTO
