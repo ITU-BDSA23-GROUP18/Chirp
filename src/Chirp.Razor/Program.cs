@@ -16,7 +16,8 @@ public class Program
         
         string DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
         builder.Services.AddDbContext<CheepContext>(options => options.UseSqlite($"Data Source={DbPath}"));
-        builder.Services.AddSingleton<IRepository<MainCheepDTO, Author>, CheepRepository>();
+
+        builder.Services.AddScoped<IRepository<MainCheepDTO, Author>, CheepRepository>();
 
 
         var app = builder.Build();

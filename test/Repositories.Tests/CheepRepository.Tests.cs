@@ -1,4 +1,7 @@
-﻿using Repositories.DTO;
+﻿
+
+
+
 
 namespace Repositories.Tests;
 
@@ -11,14 +14,15 @@ public class CheepRepositories
         new MainCheepDTO("Rasmus","Hello, BDSA students!",UnixTimeStampToDateTimeString(1690892208))
     };
     
-    public CheepRepositories()
-    {
-        _cheepService = new CheepRepository();
-    }
     
-    public CheepContext CreateInMemoryDatabase() {
-        
-        return null;
+    public CheepRepository CreateInMemoryDatabase() {
+        // Arrange
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<CheepContext>().UseSqlite(connection);
+        using var context = new CheepContext(builder.Options);
+        var repository = new CheepRepository(context);
+        return repository;
     }
 
     [Fact]

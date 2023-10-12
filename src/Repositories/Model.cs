@@ -5,9 +5,9 @@ public class CheepContext : DbContext
     public DbSet<Author> Authors { get; set; }
     public string? DbPath { get; }
 
-    public CheepContext() : base()
+    public CheepContext(DbContextOptions<CheepContext> options) : base(options)
     {
-        DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
+        
     }
     
     public void InitializeDatabase(){
@@ -18,7 +18,7 @@ public class CheepContext : DbContext
         DbInitializer.SeedDatabase(this);
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options) {}
+
         
 }
 

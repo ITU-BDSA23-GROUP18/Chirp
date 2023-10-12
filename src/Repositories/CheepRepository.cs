@@ -7,9 +7,9 @@ public class CheepRepository : IRepository<MainCheepDTO, Author>, IDisposable
     private const int CheepsPerPage = 32;
     private readonly CheepContext _cheepDB;
 
-    public CheepRepository()
+    public CheepRepository(CheepContext cheepDB)
     {
-        _cheepDB = new CheepContext();
+        _cheepDB = cheepDB;
         _cheepDB.InitializeDatabase();
     }
 
