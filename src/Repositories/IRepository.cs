@@ -1,7 +1,9 @@
-﻿namespace Repositories;
+﻿using Repositories.DTO;
 
-public interface IRepository<TDto, in TFilter>
+namespace Repositories;
+
+public interface ICheepRepository
 {
-    public Task<IEnumerable<TDto>> Get(int page = 0);
-    public Task<IEnumerable<TDto>> GetFrom(TFilter attribute, int page = 0);
+    public Task<IEnumerable<MainCheepDTO>> GetCheep(int page = 0);
+    public Task<IEnumerable<MainCheepDTO>> GetCheepFromAuthor(Author author, int page = 0);
 }
