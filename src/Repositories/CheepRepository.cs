@@ -32,7 +32,7 @@ public class CheepRepository : IRepository<MainCheepDTO, Author>, IDisposable
         await _cheepDB.Cheeps
             .Include(c => c.Author)
             .Where(c => c.Author.Name == attribute.Name) //TODO: Change to DTO
-            .Skip(CheepsPerPage * page)
+            .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
             .Select(c =>
                 new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
