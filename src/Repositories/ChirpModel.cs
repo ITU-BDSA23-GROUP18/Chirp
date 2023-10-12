@@ -1,11 +1,11 @@
 namespace Repositories;
-public class CheepContext : DbContext
+public class ChirpContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
     public string? DbPath { get; }
 
-    public CheepContext() : base()
+    public ChirpContext() : base()
     {
         DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
     }
