@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories;
-using Repositories.DTO;
 
 namespace Chirp.Razor.Pages;
 
@@ -10,11 +9,11 @@ public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
     
-    public List<MainCheepDTO> Cheeps {get; private set;}
+    public List<CheepDTO> Cheeps {get; private set;}
 
     public PublicModel(ICheepRepository repository)
     {
-        Cheeps = new List<MainCheepDTO>();
+        Cheeps = new List<CheepDTO>();
         _repository = repository;
     }
     

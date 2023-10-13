@@ -9,7 +9,7 @@ using Repositories;
 
 namespace Repositories.Migrations
 {
-    [DbContext(typeof(CheepContext))]
+    [DbContext(typeof(ChirpContext))]
     partial class CheepContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
