@@ -1,11 +1,11 @@
 ﻿namespace Repositories;
 
-public class CheepRepository : ICheepRepository, IDisposable
+public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
     private readonly ChirpContext _cheepDB;
 
-    public CheepRepository()
+    public CheepRepository(CheepContext cheepDB)
     {
         _cheepDB = new ChirpContext();
         _cheepDB.InitializeDatabase();
@@ -20,7 +20,7 @@ public class CheepRepository : ICheepRepository, IDisposable
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 0) =>
         await _cheepDB.Cheeps
             .Include(c => c.Author)
-            .Skip(CheepsPerPage * page)
+            .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
             .Select(c => 
                 new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
