@@ -10,7 +10,7 @@ using Repositories;
 
 namespace Repositories.Migrations
 {
-    [DbContext(typeof(CheepContext))]
+    [DbContext(typeof(ChirpContext))]
     [Migration("20231005142559_InitialCreate")]
     partial class InitialCreate
     {

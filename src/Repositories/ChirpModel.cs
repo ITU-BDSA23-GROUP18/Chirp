@@ -1,11 +1,11 @@
 namespace Repositories;
-public class CheepContext : DbContext
+public class ChirpContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
     public string? DbPath { get; }
 
-    public CheepContext(DbContextOptions<CheepContext> options) : base(options)
+    public ChirpContext() : base()
     {
         
     }
@@ -18,14 +18,21 @@ public class CheepContext : DbContext
         DbInitializer.SeedDatabase(this);
     }
 
-
-        
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.UseSqlite($"Data Source={DbPath}");
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Ensure the Name and Email property is unique
+        modelBuilder.Entity<Author>().HasIndex(e => e.Name).IsUnique(); 
+        modelBuilder.Entity<Author>().HasIndex(e => e.Email).IsUnique(); 
+    }
 }
 
 public class Cheep
 {
-    public int CheepId { get; set; }
-    public int AuthorId { get; set; }
+    public Guid CheepId { get; set; }
+    public required Guid AuthorId { get; set; }
     public required Author Author { get; set; }
     public required string Text { get; set; }
     public DateTime TimeStamp { get; set; }
@@ -33,8 +40,10 @@ public class Cheep
 
 public class Author
 {
-    public int AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
     public List<Cheep> Cheeps { get; set;} = new ();
 }
+
+

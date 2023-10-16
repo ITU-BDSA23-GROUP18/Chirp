@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
-using Repositories.DTO;
 
 namespace Chirp.Razor;
 
