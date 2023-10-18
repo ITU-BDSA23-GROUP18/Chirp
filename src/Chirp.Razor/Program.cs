@@ -14,8 +14,8 @@ public class Program
         builder.Services.AddRazorPages();
         builder.Services.AddSingleton<ChirpContext, ChirpContext>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-
-
+        builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
