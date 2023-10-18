@@ -3,16 +3,16 @@
 public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
-    private readonly ChirpContext _cheepDB;
+    private readonly ChirpContext _cheepDb;
 
     public CheepRepository(ChirpContext cheepDb)
     {
-        _cheepDB = cheepDb;
-        _cheepDB.InitializeDatabase();
+        _cheepDb = cheepDb;
+        _cheepDb.InitializeDatabase();
     }
 
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 0) =>
-        await _cheepDB.Cheeps
+        await _cheepDb.Cheeps
             .Include(c => c.Author)
             .Skip(CheepsPerPage * page)
             .Take(CheepsPerPage)
@@ -21,7 +21,7 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
     
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(Author attribute, int page = 0) =>
-        await _cheepDB.Cheeps
+        await _cheepDb.Cheeps
             .Include(c => c.Author)
             .Where(c => c.Author.Name == attribute.Name)
             .Skip(CheepsPerPage * (page - 1))
@@ -30,21 +30,20 @@ public class CheepRepository : ICheepRepository
                 new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
             .ToListAsync();
 
-    public void CreateCheep(string message, Guid currentAuthorID)
+    public void CreateCheep(string message, Guid currentAuthorId)
     {
-        var currentAuthor = _cheepDB.Authors.Any(a => a.AuthorId == currentAuthorID);
-
-        if (!currentAuthor) throw new NotImplementedException("Link up with create user");
-        var author = _cheepDB.Authors.Find(currentAuthorID); 
+        var author = _cheepDb.Authors.FirstOrDefault(a => a.AuthorId == currentAuthorId);
+        if (author == null) throw new NotImplementedException("Link up with create user");
+        
         var cheep = new Cheep
         {
             CheepId = new Guid(),
-            AuthorId = currentAuthorID,
+            AuthorId = currentAuthorId,
             Author = author,
             Text = message,
             TimeStamp = DateTime.Now
         };
-        _cheepDB.Cheeps.Add(cheep);
-        _cheepDB.SaveChanges();
+        _cheepDb.Cheeps.Add(cheep);
+        _cheepDb.SaveChanges();
     }
 }
