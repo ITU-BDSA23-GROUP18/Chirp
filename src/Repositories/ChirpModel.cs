@@ -1,11 +1,11 @@
 namespace Repositories;
-public class CheepContext : DbContext
+public class ChirpContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
     public string? DbPath { get; }
 
-    public CheepContext() : base()
+    public ChirpContext() : base()
     {
         DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
         InitializeDatabase();
@@ -26,6 +26,7 @@ public class CheepContext : DbContext
         modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(160);
         
         modelBuilder.Entity<Author>().Property(a => a.Name).HasMaxLength(32);
+        modelBuilder.Entity<Author>().HasIndex(a => a.Name).IsUnique();
         modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(300);
         modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
 
@@ -34,8 +35,8 @@ public class CheepContext : DbContext
 
 public class Cheep
 {
-    public int CheepId { get; set; }
-    public required int AuthorId { get; set; }
+    public Guid CheepId { get; set; }
+    public required Guid AuthorId { get; set; }
     public required Author Author { get; set; }
     public required string Text { get; set; }
     public DateTime TimeStamp { get; set; }
@@ -43,8 +44,10 @@ public class Cheep
 
 public class Author
 {
-    public int AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
     public List<Cheep> Cheeps { get; set;} = new ();
 }
+
+

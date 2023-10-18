@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories;
-using Repositories.DTO;
 
 namespace Chirp.Razor.Pages;
 
@@ -9,11 +8,11 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _repository;
 
-    public List<MainCheepDTO> Cheeps { get; set; }
+    public List<CheepDTO> Cheeps { get; set; }
 
     public UserTimelineModel(ICheepRepository repository)
     {
-        Cheeps = new List<MainCheepDTO>();
+        Cheeps = new List<CheepDTO>();
         _repository = repository;
     }
     

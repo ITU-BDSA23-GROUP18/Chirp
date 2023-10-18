@@ -10,7 +10,7 @@ using Repositories;
 
 namespace Repositories.Migrations
 {
-    [DbContext(typeof(CheepContext))]
+    [DbContext(typeof(ChirpContext))]
     [Migration("20231010103928_addedAuthorId")]
     partial class addedAuthorId
     {

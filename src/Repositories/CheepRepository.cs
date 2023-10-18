@@ -1,33 +1,49 @@
-﻿using Repositories.DTO;
-
-namespace Repositories;
+﻿namespace Repositories;
 
 public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
-    private readonly CheepContext _cheepDb;
+    private readonly ChirpContext _cheepDb;
 
-    public CheepRepository(CheepContext cheepDb)
+    public CheepRepository(ChirpContext cheepDb)
     {
         _cheepDb = cheepDb;
+        _cheepDb.InitializeDatabase();
     }
 
-    public async Task<IEnumerable<MainCheepDTO>> GetCheep(int page = 0) =>
+    public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 0) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
             .Skip(CheepsPerPage * page)
             .Take(CheepsPerPage)
             .Select(c => 
-                new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
+                new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
             .ToListAsync();
     
-    public async Task<IEnumerable<MainCheepDTO>> GetCheepFromAuthor(Author attribute, int page = 0) =>
+    public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(Author attribute, int page = 0) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
-            .Where(c => c.Author.Name == attribute.Name) //TODO: Change to DTO
+            .Where(c => c.Author.Name == attribute.Name)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
             .Select(c =>
-                new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
+                new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
             .ToListAsync();
+
+    public void CreateCheep(string message, Guid currentAuthorId)
+    {
+        var author = _cheepDb.Authors.FirstOrDefault(a => a.AuthorId == currentAuthorId);
+        if (author == null) throw new NotImplementedException("Link up with create user");
+        
+        var cheep = new Cheep
+        {
+            CheepId = new Guid(),
+            AuthorId = currentAuthorId,
+            Author = author,
+            Text = message,
+            TimeStamp = DateTime.Now
+        };
+        _cheepDb.Cheeps.Add(cheep);
+        _cheepDb.SaveChanges();
+    }
 }
