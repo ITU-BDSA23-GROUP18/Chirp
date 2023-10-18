@@ -1,28 +1,25 @@
-﻿using System.Linq.Expressions;
-using Microsoft.VisualBasic;
-
-namespace Repositories;
+﻿namespace Repositories;
 
 public class AuthorRepository : IAuthorRepository
 {
     
-    private readonly ChirpContext _AuthorDB;
+    private readonly ChirpContext _authorDb;
 
-    public AuthorRepository()
+    public AuthorRepository(ChirpContext authorDb)
     {
-        _AuthorDB = new ChirpContext();
-        _AuthorDB.InitializeDatabase();
+        _authorDb = authorDb;
+        _authorDb.InitializeDatabase();
     }
 
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name) =>
-         await _AuthorDB.Authors
+         await _authorDb.Authors
              .Where(a => a.Name == name)
              .Select(a => 
                  new AuthorDTO(a.Name, a.Email))
              .ToListAsync();
 
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email) =>
-        await _AuthorDB.Authors
+        await _authorDb.Authors
             .Where(a => a.Name == email)
             .Select(a => 
                 new AuthorDTO(a.Name, a.Email))
@@ -30,8 +27,8 @@ public class AuthorRepository : IAuthorRepository
 
     public void CreateAuthor(string name, string email)
     {
-        var nameCheck = _AuthorDB.Authors.Any(a => a.Name == name);
-        var emailCheck = _AuthorDB.Authors.Any(a => a.Email == email);
+        var nameCheck = _authorDb.Authors.Any(a => a.Name == name);
+        var emailCheck = _authorDb.Authors.Any(a => a.Email == email);
         if (nameCheck)
         {
             throw new ArgumentException($"Username {name} is already used");
@@ -49,7 +46,7 @@ public class AuthorRepository : IAuthorRepository
             Email = email,
             Cheeps = new List<Cheep>()
         };
-        _AuthorDB.Authors.Add(author);
-        _AuthorDB.SaveChanges();
+        _authorDb.Authors.Add(author);
+        _authorDb.SaveChanges();
     }
 }

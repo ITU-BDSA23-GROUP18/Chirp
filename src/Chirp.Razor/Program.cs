@@ -12,13 +12,10 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        
-        string DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
-        builder.Services.AddDbContext<CheepContext>(options => options.UseSqlite($"Data Source={DbPath}"));
-
+        builder.Services.AddSingleton<ChirpContext, ChirpContext>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-
-
+        builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

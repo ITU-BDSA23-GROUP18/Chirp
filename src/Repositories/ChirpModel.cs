@@ -20,12 +20,15 @@ public class ChirpContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // Ensure the Name and Email property is unique
-        modelBuilder.Entity<Author>().HasIndex(e => e.Name).IsUnique(); 
-        modelBuilder.Entity<Author>().HasIndex(e => e.Email).IsUnique(); 
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(160);
+        
+        modelBuilder.Entity<Author>().Property(a => a.Name).HasMaxLength(32);
+        modelBuilder.Entity<Author>().HasIndex(a => a.Name).IsUnique();
+        modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(300);
+        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
+
     }
 }
 
