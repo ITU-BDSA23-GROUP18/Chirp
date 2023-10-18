@@ -1,21 +1,15 @@
 ﻿namespace Repositories;
 
-public class CheepRepository : ICheepRepository, IDisposable
+public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
     private readonly ChirpContext _cheepDB;
 
-    public CheepRepository()
+    public CheepRepository(CheepContext cheepDb)
     {
-        _cheepDB = new ChirpContext();
+        _cheepDB = cheepDb;
         _cheepDB.InitializeDatabase();
     }
-
-    public void Dispose()
-    {
-        _cheepDB.Dispose();
-    }
-
 
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 0) =>
         await _cheepDB.Cheeps
