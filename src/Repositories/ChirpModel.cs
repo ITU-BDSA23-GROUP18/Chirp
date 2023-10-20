@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.Internal;
+
 namespace Repositories;
 public class ChirpContext : DbContext
 {
