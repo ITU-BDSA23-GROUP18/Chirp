@@ -7,8 +7,7 @@ public class ChirpContext : DbContext
 
     public ChirpContext() : base()
     {
-        DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
-        InitializeDatabase();
+        
     }
     
     public void InitializeDatabase(){
