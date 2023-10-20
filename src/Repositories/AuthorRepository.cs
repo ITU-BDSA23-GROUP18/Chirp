@@ -41,7 +41,7 @@ public class AuthorRepository : IAuthorRepository
         
         var author = new Author
         {
-            AuthorId = new Guid(),
+            AuthorId = Guid.NewGuid(),
             Name = name,
             Email = email,
             Cheeps = new List<Cheep>()

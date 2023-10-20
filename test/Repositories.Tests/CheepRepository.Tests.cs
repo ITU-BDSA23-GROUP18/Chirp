@@ -3,19 +3,20 @@ namespace Repositories.Tests;
 public class CheepRepositoryTests
 {
     private readonly ICheepRepository _repository;
-    private readonly CheepContext _context;
+    private readonly ChirpContext _context;
     
     public CheepRepositoryTests()
     {   
         var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
-        var builder = new DbContextOptionsBuilder<CheepContext>().UseSqlite(connection);
-        _context = new CheepContext(builder.Options);
+        //var builder = new DbContextOptionsBuilder<CheepContext>().UseSqlite(connection);
+        _context = new ChirpContext();
         _context.Database.EnsureCreated();
         _repository = new CheepRepository(_context);
         // Seed database
-        DbInitializer.SeedDatabase(_context);
-        _context.SaveChanges();
+        DbInitializer.SetData();
+        // DbInitializer.SeedDatabase(_context);
+        // _context.SaveChanges();
     }
     
     /*
@@ -37,10 +38,10 @@ public class CheepRepositoryTests
     {
         var cheeps = await  _repository.GetCheep(); // page = 1
 
-        var first32Cheeps = new List<MainCheepDTO>();
+        var first32Cheeps = new List<CheepDTO>();
         foreach (var c in DbInitializer.Cheeps.Take(32))
         {
-            first32Cheeps.Add(new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
+            first32Cheeps.Add(new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
         }
         Assert.All(cheeps, c => Assert.Contains(c, first32Cheeps));
     }
@@ -69,10 +70,10 @@ public class CheepRepositoryTests
 
         var cheeps = await _repository.GetCheepFromAuthor(author);
 
-        var aCheeps = new List<MainCheepDTO>();
+        var aCheeps = new List<CheepDTO>();
         foreach (var c in DbInitializer.Cheeps.Where(c => c.Author.Name == author.Name).Take(32))
         {
-            aCheeps.Add(new MainCheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
+            aCheeps.Add(new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
         }
         Assert.All(cheeps, c => Assert.Contains(c, aCheeps));
     }
@@ -88,7 +89,7 @@ public class CheepRepositoryTests
             Email = email
         };
 
-        var cheeps = await _repository.GetCheepFromAuthor(author);
+        var cheeps = await _repository.GetCheepFromAuthor(author, page);
 
         Assert.Equal(32, cheeps.Count());
 
@@ -127,39 +128,30 @@ public class CheepRepositoryTests
     [Theory]
     [InlineData("Hello my name is Helge", "Helge")]
     [InlineData("I work at Microsoft", "Rasmus")]
-    public async void CreateCheep_givenCheepAndWithAuthor_savesThatCheep(string message, string author)
+    public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
     {
-        var time = DateTime.Now;
-        var cDto = new MainCheepDTO(author, message, time.ShowString());
-        var c = new Cheep
+        //var author = _context.Authors.First(a => a.Name == authorName);
+        List<Author> authors = new List<Author>();
+        foreach (var a in _context.Authors)
         {
-            Text = message,
-            Author = _context.Authors.First(a => a.Name == author),
-            TimeStamp = time
-        };
+            authors.Add(a);
+        }
 
-        await  _repository.CreateCheep(cDto);
+        var author = authors.First(a => a.Name == authorName);
+        
+        _repository.CreateCheep(message, author.AuthorId);
 
         var cheeps = _context.Cheeps;
-        Assert.Contains(c, cheeps);
+        Assert.Contains(cheeps, c => c.Text == message && c.Author == author);
     }
     
     [Theory]
     [InlineData("I love coding <3", "OndFisk")]
     [InlineData("I can walk non water!", "Jesus")]
-    public async void CreateCheep_givenCheepWithNonExistingAuthor_savesThatCheepAndAuthor(string message, string author)
+    public void CreateCheep_givenCheepWithNonExistingAuthor_throwsException(string message, string author)
     {
-        var time = DateTime.Now;
-        var cheep = new MainCheepDTO(author, message, time.ShowString());
-        var c = new Cheep
-        {
-            Text = message,
-            Author = _context.Authors.First(a => a.Name == author),
-            TimeStamp = time
-        };
-        
-        var cheeps = await  _repository.CreateCheep(cheep);
-    
-        Assert.Empty(cheeps);
+        void CreateCheepCall() => _repository.CreateCheep(message, Guid.NewGuid());
+
+        Assert.Throws<NotImplementedException>(CreateCheepCall);
     }
 }

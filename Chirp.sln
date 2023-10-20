@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor.Tests", "test\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "src\Repositories\Repositories.csproj", "{CB9F9637-9509-42C5-8E1D-7E6E5C3F4F2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories.Tests", "test\Repositories.Tests\Repositories.Tests.csproj", "{04F841CA-69ED-4814-93FF-8D8CD1C06745}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories.Tests", "test\Repositories.Tests\Repositories.Tests.csproj", "{972605F4-C490-4221-A50B-FD8B7A0E4D97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
