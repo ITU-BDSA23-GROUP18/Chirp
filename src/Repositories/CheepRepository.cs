@@ -11,16 +11,16 @@ public class CheepRepository : ICheepRepository
         _cheepDb.InitializeDatabase();
     }
 
-    public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 0) =>
+    public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
-            .Skip(CheepsPerPage * page)
+            .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
             .Select(c => 
                 new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()))
             .ToListAsync();
     
-    public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(Author attribute, int page = 0) =>
+    public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(Author attribute, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
             .Where(c => c.Author.Name == attribute.Name)
@@ -37,7 +37,7 @@ public class CheepRepository : ICheepRepository
         
         var cheep = new Cheep
         {
-            CheepId = new Guid(),
+            CheepId = Guid.NewGuid(),
             AuthorId = currentAuthorId,
             Author = author,
             Text = message,
