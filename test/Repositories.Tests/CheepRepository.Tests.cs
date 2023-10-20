@@ -130,7 +130,14 @@ public class CheepRepositoryTests
     [InlineData("I work at Microsoft", "Rasmus")]
     public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
     {
-        var author = _context.Authors.First(a => a.Name == authorName);
+        //var author = _context.Authors.First(a => a.Name == authorName);
+        List<Author> authors = new List<Author>();
+        foreach (var a in _context.Authors)
+        {
+            authors.Add(a);
+        }
+
+        var author = authors.First(a => a.Name == authorName);
         
         _repository.CreateCheep(message, author.AuthorId);
 
@@ -143,7 +150,7 @@ public class CheepRepositoryTests
     [InlineData("I can walk non water!", "Jesus")]
     public void CreateCheep_givenCheepWithNonExistingAuthor_throwsException(string message, string author)
     {
-        void CreateCheepCall() => _repository.CreateCheep(message, new Guid());
+        void CreateCheepCall() => _repository.CreateCheep(message, Guid.NewGuid());
 
         Assert.Throws<NotImplementedException>(CreateCheepCall);
     }
