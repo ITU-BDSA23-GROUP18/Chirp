@@ -9,14 +9,11 @@ public class CheepRepositoryTests
     {   
         var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
-        //var builder = new DbContextOptionsBuilder<CheepContext>().UseSqlite(connection);
-        _context = new ChirpContext();
-        _context.Database.EnsureCreated();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        _context = new ChirpContext(builder.Options);
+        _context.InitializeDatabase();
+
         _repository = new CheepRepository(_context);
-        // Seed database
-        DbInitializer.SetData();
-        // DbInitializer.SeedDatabase(_context);
-        // _context.SaveChanges();
     }
     
     /*

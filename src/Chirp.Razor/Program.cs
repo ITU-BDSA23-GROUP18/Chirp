@@ -12,7 +12,8 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddSingleton<ChirpContext, ChirpContext>();
+        string DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
+        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={DbPath}"));
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         

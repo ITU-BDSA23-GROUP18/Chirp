@@ -3,23 +3,16 @@ public class ChirpContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
-    public string? DbPath { get; }
 
-    public ChirpContext() : base()
+    public ChirpContext(DbContextOptions<ChirpContext> options) : base(options)
     {
         
     }
     
     public void InitializeDatabase(){
-        //if the database is not created 
-        if(!File.Exists(DbPath)){
-            Database.EnsureCreated();
-        }
+        Database.EnsureCreated();
         DbInitializer.SeedDatabase(this);
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlite($"Data Source={DbPath}");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(160);
