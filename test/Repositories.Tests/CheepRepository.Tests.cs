@@ -35,12 +35,8 @@ public class CheepRepositoryTests
     {
         var cheeps = await  _repository.GetCheep(); // page = 1
         
-        var allCheeps = new List<CheepDTO>();
-        foreach (var c in DbInitializer.Cheeps)
-        {
-            allCheeps.Add(c.ToDTO());
-        }
-        
+        var allCheeps = DbInitializer.Cheeps.Select(c => c.ToDTO());
+
         Assert.Equal(32, cheeps.Count());
         Assert.All(cheeps, c => Assert.Contains(c, allCheeps));
     }
