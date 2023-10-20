@@ -34,13 +34,15 @@ public class CheepRepositoryTests
     public async void GetCheeps_onFirstPage_returns32FirstCheeps()
     {
         var cheeps = await  _repository.GetCheep(); // page = 1
-
-        var first32Cheeps = new List<CheepDTO>();
-        foreach (var c in DbInitializer.Cheeps.Take(32))
+        
+        var allCheeps = new List<CheepDTO>();
+        foreach (var c in DbInitializer.Cheeps)
         {
-            first32Cheeps.Add(new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
+            allCheeps.Add(c.ToDTO());
         }
-        Assert.All(cheeps, c => Assert.Contains(c, first32Cheeps));
+        
+        Assert.Equal(32, cheeps.Count());
+        Assert.All(cheeps, c => Assert.Contains(c, allCheeps));
     }
     
     [Fact]
@@ -70,7 +72,7 @@ public class CheepRepositoryTests
         var aCheeps = new List<CheepDTO>();
         foreach (var c in DbInitializer.Cheeps.Where(c => c.Author.Name == author.Name).Take(32))
         {
-            aCheeps.Add(new CheepDTO(c.Author.Name, c.Text, c.TimeStamp.ShowString()));
+            aCheeps.Add(c.ToDTO());
         }
         Assert.All(cheeps, c => Assert.Contains(c, aCheeps));
     }
@@ -127,19 +129,12 @@ public class CheepRepositoryTests
     [InlineData("I work at Microsoft", "Rasmus")]
     public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
     {
-        //var author = _context.Authors.First(a => a.Name == authorName);
-        List<Author> authors = new List<Author>();
-        foreach (var a in _context.Authors)
-        {
-            authors.Add(a);
-        }
+        var author = _context.Authors.First(a => a.Name == authorName);
 
-        var author = authors.First(a => a.Name == authorName);
-        
         _repository.CreateCheep(message, author.AuthorId);
 
         var cheeps = _context.Cheeps;
-        Assert.Contains(cheeps, c => c.Text == message && c.Author == author);
+        Assert.Contains(cheeps, c => c.Message == message && c.Author == author);
     }
     
     [Theory]
