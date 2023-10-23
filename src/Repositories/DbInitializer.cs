@@ -5,7 +5,6 @@ public static class DbInitializer
     public static List<Cheep> Cheeps { get; set; } = new();
     public static List<Author> Authors { get; set; } = new();
 
-    
     public static void SeedDatabase(ChirpContext chirpContext)
     {
         if (chirpContext.Authors.Any() && chirpContext.Cheeps.Any()) return;
