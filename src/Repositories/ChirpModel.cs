@@ -15,7 +15,7 @@ public class ChirpContext : DbContext
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(160);
+        modelBuilder.Entity<Cheep>().Property(c => c.Message).HasMaxLength(160);
         
         modelBuilder.Entity<Author>().Property(a => a.Name).HasMaxLength(32);
         modelBuilder.Entity<Author>().HasIndex(a => a.Name).IsUnique();
@@ -30,7 +30,7 @@ public class Cheep
     public Guid CheepId { get; set; }
     public required Guid AuthorId { get; set; }
     public required Author Author { get; set; }
-    public required string Text { get; set; }
+    public required string Message { get; set; }
     public DateTime TimeStamp { get; set; }
 }
 

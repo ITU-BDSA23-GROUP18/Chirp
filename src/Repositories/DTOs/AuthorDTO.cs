@@ -1,4 +1,3 @@
-﻿namespace Repositories
-{
-    public record AuthorDTO(string Name, string Email);
-}
+﻿namespace Repositories;
+
+public record AuthorDTO(string Name, string Email);

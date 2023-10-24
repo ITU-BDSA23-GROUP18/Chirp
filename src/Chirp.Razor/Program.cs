@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 
@@ -12,8 +11,8 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        string DbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
-        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={DbPath}"));
+        var dbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
+        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         
