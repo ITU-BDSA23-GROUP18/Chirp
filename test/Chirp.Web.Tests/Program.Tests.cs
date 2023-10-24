@@ -1,4 +1,4 @@
-namespace Chirp.Razor.Tests;
+namespace Chirp.Web.Tests;
 
 public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 {

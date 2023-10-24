@@ -1,4 +1,4 @@
-namespace Repositories.Tests;
+namespace Chirp.Infrastructure.Tests;
 
 public class CheepRepositoryTests
 {
@@ -63,7 +63,7 @@ public class CheepRepositoryTests
             Email = email
         };
 
-        var cheeps = await _repository.GetCheepFromAuthor(author);
+        var cheeps = await _repository.GetCheepFromAuthor(author.Name);
 
         var aCheeps = new List<CheepDTO>();
         foreach (var c in DbInitializer.Cheeps.Where(c => c.Author.Name == author.Name).Take(32))
@@ -84,7 +84,7 @@ public class CheepRepositoryTests
             Email = email
         };
 
-        var cheeps = await _repository.GetCheepFromAuthor(author, page);
+        var cheeps = await _repository.GetCheepFromAuthor(author.Name, page);
 
         Assert.Equal(32, cheeps.Count());
 
@@ -98,7 +98,7 @@ public class CheepRepositoryTests
             Email = "rasmus@microsoft.com"
          };
          
-        var cheeps = await _repository.GetCheepFromAuthor(author);
+        var cheeps = await _repository.GetCheepFromAuthor(author.Name);
         
         Assert.Empty(cheeps);
     }
@@ -111,7 +111,7 @@ public class CheepRepositoryTests
             Email = "ropf@itu.dk"
         };
         
-        var cheeps = await  _repository.GetCheepFromAuthor(author, 666);
+        var cheeps = await  _repository.GetCheepFromAuthor(author.Name, 666);
     
         Assert.Empty(cheeps);
     }

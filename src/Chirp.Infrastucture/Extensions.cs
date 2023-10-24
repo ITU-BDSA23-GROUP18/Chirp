@@ -1,4 +1,4 @@
-﻿namespace Repositories;
+﻿namespace Chirp.Infrastucture;
 
 public static class Extensions
 {

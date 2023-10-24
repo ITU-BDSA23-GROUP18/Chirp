@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Repositories;
-
+using Chirp.core;
 namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
@@ -20,7 +19,7 @@ public class UserTimelineModel : PageModel
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
-        Cheeps = _repository.GetCheepFromAuthor(new Author {Name = author, Email = ""}, page).Result.ToList(); //TODO: Change to DTO
+        Cheeps = _repository.GetCheepFromAuthor(author, page).Result.ToList(); //TODO: Change to DTO
         return Page();
     }
 }
