@@ -1,11 +1,12 @@
 namespace Chirp.Web.Tests;
 
-public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
+public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _fixture;
+    private readonly CusomWebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public TestAPI(WebApplicationFactory<Program> fixture)
+
+    public TestAPI(CusomWebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
