@@ -37,8 +37,9 @@ public class CheepRepositoryTests
         
         var allCheeps = DbInitializer.Cheeps.Select(c => c.ToDTO());
 
-        Assert.Equal(32, cheeps.Count());
-        Assert.All(cheeps, c => Assert.Contains(c, allCheeps));
+        var cheepDtos = cheeps as CheepDTO[] ?? cheeps.ToArray();
+        Assert.Equal(32, cheepDtos.Count());
+        Assert.All(cheepDtos, c => Assert.Contains(c, allCheeps));
     }
     
     [Fact]
@@ -127,7 +128,7 @@ public class CheepRepositoryTests
     {
         var author = _context.Authors.First(a => a.Name == authorName);
 
-        _repository.CreateCheep(message, author.AuthorId);
+        _repository.CreateCheep(message, authorName);
 
         var cheeps = _context.Cheeps;
         Assert.Contains(cheeps, c => c.Message == message && c.Author == author);
@@ -136,9 +137,9 @@ public class CheepRepositoryTests
     [Theory]
     [InlineData("I love coding <3", "OndFisk")]
     [InlineData("I can walk non water!", "Jesus")]
-    public void CreateCheep_givenCheepWithNonExistingAuthor_throwsException(string message, string author)
+    public void CreateCheep_givenCheepWithNonExistingAuthor_throwsException(string message, string authorName)
     {
-        void CreateCheepCall() => _repository.CreateCheep(message, Guid.NewGuid());
+        void CreateCheepCall() => _repository.CreateCheep(message, authorName);
 
         Assert.Throws<NotImplementedException>(CreateCheepCall);
     }
