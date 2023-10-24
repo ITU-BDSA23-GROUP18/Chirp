@@ -1,4 +1,4 @@
-namespace Repositories;
+namespace Chirp.Infrastucture;
 public class ChirpContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }

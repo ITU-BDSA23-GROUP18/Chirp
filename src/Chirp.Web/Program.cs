@@ -1,7 +1,7 @@
+namespace Chirp.Web;
 using Microsoft.EntityFrameworkCore;
-using Repositories;
-
-namespace Chirp.Razor;
+using Chirp.core;
+using Chirp.Infrastucture;
 
 public class Program
 {

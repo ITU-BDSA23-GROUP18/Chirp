@@ -1,8 +1,7 @@
-﻿namespace Repositories;
+﻿namespace Chirp.Infrastucture;
 
 public class AuthorRepository : IAuthorRepository
 {
-    
     private readonly ChirpContext _authorDb;
 
     public AuthorRepository(ChirpContext authorDb)

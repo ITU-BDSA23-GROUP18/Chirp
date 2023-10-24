@@ -1,4 +1,4 @@
-﻿namespace Repositories;
+﻿namespace Chirp.Infrastucture;
 
 public class CheepRepository : ICheepRepository
 {
@@ -20,10 +20,10 @@ public class CheepRepository : ICheepRepository
                 new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
             .ToListAsync();
     
-    public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(Author attribute, int page = 1) =>
+    public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string attribute, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
-            .Where(c => c.Author.Name == attribute.Name)
+            .Where(c => c.Author.Name == attribute)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
             .Select(c =>
