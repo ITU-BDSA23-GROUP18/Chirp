@@ -14,15 +14,17 @@ public class CheepRepository : ICheepRepository
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
+            .OrderByDescending(c => c.TimeStamp)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
-            .Select(c => 
+            .Select(c =>
                 new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
             .ToListAsync();
-    
+
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string attribute, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
+            .OrderByDescending(c => c.TimeStamp)
             .Where(c => c.Author.Name == attribute)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
@@ -34,7 +36,7 @@ public class CheepRepository : ICheepRepository
     {
         var author = _cheepDb.Authors.FirstOrDefault(a => a.AuthorId == currentUserId);
         if (author == null) throw new NotImplementedException("Link up with create user");
-        
+
         var cheep = new Cheep
         {
             CheepId = Guid.NewGuid(),
