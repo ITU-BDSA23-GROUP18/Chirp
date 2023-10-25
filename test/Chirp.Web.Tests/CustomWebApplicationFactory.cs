@@ -7,7 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Chirp.Web.Tests;
 // Adapted from "Customize WebApplicationFactory" on https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-7.0#customize-webapplicationfactory
-public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class {
+public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
+{
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -15,14 +16,16 @@ public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgr
             var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
                     typeof(DbContextOptions<ChirpContext>));
-            if (dbContextDescriptor != null) {
+            if (dbContextDescriptor != null)
+            {
                 services.Remove(dbContextDescriptor);
             }
 
             var dbConnectionDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
                     typeof(DbConnection));
-            if (dbConnectionDescriptor != null) {
+            if (dbConnectionDescriptor != null)
+            {
                 services.Remove(dbConnectionDescriptor);
             }
 
@@ -44,6 +47,4 @@ public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgr
 
         builder.UseEnvironment("Development");
     }
-
-
 }

@@ -5,7 +5,6 @@ public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
     private readonly CusomWebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-
     public TestAPI(CusomWebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;
@@ -48,7 +47,7 @@ public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
 
         Assert.DoesNotContain($"There are no cheeps so far.", content);
     }
-    
+
     [Theory]
     [InlineData("", "9999999")]
     [InlineData("Helge", "30")]
