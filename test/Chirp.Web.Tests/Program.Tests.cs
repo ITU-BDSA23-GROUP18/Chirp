@@ -1,11 +1,11 @@
 namespace Chirp.Web.Tests;
 
-public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
+public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _fixture;
+    private readonly CusomWebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
 
-    public TestAPI(WebApplicationFactory<Program> fixture)
+    public TestAPI(CusomWebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
@@ -47,7 +47,7 @@ public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
 
         Assert.DoesNotContain($"There are no cheeps so far.", content);
     }
-    
+
     [Theory]
     [InlineData("", "9999999")]
     [InlineData("Helge", "30")]
