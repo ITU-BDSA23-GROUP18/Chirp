@@ -2,6 +2,7 @@ namespace Chirp.Web;
 using Microsoft.EntityFrameworkCore;
 using Chirp.core;
 using Chirp.Infrastucture;
+using Microsoft.AspNetCore.Mvc;
 
 public class Program
 {
@@ -11,11 +12,11 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        var dbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
+        var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -32,6 +33,10 @@ public class Program
         app.UseRouting();
 
         app.MapRazorPages();
+        app.MapPost("/cheep", ([FromBody] string message, ICheepRepository repo) =>
+        {
+            repo.CreateCheep(message, Guid.NewGuid());
+        });
 
         app.Run();
     }

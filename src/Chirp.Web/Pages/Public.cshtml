@@ -10,17 +10,17 @@
 
 <div>
     <h2> Write a cheep! </h2>
-    
-    <div class="cheep">
+
+    <form asp-page-handler="cheep" method="post" class="cheep">
         <textarea placeholder="Write a cheep..."></textarea>
         <button class="share"><i class="fa fa-send"></i> Share</button>
-    </div>
-    
+    </form>
+
     <!-- Line breaks -->
-    <br/><br/>
-    
+    <br /><br />
+
     <h2> Public Timeline </h2>
-    
+
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
