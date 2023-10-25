@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.core;
 using System.Text;
+using System.Text.Json;
 
 namespace Chirp.Razor.Pages;
 
@@ -27,11 +28,17 @@ public class PublicModel : PageModel
 
     public void OnPost(string message)
     {
-        Console.WriteLine(message);
-        //send post request to server
-        //var client = new HttpClient();
-        //var content = new StringContent(message, Encoding.UTF8, "application/json");
-        //var response = client.PostAsync("/Cheep", content).Result;
-
+        var client = new HttpClient
+        {
+            BaseAddress = new Uri(Request.Scheme + "://" + Request.Host)
+        };
+        // make json data
+        var data = new StringContent(
+            JsonSerializer.Serialize($"message: {message}"),
+            Encoding.UTF8,
+            "application/json"
+        );
+        var response = client.PostAsync("/cheep", data).Result;
+        response.EnsureSuccessStatusCode();
     }
 }

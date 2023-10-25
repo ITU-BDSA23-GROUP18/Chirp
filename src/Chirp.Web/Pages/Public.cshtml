@@ -1,4 +1,5 @@
 ﻿@page "/"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model Chirp.Razor.Pages.PublicModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -7,12 +8,11 @@
 
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <div>
     <h2> Write a cheep! </h2>
 
-    <form asp-page-handler="cheep" method="post" class="cheep">
-        <textarea placeholder="Write a cheep..."></textarea>
+    <form method="post" class="cheep">
+        <textarea name="message" placeholder="Write a cheep..."></textarea>
         <button class="share"><i class="fa fa-send"></i> Share</button>
     </form>
 
