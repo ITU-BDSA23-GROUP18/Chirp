@@ -61,15 +61,15 @@ div.page h1 img {
 }
 
 div.page div.navigation {
-  background: #cc6e6e;
+  background: #eee;
   font-size: 12px;
   letter-spacing: .5px;
   text-align: right;  
-  padding: 1em;  
+  padding: 5px 10px;  
 }
 
 div.page div.navigation a {
-  color: #e7e7e7;
+  color: #888;
   font-weight: bold;
   text-decoration: none;
   padding-left: 1rem;
