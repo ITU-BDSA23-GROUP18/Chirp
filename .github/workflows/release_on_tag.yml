@@ -5,8 +5,10 @@ permissions:
 
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,23 +27,33 @@ jobs:
       - name: Set tag
         run: |
           echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
+          MAJOR=$(echo $LATEST_TAG | cut -d. -f1  | cut -c 2) 
+          MINOR=$(echo $LATEST_TAG | cut -d. -f2)
+          PATCH=$(echo $LATEST_TAG | cut -d. -f3)
+          echo "tag=v$MAJOR.$MINOR.$(($PATCH + 1))" >> "$GITHUB_ENV"
+      - if: contains(github.event.pull_request.labels.*.name, 'Major')
+        run: |
+          echo "tag=v$(($MAJOR + 1)).$MINOR.$PATCH" >> "$GITHUB_ENV"
+      - if: contains(github.event.pull_request.labels.*.name, 'Minor')
+        run: |
+          echo "tag=v$MAJOR.$(($MINOR + 1)).$PATCH" >> "$GITHUB_ENV"
 
       - name: Publish Linux
         run: |
-          dotnet publish --runtime linux-x64 --no-self-contained src/Chirp.Razor
-          zip -rj Chirp.Razor-$tag-linux-x64.zip src/Chirp.Razor/bin/Debug/net7.0/linux-x64/publish/Chirp.Razor
+          dotnet publish --runtime linux-x64 --no-self-contained src/Chirp.Web
+          zip -rj Chirp.Razor-$tag-linux-x64.zip src/Chirp.Web/bin/Debug/net7.0/linux-x64/publish/Chirp.Web
       - name: Publish Windows
         run: |
-          dotnet publish --runtime win-x64 --no-self-contained src/Chirp.Razor
-          zip -rj Chirp.Razor-$tag-win-x64.zip src/Chirp.Razor/bin/Debug/net7.0/win-x64/publish/Chirp.Razor.exe
+          dotnet publish --runtime win-x64 --no-self-contained src/Chirp.Web
+          zip -rj Chirp.Razor-$tag-win-x64.zip src/Chirp.Web/bin/Debug/net7.0/win-x64/publish/Chirp.Web.exe
       - name: Publish OSX x64
         run: |
-          dotnet publish --runtime osx-x64 --no-self-contained src/Chirp.Razor
-          zip -rj Chirp.Razor-$tag-osx-x64.zip src/Chirp.Razor/bin/Debug/net7.0/osx-x64/publish/Chirp.Razor
+          dotnet publish --runtime osx-x64 --no-self-contained src/Chirp.Web
+          zip -rj Chirp.Razor-$tag-osx-x64.zip src/Chirp.Web/bin/Debug/net7.0/osx-x64/publish/Chirp.Web
       - name: Publish OSX arm
         run: |
-          dotnet publish --runtime osx-arm64 --no-self-contained src/Chirp.Razor
-          zip -rj Chirp.Razor-$tag-osx-arm64.zip src/Chirp.Razor/bin/Debug/net7.0/osx-arm64/publish/Chirp.Razor
+          dotnet publish --runtime osx-arm64 --no-self-contained src/Chirp.Web
+          zip -rj Chirp.Razor-$tag-osx-arm64.zip src/Chirp.Web/bin/Debug/net7.0/osx-arm64/publish/Chirp.Web
 
       - name: Release
         uses: softprops/action-gh-release@v1
