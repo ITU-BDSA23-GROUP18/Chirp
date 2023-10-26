@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>@ViewData["Title"]</title>
@@ -21,8 +24,7 @@
         {
             <div>
                 <a href="/">Public Timeline</a> |
-                <a ... >register</a>
-                <a ... >login</a>
+                <a ...>login</a>
             </div>
         }
     </div>
