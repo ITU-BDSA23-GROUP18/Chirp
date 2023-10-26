@@ -7,5 +7,5 @@ public interface ICheepRepository
     public Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(String author, int page = 1);
     
     //Post cheeps
-    public void CreateCheep(string message, Guid currentUserId);
+    public void CreateCheep(string message, String authorName);
 }
