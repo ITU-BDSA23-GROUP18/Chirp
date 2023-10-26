@@ -32,15 +32,20 @@ public class CheepRepository : ICheepRepository
                 new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
             .ToListAsync();
 
-    public void CreateCheep(string message, Guid currentUserId)
+    public void CreateCheep(string message, string authorName)
     {
-        var author = _cheepDb.Authors.FirstOrDefault(a => a.AuthorId == currentUserId);
-        if (author == null) throw new NotImplementedException("Link up with create user");
+        var author = _cheepDb.Authors.FirstOrDefault(a => a.Name == authorName) ?? new Author
+        {
+            AuthorId = new Guid(),
+            Email = $"cheep{new Guid()}@chirp.dk",
+            Name = authorName,
+            Cheeps = new List<Cheep>()
+        };
 
         var cheep = new Cheep
         {
             CheepId = Guid.NewGuid(),
-            AuthorId = currentUserId,
+            AuthorId = author.AuthorId,
             Author = author,
             Message = message,
             TimeStamp = DateTime.Now
