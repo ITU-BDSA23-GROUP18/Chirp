@@ -61,11 +61,11 @@ div.page h1 img {
 }
 
 div.page div.navigation {
-  background: #cc6e6e;
+  background: #eee;
   font-size: 12px;
   letter-spacing: .5px;
   text-align: right;  
-  padding: 1em;  
+  padding: 5px 10px;  
 }
 
 div.page div.navigation a {
@@ -254,11 +254,4 @@ div.cheep button.share{
 div.cheep button.share:hover{
     background: #DD6F6F;
     color: white;
-}
-
-div.page div.navigation {
-    background: #eee;
-    color: #888;
-    padding: 5px 10px;
-    font-size: 12px;
 }
