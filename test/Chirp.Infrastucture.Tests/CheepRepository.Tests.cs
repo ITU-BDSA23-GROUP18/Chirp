@@ -90,7 +90,6 @@ public class CheepRepositoryTests
         var cheeps = await _repository.GetCheepFromAuthor(author.Name, page);
 
         Assert.Equal(32, cheeps.Count());
-
     }
 
     [Fact]
