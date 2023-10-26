@@ -9,18 +9,21 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div>
-    <h2> Write a cheep! </h2>
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <h2> Write a cheep! </h2>
+        
+        <div class="cheep">
+            <textarea placeholder="Write a cheep..."></textarea>
+            <button class="share"><i class="fa fa-send"></i> Share</button>
+        </div>
     
-    <div class="cheep">
-        <textarea placeholder="Write a cheep..."></textarea>
-        <button class="share"><i class="fa fa-send"></i> Share</button>
-    </div>
-    
-    <!-- Line breaks -->
-    <br/><br/>
+        <!-- Line breaks -->
+        <br/><br/>
+    }
     
     <h2> Public Timeline </h2>
-    
+
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">

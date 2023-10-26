@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>@ViewData["Title"]</title>
@@ -8,12 +11,24 @@
 <body>
 
 <div class=page>
-    <!-- Navigation bar - TODO: add real page-links -->
-    <div class="navigation">
-        <a href="/" class="active">Home</a>
-        <a href="#">My Page</a>
-        <a href="#">Sign out</a>
+    <div class=navigation>
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <div>
+                <a href="/">Public Timeline</a> |
+                <a href="/@(User.Identity.Name)">My Timeline</a> |
+                <a ...>Logout [@(User.Identity.Name)]</a>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a href="/">Public Timeline</a> |
+                <a ...>login</a>
+            </div>
+        }
     </div>
+    
     <h1><img src="/images/icon1.png" alt="Icon1"/>Chirp!</h1>
 
     <div class=body>
