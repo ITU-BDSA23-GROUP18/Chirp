@@ -31,10 +31,12 @@ jobs:
           MINOR=$(echo $LATEST_TAG | cut -d. -f2)
           PATCH=$(echo $LATEST_TAG | cut -d. -f3)
           echo "tag=v$MAJOR.$MINOR.$(($PATCH + 1))" >> "$GITHUB_ENV"
-      - if: contains(github.event.pull_request.labels.*.name, 'Major')
+      - name: Check If Major Release
+        if: contains(github.event.pull_request.labels.*.name, 'Major')
         run: |
           echo "tag=v$(($MAJOR + 1)).$MINOR.$PATCH" >> "$GITHUB_ENV"
-      - if: contains(github.event.pull_request.labels.*.name, 'Minor')
+      - name: Check If Minor Release
+        if: contains(github.event.pull_request.labels.*.name, 'Minor')
         run: |
           echo "tag=v$MAJOR.$(($MINOR + 1)).$PATCH" >> "$GITHUB_ENV"
 
@@ -58,6 +60,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ env.tag }}
           files: |
             Chirp.Razor-${{ env.tag }}-linux-x64.zip
             Chirp.Razor-${{ env.tag }}-win-x64.zip
