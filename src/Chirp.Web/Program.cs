@@ -35,7 +35,7 @@ public class Program
         app.MapRazorPages();
         app.MapPost("/cheep", ([FromBody] string message, ICheepRepository repo) =>
         {
-            repo.CreateCheep(message, Guid.NewGuid());
+            repo.CreateCheep(message, Guid.NewGuid().ToString());
         });
 
         app.Run();

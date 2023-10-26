@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.core;
 using System.Text;
 using System.Text.Json;
+using Chirp.Infrastucture;
 
 namespace Chirp.Razor.Pages;
 
@@ -26,7 +27,7 @@ public class PublicModel : PageModel
         return Page();
     }
 
-    public void OnPost(string message)
+    public IActionResult OnPostCheep([FromQuery] int page, string message)
     {
         var client = new HttpClient
         {
@@ -34,11 +35,12 @@ public class PublicModel : PageModel
         };
         // make json data
         var data = new StringContent(
-            JsonSerializer.Serialize($"message: {message}"),
+            JsonSerializer.Serialize(message),
             Encoding.UTF8,
             "application/json"
         );
         var response = client.PostAsync("/cheep", data).Result;
         response.EnsureSuccessStatusCode();
+        return RedirectToPage("Public");
     }
 }
