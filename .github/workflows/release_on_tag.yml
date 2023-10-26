@@ -26,7 +26,7 @@ jobs:
         run: dotnet test --no-build --verbosity normal
       - name: Set tag
         run: |
-          echo "tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
+          LATEST_TAG=$(git describe --tags --abbrev=0)
           MAJOR=$(echo $LATEST_TAG | cut -d. -f1  | cut -c 2) 
           MINOR=$(echo $LATEST_TAG | cut -d. -f2)
           PATCH=$(echo $LATEST_TAG | cut -d. -f3)
