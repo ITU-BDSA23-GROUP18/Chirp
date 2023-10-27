@@ -36,8 +36,8 @@ public class CheepRepository : ICheepRepository
     {
         var author = _cheepDb.Authors.FirstOrDefault(a => a.Name == authorName) ?? new Author
         {
-            AuthorId = new Guid(),
-            Email = $"cheep{new Guid()}@chirp.dk",
+            AuthorId = Guid.NewGuid(),
+            Email = $"cheep{Guid.NewGuid()}@chirp.dk",
             Name = authorName,
             Cheeps = new List<Cheep>()
         };
