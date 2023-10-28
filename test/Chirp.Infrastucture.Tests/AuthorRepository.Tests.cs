@@ -23,42 +23,34 @@ public class AuthorRepositoryTests
     {
 
         // Act
-        Author author = await repository.GetAuthorByName("Helge");
+        var authors = await _repository.GetAuthorByName("Helge");
+        var author = authors.FirstOrDefault();
         
         // Assert
         Assert.Equal("Helge", author.Name);
-        connection.Close();
+        
     }
     [Fact]
     public async void TestFindAuthorByEmail(){
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<CheepContext>().UseSqlite(connection);
-        using var context = new CheepContext(builder.Options);
-        var repository = new AuthorRepository(context);
+
         // Act
-        Author author = await repository.GetAuthorByEmail("ropf@itu.dk");
+        var authors = await _repository.GetAuthorByEmail("ropf@itu.dk");
+        var author = authors.FirstOrDefault();
 
         //Assert
         Assert.Equal("Helge", author.Name);
-        connection.Close();
 
     }
 
     [Fact]
     public async void TestCreateCheep(){
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<CheepContext>().UseSqlite(connection);
-        using var context = new CheepContext(builder.Options);
-        var repository = new AuthorRepository(context);h
+
         // Act
-        await repository.CreateAuthor("Helge");
+        _repository.CreateAuthor("John Doe", "John@doe.com");
 
-        Author author = await repository.GetAuthorByName("Helge");
-
+        var authors = await _repository.GetAuthorByName("John Doe");
+        var author = authors.FirstOrDefault();
         //Assert
         Assert.Equal("Helge", author.Name);
-        connection.Close();
     }
 }
