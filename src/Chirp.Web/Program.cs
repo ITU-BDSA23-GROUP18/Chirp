@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Chirp.core;
 using Chirp.Infrastucture;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 public class Program
 {
@@ -11,12 +14,16 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddRazorPages();
+        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
+        builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
+        
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-
+        
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -31,8 +38,11 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+        
+        app.UseAuthorization();
 
         app.MapRazorPages();
+        app.MapControllers();
         app.MapPost("/cheep", ([FromBody] string message, ICheepRepository repo) =>
         {
             repo.CreateCheep(message, Guid.NewGuid().ToString());
