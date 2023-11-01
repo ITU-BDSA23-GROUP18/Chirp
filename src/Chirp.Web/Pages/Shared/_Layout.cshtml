@@ -1,43 +1,55 @@
-﻿@using Microsoft.Extensions.Configuration
-@inject IConfiguration Configuration
+﻿@using Microsoft.AspNetCore.Authentication.OpenIdConnect
+@using Microsoft.Extensions.Options
+@using Microsoft.Identity.Web
+
+@inject IOptionsMonitor<MicrosoftIdentityOptions> AzureAdb2COptions
+
+@{
+    var options = AzureAdb2COptions.Get(OpenIdConnectDefaults.AuthenticationScheme);
+}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
-    <link href="/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>
 
 <div class=page>
     <h1><img src="/images/icon1.png" alt="Icon1"/>Chirp!</h1>
-
-    <div class=navigation>
-        @if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <div>
-                <a href="/">Public Timeline</a> |
-                <a href="/@(User.Identity.Name)">My Timeline</a> |
-                <a ...>Logout [@(User.Identity.Name)]</a>
-            </div>
-        }
-        else
-        {
-            <div>
-                <a href="/">Public Timeline</a> |
-                <a ...>login</a>
-            </div>
-        }
+    
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Public">Home</a>
+                            </li>
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+    
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
-
-    <div class=body>
-        @RenderBody()
-    </div>
+    
     <div class=footer>
         Chirp &mdash; An ASP.NET Application by group 18
     </div>
 </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>
