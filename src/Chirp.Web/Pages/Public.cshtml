@@ -8,14 +8,33 @@
 
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"  href="css/style.css" />
 <div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
         <h2> Write a cheep! </h2>
         <form method="post" asp-page-handler="cheep" class="cheep">
-            <textarea maxlength="160" name="message" placeholder="What's on your heart?..."></textarea>
+                <textarea id="textArea" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
+                <div class="char-count" id="charCount">0/160 characters</div>
             <button class="share"><i class="fa fa-send"></i> Cheep!</button>
         </form>
+        
+       
+
+        <script>
+            function countChars() {
+                  var textEntered = document.getElementById('textArea').value;
+                  var textLength = textEntered.length;
+            
+                  if (textLength <= 160) {
+                    document.getElementById('charCount').innerHTML = textLength + '/160 characters';
+                  } else {
+                    
+                    document.getElementById('textArea').value = textEntered.substring(0, 160);
+                    document.getElementById('charCount').innerHTML = '160/160 characters';
+                  }
+            }
+      </script>
 
         <!-- Line breaks -->
         <br />

@@ -73,7 +73,7 @@ public class CheepRepository : ICheepRepository
     
     public class NewCheep
     {
-        public string? Message { get; set; }
+        public required string Message { get; set; }
     }
     
     public class CheepValidator : AbstractValidator<NewCheep>
