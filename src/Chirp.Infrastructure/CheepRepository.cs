@@ -1,4 +1,7 @@
-﻿namespace Chirp.Infrastucture;
+﻿using System.ComponentModel;
+using System.Reflection.Metadata;
+
+namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository
 {
@@ -32,25 +35,35 @@ public class CheepRepository : ICheepRepository
                 new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
             .ToListAsync();
 
-    public void CreateCheep(string message, string authorName)
+    public void CreateCheep(string message, string username)
     {
-        var author = _cheepDb.Authors.FirstOrDefault(a => a.Name == authorName) ?? new Author
-        {
-            AuthorId = Guid.NewGuid(),
-            Email = $"cheep{Guid.NewGuid()}@chirp.dk",
-            Name = authorName,
-            Cheeps = new List<Cheep>()
-        };
 
+        Author author;
+        
+        //check if user exists
+        if (!_cheepDb.Authors.Any(a => a.Name == username))
+        {
+            author = new Author
+            {
+                AuthorId = Guid.NewGuid(),
+                Name = username,
+                Email = ""
+
+            };
+        }
+        else
+        {
+            author = _cheepDb.Authors.SingleAsync(a => a.Name == username).Result;
+        }
         var cheep = new Cheep
         {
             CheepId = Guid.NewGuid(),
-            AuthorId = author.AuthorId,
             Author = author,
             Message = message,
-            TimeStamp = DateTime.Now
+            TimeStamp = DateTime.UtcNow
         };
         _cheepDb.Cheeps.Add(cheep);
         _cheepDb.SaveChanges();
     }
 }
+

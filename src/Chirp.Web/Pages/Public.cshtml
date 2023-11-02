@@ -1,6 +1,6 @@
 ﻿@page "/"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model Chirp.Razor.Pages.PublicModel
+@model PublicModel
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
@@ -12,10 +12,9 @@
     @if (User.Identity?.IsAuthenticated ?? false)
     {
         <h2> Write a cheep! </h2>
-
         <form method="post" asp-page-handler="cheep" class="cheep">
-            <textarea name="message" placeholder="Write a cheep..."></textarea>
-            <button class="share"><i class="fa fa-send"></i> Share</button>
+            <textarea name="message" placeholder="What's on your heart?..."></textarea>
+            <button class="share"><i class="fa fa-send"></i> Cheep!</button>
         </form>
 
         <!-- Line breaks -->

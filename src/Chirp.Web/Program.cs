@@ -1,7 +1,7 @@
 namespace Chirp.Web;
 using Microsoft.EntityFrameworkCore;
 using Chirp.core;
-using Chirp.Infrastucture;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
@@ -43,10 +43,6 @@ public class Program
 
         app.MapRazorPages();
         app.MapControllers();
-        app.MapPost("/cheep", ([FromBody] string message, ICheepRepository repo) =>
-        {
-            repo.CreateCheep(message, Guid.NewGuid().ToString());
-        });
 
         app.Run();
     }
