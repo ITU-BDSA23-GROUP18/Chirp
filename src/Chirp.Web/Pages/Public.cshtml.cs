@@ -1,4 +1,5 @@
 ﻿using Chirp.core;
+using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -23,28 +24,11 @@ public class PublicModel : PageModel
         return Page();
     }
     
-    /*public async Task<IActionResult> OnPostCheep([FromQuery] int page, string message)
-    {
-        var client = new HttpClient
-        {
-            BaseAddress = new Uri(Request.Scheme + "://" + Request.Host)
-        };
-        // make json data
-        var data = new StringContent(
-            JsonSerializer.Serialize(message),
-            Encoding.UTF8,
-            "application/json"
-        );
-        var response = client.PostAsync("/cheep", data).Result;
-        response.EnsureSuccessStatusCode();
-        return RedirectToPage("Public");
-    }*/
-
-    //on post cheep
     public IActionResult OnPostCheep([FromQuery] int page, string message)
     {
         _repository.CreateCheep(message, User.Identity?.Name!);
         return RedirectToPage("Public");
     }
+    
 }
 

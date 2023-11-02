@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Chirp.Infrastructure;
 public class ChirpContext : DbContext
 {
@@ -40,5 +42,7 @@ public class Author
     public required string Email { get; set; }
     public List<Cheep> Cheeps { get; set;} = new ();
 }
+
+
 
 

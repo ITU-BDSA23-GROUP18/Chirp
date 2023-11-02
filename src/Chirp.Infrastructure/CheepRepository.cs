@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Reflection.Metadata;
+﻿using FluentValidation;
 
 namespace Chirp.Infrastructure;
 
@@ -37,6 +36,12 @@ public class CheepRepository : ICheepRepository
 
     public void CreateCheep(string message, string username)
     {
+        var cheepValidator = new CheepValidator();
+        var cheepValidationResult = cheepValidator.Validate(new NewCheep{Message = message});
+        if (!cheepValidationResult.IsValid)
+        {
+            throw new ValidationException(cheepValidationResult.Errors);
+        }
 
         Author author;
         
@@ -64,6 +69,19 @@ public class CheepRepository : ICheepRepository
         };
         _cheepDb.Cheeps.Add(cheep);
         _cheepDb.SaveChanges();
+    }
+    
+    public class NewCheep
+    {
+        public string? Message { get; set; }
+    }
+    
+    public class CheepValidator : AbstractValidator<NewCheep>
+    {
+        public CheepValidator()
+        {
+            RuleFor(c => c.Message).NotEmpty().MaximumLength(160);
+        }
     }
 }
 
