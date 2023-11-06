@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.core;
+
 namespace Chirp.Razor.Pages;
 
 public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _repository;
-
     public List<CheepDTO> Cheeps { get; set; }
+    public int TotalCheeps = -1;
+    public int CurrentPage = 1;
 
     public UserTimelineModel(ICheepRepository repository)
     {
@@ -15,10 +17,14 @@ public class UserTimelineModel : PageModel
         _repository = repository;
     }
     
-    public ActionResult OnGet(string author, [FromQuery]int page)
+    public ActionResult OnGet(string author, [FromQuery] int page)
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
+        
+        if (TotalCheeps == -1) TotalCheeps = _repository.CountCheepsFromAuthor(author).Result;
+        CurrentPage = page;
+        
         Cheeps = _repository.GetCheepFromAuthor(author, page).Result.ToList();
         return Page();
     }

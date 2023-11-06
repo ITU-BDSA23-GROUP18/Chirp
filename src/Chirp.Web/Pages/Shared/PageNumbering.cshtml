@@ -1,17 +1,17 @@
 ﻿@model Chirp.Web.Pages.Shared.PageNumberingModel
 @{
     @if (Model.CurrentPage == 1) {<text>Previous</text>}
-    else {<a href="/?page=@(Model.CurrentPage - 1)">Previous</a>}
+    else {<a href="?page=@(Model.CurrentPage - 1)">Previous</a>}
     <text>|</text>
     
     @for (var i = 1; i <= Model.NPages; i++)
     {
-        @if (Model.CurrentPage == 1) {<text>@i</text>}
-        else {<a href="/?page=@i">@i</a>}
+        @if (i == Model.CurrentPage) {<text>@i</text>}
+        else {<a href="?page=@i">@i</a>}
         <text>|</text>
     }
     
     <text>|</text>
     @if (Model.CurrentPage == Model.NPages) {<text>Next</text>}
-    else {<a href="/?page=@(Model.CurrentPage+1)">Next</a>}
+    else {<a href="?page=@(Model.CurrentPage+1)">Next</a>}
 }

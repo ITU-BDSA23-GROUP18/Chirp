@@ -33,7 +33,7 @@
     }
     
     @{
-        var pageNumbers = new PageNumberingModel(Model.Cheeps);
+        var pageNumbers = new PageNumberingModel(Model.TotalCheeps, Model.CurrentPage);
         await Html.RenderPartialAsync("Shared/PageNumbering", pageNumbers);
     }
 </div>
