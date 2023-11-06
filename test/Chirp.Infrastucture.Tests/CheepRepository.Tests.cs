@@ -1,59 +1,75 @@
 using Testcontainers.MsSql;
 using Microsoft.Data.SqlClient;
-using System.Runtime.CompilerServices;
-using Renci.SshNet;
-using Xunit;
+
+
 
 
 namespace Chirp.Infrastructure.Tests;
 
 public class CheepRepositoryTests
 {
-    private readonly ChirpContext _context;
+    private  ChirpContext _context;
 
-    private readonly ICheepRepository _repository;
-
-
-
-public sealed class MsSqlServerContainerTest : IAsyncLifetime{
-
-    private readonly MsSqlContainer _msSqlContainer
-    = new MsSqlBuilder().Build();
-
- 
+    private  ICheepRepository _repository;
+private readonly MsSqlContainer _msSqlContainer
+        = new MsSqlBuilder()
+            .WithPassword("Password1234!")
+            .WithDatabase("Chirp")
+            .Build();
 
 
 
+
+    
+
+
+  public CheepRepositoryTests() 
+    {
+        InitializeDatabase().GetAwaiter().GetResult();
+
+        
+
+
+        /*
+        var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        _context = new ChirpContext(builder.Options);
+        _context.InitializeDatabase();
+*/
+
+    }
+    async Task InitializeDatabase(){
+       await using var connection = new SqlConnection(_msSqlContainer.GetConnectionString());
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(connection);
+        _context = new ChirpContext(builder.Options);
+        _context.InitializeDatabase();
+        _repository = new CheepRepository(_context);
+
+    }
 
 
         /*
          * Testing GetCheeps
          */
-
+/*
         [Theory]
     [InlineData(1)]
     [InlineData(2)]
     public async Task GetCheeps_returns32Cheeps(int page)
     {
-        await using var connection = new SqlConnection(_msSqlContainer.GetConnectionString());
-        await connection.OpenAsync();
-        var command = connection.CreateCommand();
-        command.CommandText = $"SELECT COUNT(*) FROM Cheeps";
-         
+         var cheeps = await _repository.GetCheep(page);
 
-
-
-
-        
-        Assert.Equal(32, count);
+        Assert.Equal(32, cheeps.Count());
     }
-      public Task InitializeAsync() => _msSqlContainer.StartAsync();
-   public Task DisposeAsync() => _msSqlContainer.DisposeAsync().AsTask();
-
-        /*
+        */
    [Fact]
    public async void GetCheeps_onFirstPage_returns32FirstCheeps()
    {
+
+
+
        var cheeps = await _repository.GetCheep(); // page = 1
 
        var allCheeps = DbInitializer.Cheeps.Select(c => c.ToDTO());
@@ -61,7 +77,10 @@ public sealed class MsSqlServerContainerTest : IAsyncLifetime{
        var cheepDtos = cheeps as CheepDTO[] ?? cheeps.ToArray();
        Assert.Equal(32, cheepDtos.Count());
        Assert.All(cheepDtos, c => Assert.Contains(c, allCheeps));
+
+
    }
+   /*
 
    [Fact]
    public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
@@ -164,8 +183,9 @@ public sealed class MsSqlServerContainerTest : IAsyncLifetime{
        _repository.CreateCheep(message, authorName);
        Assert.Contains(_context.Authors, a => a.Name == authorName);
    }
-   */
- 
+*/   
+    public Task InitializeAsync() => _msSqlContainer.StartAsync();
+    public Task DisposeAsync() => _msSqlContainer.DisposeAsync().AsTask();
    
-    }
+
 }
