@@ -53,17 +53,20 @@ public class CheepRepositoryTests : IAsyncLifetime
         /*
          * Testing GetCheeps
          */
-/*
+
         [Theory]
     [InlineData(1)]
     [InlineData(2)]
     public async Task GetCheeps_returns32Cheeps(int page)
     {
-         var cheeps = await _repository.GetCheep(page);
+       var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+       var _context = new ChirpContext(builder.Options);
+       var _repository = new CheepRepository(_context);
+       var cheeps = await _repository.GetCheep(page);
 
-        Assert.Equal(32, cheeps.Count());
+       Assert.Equal(32, cheeps.Count());
     }
-        */
+        
    [Fact]
    public async void GetCheeps_onFirstPage_returns32FirstCheeps()
    {
