@@ -1,21 +1,17 @@
 using Testcontainers.MsSql;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 
 
 
 
 namespace Chirp.Infrastructure.Tests;
 
-public class CheepRepositoryTests
+public class CheepRepositoryTests : IAsyncLifetime
 {
-    private  ChirpContext _context;
 
-    private  ICheepRepository _repository;
-private readonly MsSqlContainer _msSqlContainer
-        = new MsSqlBuilder()
-            .WithPassword("Password1234!")
-            .WithDatabase("Chirp")
-            .Build();
+    
+    private readonly MsSqlContainer _msSqlContainer;
 
 
 
@@ -25,7 +21,9 @@ private readonly MsSqlContainer _msSqlContainer
 
   public CheepRepositoryTests() 
     {
-        InitializeDatabase().GetAwaiter().GetResult();
+        _msSqlContainer = new MsSqlBuilder()
+        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+        .Build();
 
         
 
@@ -39,13 +37,15 @@ private readonly MsSqlContainer _msSqlContainer
 */
 
     }
-    async Task InitializeDatabase(){
-       await using var connection = new SqlConnection(_msSqlContainer.GetConnectionString());
-        await connection.OpenAsync();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(connection);
-        _context = new ChirpContext(builder.Options);
-        _context.InitializeDatabase();
-        _repository = new CheepRepository(_context);
+    public async Task InitializeAsync(){
+        
+        await _msSqlContainer.StartAsync();
+        var optionsBuilder = new DbContextOptionsBuilder <ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        using var context = new ChirpContext(optionsBuilder.Options);
+        await context.Database.MigrateAsync();
+
+        
+
 
     }
 
@@ -67,7 +67,9 @@ private readonly MsSqlContainer _msSqlContainer
    [Fact]
    public async void GetCheeps_onFirstPage_returns32FirstCheeps()
    {
-
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
 
 
        var cheeps = await _repository.GetCheep(); // page = 1
@@ -80,112 +82,116 @@ private readonly MsSqlContainer _msSqlContainer
 
 
    }
-   /*
 
-   [Fact]
-   public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
+    public async Task DisposeAsync()
+    {
+        await _msSqlContainer.DisposeAsync();
+    }
+    /*
+
+[Fact]
+public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
+{
+   var cheeps = await _repository.GetCheep(666);
+
+   Assert.Empty(cheeps);
+}
+
+
+
+[Theory]
+[InlineData("Helge", "ropf@itu.dk")]
+[InlineData("Rasmus", "rnie@itu.dk")]
+public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
+{
+   var author = new Author
    {
-       var cheeps = await _repository.GetCheep(666);
+       Name = name,
+       Email = email
+   };
 
-       Assert.Empty(cheeps);
-   }
+   var cheeps = await _repository.GetCheepFromAuthor(author.Name);
 
-
-
-   [Theory]
-   [InlineData("Helge", "ropf@itu.dk")]
-   [InlineData("Rasmus", "rnie@itu.dk")]
-   public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
+   var aCheeps = new List<CheepDTO>();
+   foreach (var c in DbInitializer.Cheeps.Where(c => c.Author.Name == author.Name).Take(32))
    {
-       var author = new Author
-       {
-           Name = name,
-           Email = email
-       };
-
-       var cheeps = await _repository.GetCheepFromAuthor(author.Name);
-
-       var aCheeps = new List<CheepDTO>();
-       foreach (var c in DbInitializer.Cheeps.Where(c => c.Author.Name == author.Name).Take(32))
-       {
-           aCheeps.Add(c.ToDTO());
-       }
-       Assert.All(cheeps, c => Assert.Contains(c, aCheeps));
+       aCheeps.Add(c.ToDTO());
    }
+   Assert.All(cheeps, c => Assert.Contains(c, aCheeps));
+}
 
-   [Theory]
-   [InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 1)]
-   [InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 2)]
+[Theory]
+[InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 1)]
+[InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 2)]
 
-   public async void GetCheepsFromAuthor_givenAuthorAndPage_returns32Cheeps(string name, string email, int page)
+public async void GetCheepsFromAuthor_givenAuthorAndPage_returns32Cheeps(string name, string email, int page)
+{
+   var author = new Author
    {
-       var author = new Author
-       {
-           Name = name,
-           Email = email
-       };
+       Name = name,
+       Email = email
+   };
 
-       var cheeps = await _repository.GetCheepFromAuthor(author.Name, page);
+   var cheeps = await _repository.GetCheepFromAuthor(author.Name, page);
 
-       Assert.Equal(32, cheeps.Count());
-   }
+   Assert.Equal(32, cheeps.Count());
+}
 
-   [Fact]
-   public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty()
+[Fact]
+public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty()
+{
+   var author = new Author
    {
-       var author = new Author
-       {
-           Name = "OndFisk",
-           Email = "rasmus@microsoft.com"
-       };
+       Name = "OndFisk",
+       Email = "rasmus@microsoft.com"
+   };
 
-       var cheeps = await _repository.GetCheepFromAuthor(author.Name);
+   var cheeps = await _repository.GetCheepFromAuthor(author.Name);
 
-       Assert.Empty(cheeps);
-   }
+   Assert.Empty(cheeps);
+}
 
-   [Fact]
-   public async void GetCheepsFromAuthor_onAPageOutOfRange_returnsEmpty()
+[Fact]
+public async void GetCheepsFromAuthor_onAPageOutOfRange_returnsEmpty()
+{
+   var author = new Author
    {
-       var author = new Author
-       {
-           Name = "Helge",
-           Email = "ropf@itu.dk"
-       };
+       Name = "Helge",
+       Email = "ropf@itu.dk"
+   };
 
-       var cheeps = await _repository.GetCheepFromAuthor(author.Name, 666);
+   var cheeps = await _repository.GetCheepFromAuthor(author.Name, 666);
 
-       Assert.Empty(cheeps);
-   }
+   Assert.Empty(cheeps);
+}
 
 
-    //Testing CreateCheep
+//Testing CreateCheep
 
 
-   [Theory]
-   [InlineData("Hello my name is Helge", "Helge")]
-   [InlineData("I work at Microsoft", "Rasmus")]
-   public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
-   {
-       var author = _context.Authors.First(a => a.Name == authorName);
+[Theory]
+[InlineData("Hello my name is Helge", "Helge")]
+[InlineData("I work at Microsoft", "Rasmus")]
+public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
+{
+   var author = _context.Authors.First(a => a.Name == authorName);
 
-       _repository.CreateCheep(message, authorName);
+   _repository.CreateCheep(message, authorName);
 
-       var cheeps = _context.Cheeps;
-       Assert.Contains(cheeps, c => c.Message == message && c.Author == author);
-   }
+   var cheeps = _context.Cheeps;
+   Assert.Contains(cheeps, c => c.Message == message && c.Author == author);
+}
 
-   [Theory]
-   [InlineData("I love coding <3", "OndFisk")]
-   [InlineData("I can walk non water!", "Jesus")]
-   public void CreateCheep_givenCheepWithNonExistingAuthor_CreatesAuthor(string message, string authorName)
-   {
-       _repository.CreateCheep(message, authorName);
-       Assert.Contains(_context.Authors, a => a.Name == authorName);
-   }
-*/   
-    public Task InitializeAsync() => _msSqlContainer.StartAsync();
-    public Task DisposeAsync() => _msSqlContainer.DisposeAsync().AsTask();
-   
+[Theory]
+[InlineData("I love coding <3", "OndFisk")]
+[InlineData("I can walk non water!", "Jesus")]
+public void CreateCheep_givenCheepWithNonExistingAuthor_CreatesAuthor(string message, string authorName)
+{
+   _repository.CreateCheep(message, authorName);
+   Assert.Contains(_context.Authors, a => a.Name == authorName);
+}
+*/
+
+
 
 }
