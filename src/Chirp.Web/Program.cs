@@ -19,7 +19,7 @@ public class Program
         builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
         
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
-        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ChirpContext")));
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         
