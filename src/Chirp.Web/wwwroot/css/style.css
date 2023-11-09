@@ -4,6 +4,10 @@ body {
   font-size: 14px;
 }
 
+.nullInput{
+    border: 1px solid red;
+}
+
 a {
   color: #26776F;
   text-decoration: none;
@@ -60,7 +64,7 @@ div.page h1 {
 }
 
 div.page h1 img {
-  height: 1em;
+  height: 1em; 
 }
 
 div.page div.navigation {

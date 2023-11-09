@@ -22,7 +22,7 @@ public class ChirpContext : DbContext
         modelBuilder.Entity<Author>().Property(a => a.Name).HasMaxLength(32);
         modelBuilder.Entity<Author>().HasIndex(a => a.Name).IsUnique();
         modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(300);
-        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
+        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique().HasFilter("[Email] IS NOT NULL");
     }
 }
 
@@ -40,7 +40,7 @@ public class Author
     public Guid AuthorId { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
-    public List<Cheep> Cheeps { get; set;} = new ();
+    public List<Cheep>? Cheeps { get; set;} = new ();
 }
 
 
