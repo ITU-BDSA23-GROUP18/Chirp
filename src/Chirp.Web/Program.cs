@@ -1,10 +1,10 @@
 namespace Chirp.Web;
-using Microsoft.EntityFrameworkCore;
 using core;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Microsoft.EntityFrameworkCore;
 
 public class Program
 {
