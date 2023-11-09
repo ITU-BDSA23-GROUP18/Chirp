@@ -2,6 +2,10 @@ namespace Chirp.Web;
 using Microsoft.EntityFrameworkCore;
 using Chirp.core;
 using Chirp.Infrastucture;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 public class Program
 {
@@ -10,11 +14,15 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddRazorPages();
-        var dbPath = Path.Combine(Path.GetTempPath(),"Chirp.db");
-        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
+        builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
+        
+        var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
+        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ChirpContext")));
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+        
         
         var app = builder.Build();
 
@@ -30,8 +38,15 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+        
+        app.UseAuthorization();
 
         app.MapRazorPages();
+        app.MapControllers();
+        app.MapPost("/cheep", ([FromBody] string message, ICheepRepository repo) =>
+        {
+            repo.CreateCheep(message, Guid.NewGuid().ToString());
+        });
 
         app.Run();
     }

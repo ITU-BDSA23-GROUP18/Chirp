@@ -21,23 +21,33 @@ public class CheepRepository : ICheepRepository
                 new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
             .ToListAsync();
 
-    public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string attribute, int page = 1) =>
+    public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
             .OrderByDescending(c => c.TimeStamp)
-            .Where(c => c.Author.Name == attribute)
+            .Where(c => c.Author.Name == authorName)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
             .Select(c =>
                 new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
             .ToListAsync();
 
+    public async Task<int> CountCheeps() =>
+        await _cheepDb.Cheeps
+            .CountAsync();
+    
+    public async Task<int> CountCheepsFromAuthor(string authorName) =>
+        await _cheepDb.Cheeps
+            .Include(c => c.Author)
+            .Where(c => c.Author.Name == authorName)
+            .CountAsync();
+
     public void CreateCheep(string message, string authorName)
     {
         var author = _cheepDb.Authors.FirstOrDefault(a => a.Name == authorName) ?? new Author
         {
-            AuthorId = new Guid(),
-            Email = $"cheep{new Guid()}@chirp.dk",
+            AuthorId = Guid.NewGuid(),
+            Email = $"cheep{Guid.NewGuid()}@chirp.dk",
             Name = authorName,
             Cheeps = new List<Cheep>()
         };
