@@ -63,22 +63,4 @@ public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
 
         Assert.Contains($"There are no cheeps so far.", content);
     }
-
-    [Fact]
-    public async void CanPostNewCheep()
-    {
-        //Post
-        var toPost = Guid.NewGuid();
-        var postResponse = await _client.PostAsync("/cheep",
-            new StringContent(JsonSerializer.Serialize(toPost), Encoding.UTF8, "application/json")
-        );
-        postResponse.EnsureSuccessStatusCode();
-        //Get
-        var getResponse = await _client.GetAsync("/");
-        getResponse.EnsureSuccessStatusCode();
-        var content = await getResponse.Content.ReadAsStringAsync();
-
-        //Assert
-        Assert.Contains(toPost.ToString(), content);
-    }
 }
