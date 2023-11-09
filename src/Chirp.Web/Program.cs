@@ -21,12 +21,11 @@ public class Program
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         // Try to get remote connection string
         string? connectionString = builder.Configuration.GetConnectionString("AzureSQLDBConnectionstring");
-        if (connectionString == null) {
-            // Get local password and connection string
+        if (connectionString == null) throw new Exception("Connection string not found");
+        if (!connectionString.Contains("Password")) {
             string? pass = builder.Configuration["Chirp:azuredbkey"];
-            string? connString = builder.Configuration.GetConnectionString("AzureConnection");
-            connectionString = connString + $"Password={pass};";
-            if (pass == null || connString == null) throw new Exception("Could not get local connection string or sql password");
+            if (pass == null) throw new Exception("Local sql password not set");
+            connectionString += $"Password={pass};";
         }
         
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(connectionString));
