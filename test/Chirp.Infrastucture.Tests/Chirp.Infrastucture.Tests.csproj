@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.2" />
     <PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.403" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
