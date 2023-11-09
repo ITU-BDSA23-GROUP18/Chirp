@@ -30,4 +30,8 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    
+    @{
+        await Html.RenderPartialAsync("Shared/PageNumbering", Model.Pagination);
+    }
 </div>

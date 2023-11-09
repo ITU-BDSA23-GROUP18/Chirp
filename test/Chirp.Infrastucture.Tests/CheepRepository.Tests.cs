@@ -1,30 +1,41 @@
+using Testcontainers.MsSql;
+
 namespace Chirp.Infrastructure.Tests;
 
-public class CheepRepositoryTests
+public class CheepRepositoryTests : IAsyncLifetime
 {
-    private readonly ICheepRepository _repository;
-    private readonly ChirpContext _context;
+
+    private readonly MsSqlContainer _msSqlContainer;
 
     public CheepRepositoryTests()
     {
-        var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        _context = new ChirpContext(builder.Options);
-        _context.InitializeDatabase();
+        _msSqlContainer = new MsSqlBuilder()
+        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+        .Build();
 
-        _repository = new CheepRepository(_context);
+    }
+    public async Task InitializeAsync()
+    {
+
+        await _msSqlContainer.StartAsync();
+        var optionsBuilder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        using var context = new ChirpContext(optionsBuilder.Options);
+        await context.Database.MigrateAsync();
+
     }
 
     /*
-     * Testing GetCheeps
-     */
+    * Testing GetCheeps
+    */
 
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void GetCheeps_returns32Cheeps(int page)
+    public async Task GetCheeps_returns32Cheeps(int page)
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
         var cheeps = await _repository.GetCheep(page);
 
         Assert.Equal(32, cheeps.Count());
@@ -33,6 +44,10 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheeps_onFirstPage_returns32FirstCheeps()
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
+
         var cheeps = await _repository.GetCheep(); // page = 1
 
         var allCheeps = DbInitializer.Cheeps.Select(c => c.ToDTO());
@@ -40,25 +55,35 @@ public class CheepRepositoryTests
         var cheepDtos = cheeps as CheepDTO[] ?? cheeps.ToArray();
         Assert.Equal(32, cheepDtos.Count());
         Assert.All(cheepDtos, c => Assert.Contains(c, allCheeps));
+
+    }
+
+    public async Task DisposeAsync()
+    {
+        await _msSqlContainer.DisposeAsync();
     }
 
     [Fact]
     public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
+
         var cheeps = await _repository.GetCheep(666);
 
         Assert.Empty(cheeps);
     }
-
-    /*
-     * Testing GetCheepsFromAuthor
-     */
 
     [Theory]
     [InlineData("Helge", "ropf@itu.dk")]
     [InlineData("Rasmus", "rnie@itu.dk")]
     public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
+
         var author = new Author
         {
             Name = name,
@@ -81,6 +106,10 @@ public class CheepRepositoryTests
 
     public async void GetCheepsFromAuthor_givenAuthorAndPage_returns32Cheeps(string name, string email, int page)
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
+
         var author = new Author
         {
             Name = name,
@@ -95,6 +124,9 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty()
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
         var author = new Author
         {
             Name = "OndFisk",
@@ -109,6 +141,9 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheepsFromAuthor_onAPageOutOfRange_returnsEmpty()
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
         var author = new Author
         {
             Name = "Helge",
@@ -120,15 +155,16 @@ public class CheepRepositoryTests
         Assert.Empty(cheeps);
     }
 
-    /*
-     * Testing CreateCheep
-     */
+    //Testing CreateCheep
 
     [Theory]
     [InlineData("Hello my name is Helge", "Helge")]
     [InlineData("I work at Microsoft", "Rasmus")]
     public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
         var author = _context.Authors.First(a => a.Name == authorName);
 
         _repository.CreateCheep(message, authorName);
@@ -142,7 +178,38 @@ public class CheepRepositoryTests
     [InlineData("I can walk non water!", "Jesus")]
     public void CreateCheep_givenCheepWithNonExistingAuthor_CreatesAuthor(string message, string authorName)
     {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
         _repository.CreateCheep(message, authorName);
         Assert.Contains(_context.Authors, a => a.Name == authorName);
     }
+
+    [Fact]
+    public void ManyNewUsers_CanCreateCheeps_andReadCheep()
+    {
+        // 
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new CheepRepository(_context);
+
+        List<CheepDTO> newCheeps = new Faker<CheepDTO>()
+            .CustomInstantiator(f => new CheepDTO(f.Random.Words(), f.Name.FirstName(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy")))
+            .RuleFor(c => c.Author, (f, c) => f.Name.FirstName())
+            .RuleFor(c => c.Message, (f, c) => f.Random.Words())
+            .RuleFor(c => c.Timestamp, (f, c) => f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"))
+            .GenerateBetween(50, 100);
+
+        foreach (var cheep in newCheeps)
+        {
+            _repository.CreateCheep(cheep.Message, cheep.Author);
+        }
+
+        Assert.AllAsync<CheepDTO>(newCheeps, async (c) =>
+        {
+            var cheeps = await _repository.GetCheepFromAuthor(c.Author);
+            Assert.Contains(c, cheeps);
+        });
+    }
+
 }
