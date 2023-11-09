@@ -9,5 +9,5 @@ public interface ICheepRepository
     public Task<int> CountCheepsFromAuthor(String authorName);
     
     //Post cheeps
-    public void CreateCheep(string message, String authorName);
+    public void CreateCheep(string message, string username);
 }

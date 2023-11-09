@@ -1,4 +1,6 @@
-namespace Chirp.Infrastucture;
+using System.ComponentModel.DataAnnotations;
+
+namespace Chirp.Infrastructure;
 public class ChirpContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }
@@ -20,15 +22,14 @@ public class ChirpContext : DbContext
         modelBuilder.Entity<Author>().Property(a => a.Name).HasMaxLength(32);
         modelBuilder.Entity<Author>().HasIndex(a => a.Name).IsUnique();
         modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(300);
-        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
-
+        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique().HasFilter("[Email] IS NOT NULL");
     }
 }
 
 public class Cheep
 {
     public Guid CheepId { get; set; }
-    public required Guid AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
     public required Author Author { get; set; }
     public required string Message { get; set; }
     public DateTime TimeStamp { get; set; }
@@ -39,7 +40,9 @@ public class Author
     public Guid AuthorId { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
-    public List<Cheep> Cheeps { get; set;} = new ();
+    public List<Cheep>? Cheeps { get; set;} = new ();
 }
+
+
 
 

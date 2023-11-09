@@ -1,11 +1,10 @@
 namespace Chirp.Web;
-using Microsoft.EntityFrameworkCore;
-using Chirp.core;
-using Chirp.Infrastucture;
-using Microsoft.AspNetCore.Mvc;
+using core;
+using Infrastructure;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Microsoft.EntityFrameworkCore;
 
 public class Program
 {
@@ -32,6 +31,7 @@ public class Program
 
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+        builder.WebHost.UseUrls("https://localhost:7022");
         
         var app = builder.Build();
 
@@ -42,20 +42,17 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-
+        
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
         
         app.UseAuthorization();
+        app.UseAuthentication();
 
         app.MapRazorPages();
         app.MapControllers();
-        app.MapPost("/cheep", ([FromBody] string message, ICheepRepository repo) =>
-        {
-            repo.CreateCheep(message, Guid.NewGuid().ToString());
-        });
 
         app.Run();
     }
