@@ -23,10 +23,12 @@ public class CheepRepositoryTests : IAsyncLifetime
         await context.Database.MigrateAsync();
 
     }
+    public async Task DisposeAsync()
+    {
+        await _msSqlContainer.DisposeAsync();
+    }
 
-    /*
-    * Testing GetCheeps
-    */
+    
 
     [Theory]
     [InlineData(1)]
@@ -58,10 +60,7 @@ public class CheepRepositoryTests : IAsyncLifetime
 
     }
 
-    public async Task DisposeAsync()
-    {
-        await _msSqlContainer.DisposeAsync();
-    }
+    
 
     [Fact]
     public async void GetCheeps_onAPageOutOfRange_returnsEmpty()

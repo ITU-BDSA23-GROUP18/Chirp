@@ -1,30 +1,51 @@
 namespace Chirp.Infrastructure.Tests;
-public class AuthorRepositoryTests
+
+using Testcontainers.MsSql;
+public class AuthorRepositoryTests : IAsyncLifetime
 {
 
-    private readonly IAuthorRepository _repository;
-    private readonly ChirpContext _context;
+
+    private readonly MsSqlContainer _msSqlContainer;
     public AuthorRepositoryTests()
     {
         // Arrange
-        var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        _context = new ChirpContext(builder.Options);
-        _context.InitializeDatabase();
-
-        _repository = new AuthorRepository(_context);
+        _msSqlContainer = new MsSqlBuilder()
+        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+        .Build();
 
         
+    }
+
+    public async Task InitializeAsync()
+    {
+
+        await _msSqlContainer.StartAsync();
+        var optionsBuilder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        using var context = new ChirpContext(optionsBuilder.Options);
+        await context.Database.MigrateAsync();
+
+    }
+    public async Task DisposeAsync()
+    {
+        await _msSqlContainer.DisposeAsync();
     }
     
     [Fact]
     public async void TestFindAuthorByName()
     {
 
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new AuthorRepository(_context);
         // Act
         var authors = await _repository.GetAuthorByName("Helge");
-        var author = authors.FirstOrDefault();
+        var author = new AuthorDTO(null,null);
+
+        for (int i = 0; i < authors.Count(); i++)
+        {
+            author = authors.ElementAt(0);
+            // Assert
+        }
         
         // Assert
         Assert.Equal("Helge", author.Name);
@@ -33,9 +54,18 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestFindAuthorByEmail(){
 
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new AuthorRepository(_context);
         // Act
         var authors = await _repository.GetAuthorByEmail("ropf@itu.dk");
-        var author = authors.FirstOrDefault();
+        var author = new AuthorDTO(null,null);
+
+        for (int i = 0; i < authors.Count(); i++)
+        {
+            author = authors.ElementAt(0);
+            // Assert
+        }
 
         //Assert
         Assert.Equal("Helge", author.Name);
@@ -45,12 +75,17 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestCreateCheep(){
 
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new AuthorRepository(_context);
         // Act
         _repository.CreateAuthor("John Doe", "John@doe.com");
 
         var authors = await _repository.GetAuthorByName("John Doe");
         var author = authors.FirstOrDefault();
         //Assert
-        Assert.Equal("Helge", author.Name);
+        Assert.Equal("John Doe", author.Name);
     }
+
+    
 }
