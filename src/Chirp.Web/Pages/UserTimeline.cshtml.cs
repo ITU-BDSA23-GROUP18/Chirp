@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.core;
+using Chirp.Web.Pages.Shared;
 
 namespace Chirp.Razor.Pages;
 
@@ -8,8 +9,7 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _repository;
     public List<CheepDTO> Cheeps { get; set; }
-    public int TotalCheeps = -1;
-    public int CurrentPage = 1;
+    public PaginationModel? Pagination { get; private set; }
 
     public UserTimelineModel(ICheepRepository repository)
     {
@@ -21,9 +21,9 @@ public class UserTimelineModel : PageModel
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
-        
-        if (TotalCheeps == -1) TotalCheeps = _repository.CountCheepsFromAuthor(author).Result;
-        CurrentPage = page;
+
+        var nCheeps = _repository.CountCheepsFromAuthor(author).Result;
+        Pagination = new PaginationModel(nCheeps, page);
         
         Cheeps = _repository.GetCheepFromAuthor(author, page).Result.ToList();
         return Page();

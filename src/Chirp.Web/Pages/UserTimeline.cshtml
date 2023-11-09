@@ -1,5 +1,4 @@
 ﻿@page "/{author}"
-@using Chirp.Web.Pages.Shared
 @model Chirp.Razor.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -33,7 +32,6 @@
     }
     
     @{
-        var pageNumbers = new PageNumberingModel(Model.TotalCheeps, Model.CurrentPage);
-        await Html.RenderPartialAsync("Shared/PageNumbering", pageNumbers);
+        await Html.RenderPartialAsync("Shared/PageNumbering", Model.Pagination);
     }
 </div>
