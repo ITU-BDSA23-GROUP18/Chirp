@@ -2,7 +2,7 @@
 
 public interface IAuthorRepository
 {
-    // Getter methods
+    // Get methods
     public Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name);
     public Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email);
     
