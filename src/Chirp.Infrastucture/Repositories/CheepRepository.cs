@@ -17,8 +17,7 @@ public class CheepRepository : ICheepRepository
             .OrderByDescending(c => c.TimeStamp)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
-            .Select(c =>
-                new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString(), new ReactionDTO[0]))
+            .Select(c => c.ToDTO())
             .ToListAsync();
 
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
@@ -28,8 +27,7 @@ public class CheepRepository : ICheepRepository
             .Where(c => c.Author.Name == authorName)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
-            .Select(c =>
-                new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString(), new ReactionDTO[0]))
+            .Select(c => c.ToDTO())
             .ToListAsync();
 
     public async Task<int> CountCheeps() =>

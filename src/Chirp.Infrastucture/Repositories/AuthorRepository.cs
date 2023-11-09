@@ -13,30 +13,22 @@ public class AuthorRepository : IAuthorRepository
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name) =>
          await _authorDb.Authors
              .Where(a => a.Name == name)
-             .Select(a => 
-                 new AuthorDTO(a.Name, a.Email))
+             .Select(a => a.ToDTO())
              .ToListAsync();
 
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email) =>
         await _authorDb.Authors
             .Where(a => a.Name == email)
-            .Select(a => 
-                new AuthorDTO(a.Name, a.Email))
+            .Select(a => a.ToDTO())
             .ToListAsync();
 
     public void CreateAuthor(string name, string email)
     {
-        var nameCheck = _authorDb.Authors.Any(a => a.Name == name);
-        var emailCheck = _authorDb.Authors.Any(a => a.Email == email);
-        if (nameCheck)
-        {
+        if (_authorDb.Authors.Any(a => a.Name == name))
             throw new ArgumentException($"Username {name} is already used");
-        }
 
-        if (emailCheck)
-        {
+        if (_authorDb.Authors.Any(a => a.Email == email))
             throw new ArgumentException($"{email} is already used!");
-        }
         
         var author = new Author
         {

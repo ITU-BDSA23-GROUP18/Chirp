@@ -3,8 +3,8 @@
 public interface IReactionRepository
 {
     // Get methods
-    public void CreateReaction(int cheeepId, string authorName, string reaction);
+    public void CreateReaction(string cheepId, string authorName, string reactionType);
 
     // Delete methods
-    public void RemoveReaction(int cheeepId, string authorName);
+    public void RemoveReaction(string cheepId, string authorName);
 }
