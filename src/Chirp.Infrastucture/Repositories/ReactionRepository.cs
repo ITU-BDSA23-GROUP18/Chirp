@@ -9,6 +9,9 @@ public class ReactionRepository : IReactionRepository
         _reactionDb = reactionDb;
         _reactionDb.InitializeDatabase();
     }
+
+    public IEnumerable<string> GetAllReactionTypes() =>
+        Enum.GetValues<ReactionType>().Select(r => r.ToString());
     
     public void CreateReaction(string cheepId, string authorName, string reactionString)
     {

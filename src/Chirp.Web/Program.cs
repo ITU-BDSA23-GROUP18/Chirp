@@ -22,7 +22,7 @@ public class Program
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ChirpContext")));
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        
+        builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
         
         var app = builder.Build();
 

@@ -194,7 +194,7 @@ public class CheepRepositoryTests : IAsyncLifetime
         var _repository = new CheepRepository(_context);
 
         List<CheepDTO> newCheeps = new Faker<CheepDTO>()
-            .CustomInstantiator(f => new CheepDTO(f.Random.Words(), f.Name.FirstName(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy")))
+            .CustomInstantiator(f => new CheepDTO(f.Random.Words(), f.Name.FirstName(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"), new List<ReactionDTO>()))
             .RuleFor(c => c.Author, (f, c) => f.Name.FirstName())
             .RuleFor(c => c.Message, (f, c) => f.Random.Words())
             .RuleFor(c => c.Timestamp, (f, c) => f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"))
