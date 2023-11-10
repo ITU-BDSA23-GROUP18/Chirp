@@ -10,8 +10,7 @@ public class ChirpContext : DbContext
     }
     
     public void InitializeDatabase(){
-        Database.EnsureCreated();
-        DbInitializer.SeedDatabase(this);
+        Database.Migrate();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {

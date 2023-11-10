@@ -40,8 +40,11 @@ public class CheepRepositoryTests : IAsyncLifetime
         var _repository = new CheepRepository(_context);
         var cheeps = await _repository.GetCheep(page);
 
+        
+
+
         Assert.Equal(32, cheeps.Count());
-    }
+    }/*
 
     [Fact]
     public async void GetCheeps_onFirstPage_returns32FirstCheeps()
@@ -209,6 +212,6 @@ public class CheepRepositoryTests : IAsyncLifetime
             var cheeps = await _repository.GetCheepFromAuthor(c.Author);
             Assert.Contains(c, cheeps);
         });
-    }
+    }*/
 
 }

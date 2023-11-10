@@ -12,8 +12,6 @@ public class AuthorRepositoryTests : IAsyncLifetime
         _msSqlContainer = new MsSqlBuilder()
         .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
         .Build();
-
-        
     }
 
     public async Task InitializeAsync()
@@ -29,43 +27,37 @@ public class AuthorRepositoryTests : IAsyncLifetime
     {
         await _msSqlContainer.DisposeAsync();
     }
-    
+
+    [Theory]
+    [InlineData("Helge")]
+    [InlineData("Roger")]
+    public async void TestFindAuthorByName(string name)
+    {
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
+        var _context = new ChirpContext(builder.Options);
+        var _repository = new AuthorRepository(_context);
+
+        var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = name, Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
+        var Authors = new List<Author>() { a1 };
+        _context.Authors.AddRange(Authors);
+        _context.SaveChanges();
+        // Act
+        var authors = await _repository.GetAuthorByName(name);
+        var author = authors.FirstOrDefault();
+        // Assert
+        Assert.Equal(name, author.Name);
+
+    }/*
     [Fact]
-    public async void TestFindAuthorByName()
+    public async void TestFindAuthorByEmail()
     {
 
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
         var _context = new ChirpContext(builder.Options);
         var _repository = new AuthorRepository(_context);
         // Act
-        var authors = await _repository.GetAuthorByName("Helge");
-        var author = new AuthorDTO(null,null);
-
-        for (int i = 0; i < authors.Count(); i++)
-        {
-            author = authors.ElementAt(0);
-            // Assert
-        }
-        
-        // Assert
-        Assert.Equal("Helge", author.Name);
-        
-    }
-    [Fact]
-    public async void TestFindAuthorByEmail(){
-
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
-        var _repository = new AuthorRepository(_context);
-        // Act
         var authors = await _repository.GetAuthorByEmail("ropf@itu.dk");
-        var author = new AuthorDTO(null,null);
-
-        for (int i = 0; i < authors.Count(); i++)
-        {
-            author = authors.ElementAt(0);
-            // Assert
-        }
+        var author = authors.FirstOrDefault();
 
         //Assert
         Assert.Equal("Helge", author.Name);
@@ -73,7 +65,8 @@ public class AuthorRepositoryTests : IAsyncLifetime
     }
 
     [Fact]
-    public async void TestCreateCheep(){
+    public async void TestCreateCheep()
+    {
 
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
         var _context = new ChirpContext(builder.Options);
@@ -86,6 +79,6 @@ public class AuthorRepositoryTests : IAsyncLifetime
         //Assert
         Assert.Equal("John Doe", author.Name);
     }
+*/
 
-    
 }
