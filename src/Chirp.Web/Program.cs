@@ -18,12 +18,20 @@ public class Program
         builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
         
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
-        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
-        //builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ChirpContext")));
+        // Try to get remote connection string
+        string? connectionString = builder.Configuration.GetConnectionString("AzureSQLDBConnectionstring");
+        if (connectionString == null) throw new Exception("Connection string not found");
+        if (!connectionString.Contains("Password")) {
+            string? pass = builder.Configuration["Chirp:azuredbkey"];
+            if (pass == null) throw new Exception("Local sql password not set");
+            connectionString += $"Password={pass};";
+        }
+        
+        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(connectionString));
+
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.WebHost.UseUrls("https://localhost:7022");
-        
         
         var app = builder.Build();
 
@@ -49,4 +57,3 @@ public class Program
         app.Run();
     }
 }
-
