@@ -1,4 +1,6 @@
-﻿namespace Chirp.Infrastucture;
+﻿using FluentValidation;
+
+namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository
 {
@@ -39,26 +41,55 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Where(c => c.Author.Name == authorName)
             .CountAsync();
-
-    public void CreateCheep(string message, string authorName)
+    
+    public void CreateCheep(string message, string username)
     {
-        var author = _cheepDb.Authors.FirstOrDefault(a => a.Name == authorName) ?? new Author
+        var cheepValidator = new CheepValidator();
+        var cheepValidationResult = cheepValidator.Validate(new NewCheep{Message = message});
+        if (!cheepValidationResult.IsValid)
         {
-            AuthorId = Guid.NewGuid(),
-            Email = $"cheep{Guid.NewGuid()}@chirp.dk",
-            Name = authorName,
-            Cheeps = new List<Cheep>()
-        };
+            throw new ValidationException(cheepValidationResult.Errors);
+        }
 
+        Author author;
+        
+        //check if user exists
+        if (!_cheepDb.Authors.Any(a => a.Name == username))
+        {
+            author = new Author
+            {
+                AuthorId = Guid.NewGuid(),
+                Name = username,
+                Email = Guid.NewGuid().ToString()+"@test.com"
+
+            };
+        }
+        else
+        {
+            author = _cheepDb.Authors.SingleAsync(a => a.Name == username).Result;
+        }
         var cheep = new Cheep
         {
             CheepId = Guid.NewGuid(),
-            AuthorId = author.AuthorId,
             Author = author,
             Message = message,
-            TimeStamp = DateTime.Now
+            TimeStamp = DateTime.UtcNow
         };
         _cheepDb.Cheeps.Add(cheep);
         _cheepDb.SaveChanges();
     }
+    
+    public class NewCheep
+    {
+        public required string Message { get; set; }
+    }
+    
+    public class CheepValidator : AbstractValidator<NewCheep>
+    {
+        public CheepValidator()
+        {
+            RuleFor(c => c.Message).NotEmpty().MaximumLength(160);
+        }
+    }
 }
+

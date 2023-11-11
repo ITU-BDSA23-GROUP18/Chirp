@@ -1,4 +1,6 @@
-namespace Chirp.Infrastucture;
+using System.ComponentModel.DataAnnotations;
+
+namespace Chirp.Infrastructure;
 public class ChirpContext : DbContext
 {
     public DbSet<Cheep> Cheeps { get; set; }
@@ -26,5 +28,7 @@ public class ChirpContext : DbContext
         modelBuilder.Entity<Reaction>().HasIndex(r => new {r.Cheep.CheepId, r.Author.AuthorId}).IsUnique();
     }
 }
+
+
 
 

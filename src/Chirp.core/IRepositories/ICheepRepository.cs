@@ -8,6 +8,6 @@ public interface ICheepRepository
     public Task<int> CountCheeps();
     public Task<int> CountCheepsFromAuthor(string authorName);
     
-    // Post methods
-    public void CreateCheep(string message, string authorName);
+    //Post cheeps
+    public void CreateCheep(string message, string username);
 }

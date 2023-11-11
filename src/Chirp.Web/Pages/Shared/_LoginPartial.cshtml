@@ -14,12 +14,12 @@
         @if (!string.IsNullOrEmpty(options.EditProfilePolicyId))
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="EditProfile">Hello @User.Identity?.Name!</a>
+                <a class="nav-link text-dark" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="EditProfile">@User.Identity?.Name!</a>
             </li>
         }
         else
         {
-            <span class="navbar-text text-dark">Hello @User.Identity?.Name!</span>
+            <a class="navbar-text text-dark" onclick="redirect()">@User.Identity?.Name's page</a>
         }
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
@@ -32,3 +32,10 @@
         </li>
     }
 </ul>
+
+<script>
+    function redirect() {
+        window.location.href = "/@User.Identity?.Name";
+    }
+</script>
+    
