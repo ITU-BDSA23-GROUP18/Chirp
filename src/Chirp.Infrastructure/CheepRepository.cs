@@ -62,7 +62,7 @@ public class CheepRepository : ICheepRepository
             {
                 AuthorId = Guid.NewGuid(),
                 Name = username,
-                Email = ""
+                Email = Guid.NewGuid().ToString()+"@test.com"
 
             };
         }
