@@ -1,4 +1,4 @@
-﻿namespace Chirp.Infrastucture;
+﻿namespace Chirp.Infrastructure;
 
 public class Cheep
 {
