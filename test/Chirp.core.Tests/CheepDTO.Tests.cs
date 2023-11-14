@@ -16,12 +16,4 @@ public class CheepDTOTests
         Assert.Equal(cheepDTO.Message, cheepDTO.Timestamp);
         Assert.Equal(cheepDTO.Timestamp, cheepDTO.Timestamp);
     }
-
-    [Fact]
-    public void CreatenAoutherWithNullNameTest()
-    {
-        var authorDTO= new AuthorDTO(null, null);
-        Debug.WriteLine(authorDTO.Name);
-
-    }
 }

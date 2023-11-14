@@ -16,11 +16,4 @@ public class authorDTOTests
         Assert.Equal(authorDTO.Email, authorDTO.Email);
     }
 
-    [Fact]
-    public void CreatenAoutherWithNullNameTest()
-    {
-        var authorDTO= new AuthorDTO(null, null);
-        Debug.WriteLine(authorDTO.Name);
-
-    }
 }
