@@ -2,9 +2,9 @@
 
 public class AuthorRepository : IAuthorRepository
 {
-    private readonly ChirpContext _authorDb;
+    private readonly ChirpDbContext _authorDb;
 
-    public AuthorRepository(ChirpContext authorDb)
+    public AuthorRepository(ChirpDbContext authorDb)
     {
         _authorDb = authorDb;
         _authorDb.InitializeDatabase();

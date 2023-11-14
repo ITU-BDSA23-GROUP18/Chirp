@@ -5,9 +5,9 @@ namespace Chirp.Infrastructure;
 public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
-    private readonly ChirpContext _cheepDb;
+    private readonly ChirpDbContext _cheepDb;
 
-    public CheepRepository(ChirpContext cheepDb)
+    public CheepRepository(ChirpDbContext cheepDb)
     {
         _cheepDb = cheepDb;
         _cheepDb.InitializeDatabase();

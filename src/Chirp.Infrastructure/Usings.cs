@@ -1,3 +1,3 @@
 ﻿global using Microsoft.EntityFrameworkCore;
 global using Chirp.core;
-global using Chirp.Infrastructure;
+global using System;

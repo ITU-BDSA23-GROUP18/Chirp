@@ -1,5 +1,6 @@
 ﻿@page "/{author}"
 @model UserTimelineModel
+
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
@@ -8,6 +9,7 @@
 
 <div>
     <h2> @user's Timeline </h2>
+    <button class="follow/unfollow_btn">@($"{UserTimelineModel.IsFollowing(user!.ToString()!, @User.Identity?.Name!)}")</button>
 
     @if (Model.Cheeps.Any())
     {

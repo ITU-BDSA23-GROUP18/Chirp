@@ -16,7 +16,7 @@ public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgr
         {
             var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
-                    typeof(DbContextOptions<ChirpContext>));
+                    typeof(DbContextOptions<ChirpDbContext>));
             if (dbContextDescriptor != null)
             {
                 services.Remove(dbContextDescriptor);
@@ -39,7 +39,7 @@ public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgr
                 return connection;
             });
 
-            services.AddDbContext<ChirpContext>((container, options) =>
+            services.AddDbContext<ChirpDbContext>((container, options) =>
             {
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);

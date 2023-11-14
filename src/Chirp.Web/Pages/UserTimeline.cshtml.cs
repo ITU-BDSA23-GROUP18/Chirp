@@ -8,6 +8,7 @@ namespace Chirp.Web.Pages;
 public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _repository;
+    private static readonly IAuthorRepository? _authorRepository;
     public List<CheepDTO> Cheeps { get; set; }
     public PaginationModel? Pagination { get; private set; }
 
@@ -27,5 +28,12 @@ public class UserTimelineModel : PageModel
         
         Cheeps = _repository.GetCheepFromAuthor(author, page).Result.ToList();
         return Page();
+    }
+
+    public static string IsFollowing(string followName, string currentUserName)
+    {
+        var following = _authorRepository!.GetFollowing(currentUserName).Result;
+        var pageUser = _authorRepository.GetAuthorByName(followName).Result.FirstOrDefault();
+        return following.Contains(pageUser) ? "Unfollow" : "Follow";
     }
 }

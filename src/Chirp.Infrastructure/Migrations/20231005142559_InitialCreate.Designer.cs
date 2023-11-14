@@ -11,7 +11,7 @@ using Repositories;
 
 namespace Repositories.Migrations
 {
-    [DbContext(typeof(ChirpContext))]
+    [DbContext(typeof(ChirpDbContext))]
     [Migration("20231005142559_InitialCreate")]
     partial class InitialCreate
     {

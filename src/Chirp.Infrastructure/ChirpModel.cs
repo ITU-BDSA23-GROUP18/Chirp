@@ -1,10 +1,10 @@
 namespace Chirp.Infrastructure;
-public class ChirpContext : DbContext
+public class ChirpDbContext : DbContext
 {
     public DbSet<Cheep>? Cheeps { get; set; }
     public DbSet<Author>? Authors { get; set; }
 
-    public ChirpContext(DbContextOptions<ChirpContext> options) : base(options)
+    public ChirpDbContext(DbContextOptions<ChirpDbContext> options) : base(options)
     {
         
     }
@@ -40,7 +40,6 @@ public class Author
     public required string Email { get; set; }
     public List<Cheep>? Cheeps { get; set; }
     public List<Author>? Following { get; set; }
-    
     public List<Author>? Followers { get; set; }
 }
 
