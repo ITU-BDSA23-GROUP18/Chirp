@@ -23,8 +23,11 @@ public class Program
         if (connectionString == null) throw new Exception("Connection string not found");
         if (!connectionString.Contains("Password")) {
             string? pass = builder.Configuration["Chirp:azuredbkey"];
-            if (pass == null) throw new Exception("Local sql password not set");
-            connectionString += $"Password={pass};";
+            if (pass == null)  {
+                Console.WriteLine("Local sql password not set and was not overriden by remote!");
+            } else {
+                connectionString += $"Password={pass};";
+            }
         }
         
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(connectionString));
