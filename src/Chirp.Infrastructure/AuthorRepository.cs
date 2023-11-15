@@ -1,4 +1,6 @@
-﻿namespace Chirp.Infrastructure;
+﻿using Chirp.core.DTOs;
+
+namespace Chirp.Infrastructure;
 
 public class AuthorRepository : IAuthorRepository
 {

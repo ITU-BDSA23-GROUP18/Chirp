@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Chirp.core.DTOs;
+using FluentValidation;
 
 namespace Chirp.Infrastructure;
 

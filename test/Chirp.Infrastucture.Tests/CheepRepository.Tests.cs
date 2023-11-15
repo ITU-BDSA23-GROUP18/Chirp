@@ -1,3 +1,4 @@
+using Chirp.core.DTOs;
 using Testcontainers.MsSql;
 
 namespace Chirp.Infrastructure.Tests;

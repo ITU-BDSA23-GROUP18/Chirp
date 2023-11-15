@@ -1,4 +1,6 @@
-﻿namespace Chirp.core;
+﻿using Chirp.core.DTOs;
+
+namespace Chirp.core;
 
 public interface ICheepRepository
 {

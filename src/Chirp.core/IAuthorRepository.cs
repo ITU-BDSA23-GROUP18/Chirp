@@ -1,4 +1,6 @@
-﻿namespace Chirp.core;
+﻿using Chirp.core.DTOs;
+
+namespace Chirp.core;
 
 public interface IAuthorRepository
 {
@@ -6,9 +8,9 @@ public interface IAuthorRepository
     public Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name);
     public Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email);
 
-    public Task<IEnumerable<AuthorDTO>> GetFollowers(string name);
+    public Task<IEnumerable<AuthorDTO>> GetFollowers(string currentUserName);
 
-    public Task<IEnumerable<AuthorDTO>> GetFollowing(string name);
+    public Task<IEnumerable<AuthorDTO>> GetFollowing(string currentUserName);
     
     // Post methods
     public void CreateAuthor(string name, string email);
