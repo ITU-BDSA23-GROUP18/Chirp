@@ -63,4 +63,15 @@ public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
 
         Assert.Contains($"There are no cheeps so far.", content);
     }
+    public async void CreateAndDeleteUserTest(string email, string password){
+        //create the user and login
+    }
+    //mabye we want to check if the github login works
+
+    public async void CreateCheepTest(){
+        //login to a test user
+        //create a cheep
+        //see that the cheep is in timeline
+        //logout
+    }
 }
