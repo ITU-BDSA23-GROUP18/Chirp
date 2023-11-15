@@ -14,7 +14,7 @@ public class CheepRepository : ICheepRepository
     }
 
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .Include(c => c.Author)
             .OrderByDescending(c => c.TimeStamp)
             .Skip(CheepsPerPage * (page - 1))
@@ -24,7 +24,7 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
 
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .Include(c => c.Author)
             .OrderByDescending(c => c.TimeStamp)
             .Where(c => c.Author.Name == authorName)
@@ -35,11 +35,11 @@ public class CheepRepository : ICheepRepository
             .ToListAsync();
 
     public async Task<int> CountCheeps() =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .CountAsync();
     
     public async Task<int> CountCheepsFromAuthor(string authorName) =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .Include(c => c.Author)
             .Where(c => c.Author.Name == authorName)
             .CountAsync();
@@ -56,7 +56,7 @@ public class CheepRepository : ICheepRepository
         Author author;
         
         //check if user exists
-        if (!_cheepDb.Authors.Any(a => a.Name == username))
+        if (!_cheepDb.Authors!.Any(a => a.Name == username))
         {
             author = new Author
             {
@@ -68,7 +68,7 @@ public class CheepRepository : ICheepRepository
         }
         else
         {
-            author = _cheepDb.Authors.SingleAsync(a => a.Name == username).Result;
+            author = _cheepDb.Authors!.SingleAsync(a => a.Name == username).Result;
         }
         var cheep = new Cheep
         {
@@ -77,7 +77,7 @@ public class CheepRepository : ICheepRepository
             Message = message,
             TimeStamp = DateTime.UtcNow
         };
-        _cheepDb.Cheeps.Add(cheep);
+        _cheepDb.Cheeps!.Add(cheep);
         _cheepDb.SaveChanges();
     }
     
