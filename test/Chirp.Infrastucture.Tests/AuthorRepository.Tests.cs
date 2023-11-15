@@ -47,7 +47,7 @@ public class AuthorRepositoryTests : IAsyncLifetime
         // Assert
         Assert.Equal(name, author.Name);
 
-    }/*
+    }
     [Fact]
     public async void TestFindAuthorByEmail()
     {
@@ -55,6 +55,14 @@ public class AuthorRepositoryTests : IAsyncLifetime
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
         var _context = new ChirpContext(builder.Options);
         var _repository = new AuthorRepository(_context);
+
+        var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
+        var Authors = new List<Author>() { a1 };
+        _context.Authors.AddRange(Authors);
+        _context.SaveChanges();
+        
+
+
         // Act
         var authors = await _repository.GetAuthorByEmail("ropf@itu.dk");
         var author = authors.FirstOrDefault();
@@ -79,6 +87,4 @@ public class AuthorRepositoryTests : IAsyncLifetime
         //Assert
         Assert.Equal("John Doe", author.Name);
     }
-*/
-
 }
