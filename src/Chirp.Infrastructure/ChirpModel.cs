@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.Design;
+
 namespace Chirp.Infrastructure;
 public class ChirpDbContext : DbContext
 {
@@ -41,6 +43,18 @@ public class Author
     public List<Author>? Following { get; set; }
     public List<Author>? Followers { get; set; }
 }
+
+public class ChirpContextFactory : IDesignTimeDbContextFactory<ChirpDbContext>
+    {
+        public ChirpDbContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ChirpDbContext>();
+            var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
+            optionsBuilder.UseSqlite($"Data Source={dbPath}");
+
+            return new ChirpDbContext(optionsBuilder.Options);
+        }
+    }
 
 
 
