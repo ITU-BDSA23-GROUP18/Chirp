@@ -7,9 +7,9 @@ public class authorDTOTests
     [Theory]
     [InlineData("test1", null)]
     [InlineData("", "test2")]
+    [InlineData(null,null)]
     public void CreateAuthorDTOTest(string name, string email)
     {
-        
         var authorDTO= new AuthorDTO(name, email);
 
         Assert.Equal(authorDTO.Name, authorDTO.Name);
