@@ -54,28 +54,27 @@ public class AuthorRepository : IAuthorRepository
     public void FollowAuthor(string followName, string currentUserName)
     {
         var authorToFollow = _authorDb.Authors!.SingleAsync(a => a.Name == followName).Result;
-        Console.WriteLine(authorToFollow);
+        Console.WriteLine($"Author to follow{authorToFollow}");
         
         if (authorToFollow == null)
         {
             throw new ArgumentException($"Author to follow does not exist");
         }
         
-        var currentUser =  _authorDb.Authors!.Include(a => a.Following).FirstOrDefault(a => a.Name == currentUserName);
-        if (currentUser == null)
+        var signedInUser =  _authorDb.Authors!.Include(author => author.Following!).FirstOrDefault(a => a.Name == currentUserName);
+        Console.WriteLine($"Singed in user: {signedInUser}");
+        if (signedInUser == null)
         {
             throw new ArgumentException($"Current user does not exist");
         }
         
-        currentUser.Following!.Add(authorToFollow);
+        signedInUser.Following!.Add(authorToFollow);
         _authorDb.SaveChanges();
     }
     
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
-        Console.WriteLine($"\n \n \n Pageuser 3: {pageUser} \n \n \n");
         var user = await _authorDb.Authors!.SingleAsync(a => a.Name == pageUser);
-        Console.WriteLine($"Pageuser 4: {user}");
 
         if (user == null)
         {
@@ -92,9 +91,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
     {
-        Console.WriteLine($"\n \n \n Pageuser 1: {userName} \n \n \n");
         var user = await _authorDb.Authors!.Include(author => author.Following!).FirstOrDefaultAsync(a => a.Name == userName);
-        Console.WriteLine($"Pageuser 2: {user.Name}");
         //return list of authors in following
         if (user == null)
         {
