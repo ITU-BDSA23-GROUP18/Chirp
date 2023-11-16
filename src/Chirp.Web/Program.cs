@@ -31,6 +31,7 @@ public class Program
 
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+        builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
         builder.WebHost.UseUrls("https://localhost:7022");
         
         var app = builder.Build();
