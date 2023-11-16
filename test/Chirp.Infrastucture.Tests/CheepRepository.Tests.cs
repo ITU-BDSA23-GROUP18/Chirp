@@ -152,7 +152,7 @@ public class CheepRepositoryTests : IAsyncLifetime
     {
         //Use GUID as username since the username must be uniqe
         List<CheepDTO> newCheeps = new Faker<CheepDTO>()
-            .CustomInstantiator(f => new CheepDTO(Guid.NewGuid().ToString()[4..], f.Random.Words(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy")))
+            .CustomInstantiator(f => new CheepDTO(Guid.NewGuid().ToString()[4..], f.Random.Words(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"), new List<ReactionDTO>()))
             .RuleFor(c => c.Message, (f, c) => f.Random.Words())
             .RuleFor(c => c.Timestamp, (f, c) => f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"))
             .GenerateBetween(50, 100);

@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿namespace Chirp.Infrastructure.Repositories;
 
-namespace Chirp.Infrastructure;
+using FluentValidation;
 
 public class CheepRepository : ICheepRepository
 {
