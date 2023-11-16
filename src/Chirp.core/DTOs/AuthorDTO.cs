@@ -1,4 +1,4 @@
-﻿namespace Chirp.core;
+﻿namespace Chirp.Core;
 
 public record AuthorDTO{
     public string Name{get; private set;}

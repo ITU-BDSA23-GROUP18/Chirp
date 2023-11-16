@@ -1,4 +1,4 @@
-﻿using Chirp.core;
+﻿using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.Web.Pages.Shared;

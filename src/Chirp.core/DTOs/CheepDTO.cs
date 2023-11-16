@@ -1,6 +1,4 @@
-using System.Buffers;
-
-namespace Chirp.core;
+namespace Chirp.Core;
 
 public record CheepDTO{
     public string Author{get; private set;}
