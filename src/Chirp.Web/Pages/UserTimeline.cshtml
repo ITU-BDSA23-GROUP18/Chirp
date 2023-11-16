@@ -11,7 +11,7 @@
 
 <div>
     <h2> @user's Timeline </h2>
-    <h5>@($"Following: {Model.FollowingCount}")</h5>
+    <a href="/FollowView/following">@($"Following: {Model.FollowingCount}")</a>
     
     @if (user != User.Identity!.Name!)
     {

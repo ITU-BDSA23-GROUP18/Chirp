@@ -22,6 +22,7 @@ public class UserTimelineModel : PageModel
     public bool IsFollowingAuthor { get; set; }
     
     
+    
 
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
@@ -50,6 +51,7 @@ public class UserTimelineModel : PageModel
         
         /*var followers = await _authorRepository.GetFollowers(author);
         FollowersCount = followers.Count();*/ 
+        
 
         Cheeps = _cheepRepository.GetCheepFromAuthor(author, page).Result.ToList();
         return Page();
@@ -61,11 +63,11 @@ public class UserTimelineModel : PageModel
         try
         {
             _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
-            return RedirectToPage("Public");
+            return RedirectToPage();
         }
-        catch (Exception ex)
+        catch 
         {
-            return RedirectToPage("Public");
+            return RedirectToPage();
         }
     }
     
@@ -74,11 +76,11 @@ public class UserTimelineModel : PageModel
         try
         {
             _authorRepository.FollowAuthor(author, User.Identity?.Name!);
-            return RedirectToPage("Public");
+            return RedirectToPage();
         }
-        catch (Exception ex)
+        catch 
         {
-            return RedirectToPage("Public");
+            return RedirectToPage();
         }
     }
 

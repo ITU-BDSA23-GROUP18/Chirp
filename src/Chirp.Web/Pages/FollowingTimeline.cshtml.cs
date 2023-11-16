@@ -6,14 +6,14 @@ using Chirp.Web.Pages.Shared;
 
 namespace Chirp.Web.Pages;
 
-public class FollowingModel : PageModel
+public class FollowingTimelineModel : PageModel
 {
     private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     
-    public FollowingModel(ICheepRepository repository, IAuthorRepository authorRepository)
+    public FollowingTimelineModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
         _repository = repository;
