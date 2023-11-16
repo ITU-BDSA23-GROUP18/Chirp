@@ -1,4 +1,4 @@
-﻿namespace Chirp.core;
+﻿namespace Chirp.Core;
 
 public interface ICheepRepository
 {
