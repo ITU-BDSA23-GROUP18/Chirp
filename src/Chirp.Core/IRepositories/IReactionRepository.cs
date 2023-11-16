@@ -1,4 +1,4 @@
-﻿namespace Chirp.core;
+namespace Chirp.Core.IRepositories;
 
 public interface IReactionRepository
 {
@@ -9,5 +9,5 @@ public interface IReactionRepository
     public void CreateReaction(string cheepId, string authorName, string reactionType);
 
     // Delete methods
-    public void RemoveReaction(string cheepId, string authorName);
+    public void RemoveReaction(string cheepId, string authorId);
 }

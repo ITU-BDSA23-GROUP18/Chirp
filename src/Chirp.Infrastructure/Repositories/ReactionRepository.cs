@@ -1,4 +1,4 @@
-﻿namespace Chirp.Infrastructure;
+﻿namespace Chirp.Infrastructure.Repositories;
 
 public class ReactionRepository : IReactionRepository
 {
@@ -26,8 +26,10 @@ public class ReactionRepository : IReactionRepository
         
         var reaction = new Reaction()
         {
-            Cheep = cheep, 
-            Author = author, 
+            CheepId = cheep.CheepId,
+            Cheep = cheep,
+            // Author = author,
+            // AuthorId = author.AuthorId,
             ReactionType = reactionType
         };
 
@@ -37,10 +39,10 @@ public class ReactionRepository : IReactionRepository
         _reactionDb.SaveChanges();
     }
 
-    public void RemoveReaction(string cheepId, string authorName)
+    public void RemoveReaction(string cheepId, string authorId)
     {
         var reaction = _reactionDb.Reactions.FirstOrDefault(r => 
-            r.Cheep.CheepId == new Guid(cheepId) && r.Author.Name == authorName);
+            r.Cheep.CheepId == new Guid(cheepId));
         if (reaction != null) _reactionDb.Reactions.Remove(reaction);
         _reactionDb.SaveChanges();
     }
