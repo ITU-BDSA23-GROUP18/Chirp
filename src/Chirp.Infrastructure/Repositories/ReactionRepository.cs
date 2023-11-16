@@ -28,8 +28,8 @@ public class ReactionRepository : IReactionRepository
         {
             CheepId = cheep.CheepId,
             Cheep = cheep,
-            Author = author,
-            AuthorId = author.AuthorId,
+            // Author = author,
+            // AuthorId = author.AuthorId,
             ReactionType = reactionType
         };
 
@@ -42,7 +42,7 @@ public class ReactionRepository : IReactionRepository
     public void RemoveReaction(string cheepId, string authorId)
     {
         var reaction = _reactionDb.Reactions.FirstOrDefault(r => 
-            r.Cheep.CheepId == new Guid(cheepId) && r.AuthorId == new Guid(authorId));
+            r.Cheep.CheepId == new Guid(cheepId));
         if (reaction != null) _reactionDb.Reactions.Remove(reaction);
         _reactionDb.SaveChanges();
     }
