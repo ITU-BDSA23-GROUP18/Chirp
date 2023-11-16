@@ -53,37 +53,65 @@ public class AuthorRepository : IAuthorRepository
 
     public void FollowAuthor(string followName, string currentUserName)
     {
-        var followAuthor = _authorDb.Authors!.FirstOrDefault(a => a.Name == followName);
-        var currentUser = _authorDb.Authors!.Include(author => author.Following!).FirstOrDefault(a => a.Name == currentUserName);
-        if (followAuthor == null || currentUser == null)
+        var authorToFollow = _authorDb.Authors!.SingleAsync(a => a.Name == followName).Result;
+        Console.WriteLine(authorToFollow);
+        
+        if (authorToFollow == null)
         {
-            throw new ArgumentException($"Author {followName} does not exist");
+            throw new ArgumentException($"Author to follow does not exist");
         }
         
-        currentUser.Following!.Add(followAuthor);
+        var currentUser =  _authorDb.Authors!.Include(a => a.Following).FirstOrDefault(a => a.Name == currentUserName);
+        if (currentUser == null)
+        {
+            throw new ArgumentException($"Current user does not exist");
+        }
+        
+        currentUser.Following!.Add(authorToFollow);
         _authorDb.SaveChanges();
     }
-
-    public async Task<IEnumerable<AuthorDTO>> GetFollowers(string currentUserName)
+    
+    public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
-        var followers = await _authorDb.Authors!
-            .Where(a => a.Following!.Any(f => f.Name == currentUserName))
-            .Select(a => 
-                new AuthorDTO(a.Name, a.Email))
+        Console.WriteLine($"\n \n \n Pageuser 3: {pageUser} \n \n \n");
+        var user = await _authorDb.Authors!.SingleAsync(a => a.Name == pageUser);
+        Console.WriteLine($"Pageuser 4: {user}");
+
+        if (user == null)
+        {
+            throw new ArgumentException("User does not exist");
+        }
+
+        var followerList = await _authorDb.Authors!
+            .Where(a => user.Followers!.Contains(a))
+            .Select(a => new AuthorDTO(a.Name, a.Email))
             .ToListAsync();
-        return followers;
+
+        return followerList;
     }
 
-    public async Task<IEnumerable<AuthorDTO>> GetFollowing(string currentUserName)
+    public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
     {
-        var following = await _authorDb.Authors!
-            .Where(a => a.Following!.Any(f => f.Name == currentUserName))
-            .Select(a => 
-                new AuthorDTO(a.Name, a.Email))
-            .ToListAsync();
-        return following;
+        Console.WriteLine($"\n \n \n Pageuser 1: {userName} \n \n \n");
+        var user = await _authorDb.Authors!.Include(author => author.Following!).FirstOrDefaultAsync(a => a.Name == userName);
+        Console.WriteLine($"Pageuser 2: {user.Name}");
+        //return list of authors in following
+        if (user == null)
+        {
+            throw new ArgumentException("User does not exist");
+        }
+        // return list of authors in following
+        var followingList = user.Following!.ToList();
+        var followingListDto = new List<AuthorDTO>();
+        foreach (var author in followingList)
+        {
+            var authorDto = new AuthorDTO(author.Name, author.Email);
+            followingListDto.Add(authorDto);
+            Console.WriteLine("Auhor in following list: " + author.Name);
+        }
+        return followingListDto;
     }
-
+    
     public void UnfollowAuthor(string followName, string currentUserName)
     {
         var followAuthor = _authorDb.Authors!.FirstOrDefault(a => a.Name == followName);

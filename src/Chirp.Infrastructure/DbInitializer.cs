@@ -1,3 +1,5 @@
+using Chirp.core.DTOs;
+
 namespace Chirp.Infrastructure;
 
 public static class DbInitializer
@@ -32,6 +34,10 @@ public static class DbInitializer
         var a12 = new Author() { AuthorId = Guid.NewGuid(), Name = "Rasmus", Email = "rnie@itu.dk", Cheeps = new List<Cheep>(), Following = new List<Author>(), Followers = new List<Author>() };
 
         Authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
+        
+       a3.Following!.Add(a1);
+       a3.Following!.Add(a2);
+       a3.Following!.Add(a4);
 
         var c1 = new Cheep() { CheepId = Guid.NewGuid(), AuthorId = a10.AuthorId, Author = a10, Message = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
         var c2 = new Cheep() { CheepId = Guid.NewGuid(), AuthorId = a10.AuthorId, Author = a10, Message = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };

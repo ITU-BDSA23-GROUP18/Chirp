@@ -1,9 +1,6 @@
 ﻿using Chirp.core;
-using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Text;
-using System.Text.Json;
 using Chirp.core.DTOs;
 using Chirp.Web.Pages.Shared;
 

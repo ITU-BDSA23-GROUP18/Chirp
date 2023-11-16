@@ -1,3 +1,4 @@
+using Chirp.core.DTOs;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Chirp.Infrastructure;
@@ -9,6 +10,7 @@ public class ChirpDbContext : DbContext
     
     public DbSet<Cheep>? Cheeps { get; set; }
     public DbSet<Author>? Authors { get; set; }
+    
     
     public void InitializeDatabase(){
         Database.EnsureCreated();

@@ -10,7 +10,7 @@ public interface IAuthorRepository
 
     public Task<IEnumerable<AuthorDTO>> GetFollowers(string currentUserName);
 
-    public Task<IEnumerable<AuthorDTO>> GetFollowing(string currentUserName);
+    public Task<IEnumerable<AuthorDTO>> GetFollowing(string userName);
     
     // Post methods
     public void CreateAuthor(string name, string email);

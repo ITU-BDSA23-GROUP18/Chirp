@@ -1,15 +1,32 @@
 ﻿@page "/{author}"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model UserTimelineModel
 
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var user = HttpContext.GetRouteValue("author");
+    var user = HttpContext.GetRouteValue("author")!.ToString();
 }
 
 <div>
     <h2> @user's Timeline </h2>
-    <button class="follow/unfollow_btn">@($"{UserTimelineModel.IsFollowing(user!.ToString()!, @User.Identity?.Name!)}")</button>
+    <h5>@($"Following: {Model.FollowingCount}")</h5>
+    
+    @if(await Model.IsFollowing(user!, User.Identity!.Name!))
+    {
+        //make the unfollow button here using the method onPostUnfollow
+        <form method="post" asp-page-handler="unfollow" class="author">
+        <button class="share"><i class="fa fa-send"></i> Unfollow</button>
+        </form>
+        
+    }
+    else
+    {
+        <form method="post" asp-page-handler="follow" class="author">
+        <button class="share"><i class="fa fa-send"></i> Follow</button>
+        </form>
+    }
+    
 
     @if (Model.Cheeps.Any())
     {
