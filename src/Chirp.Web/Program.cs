@@ -1,5 +1,5 @@
 namespace Chirp.Web;
-using core;
+using Chirp.Core;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
