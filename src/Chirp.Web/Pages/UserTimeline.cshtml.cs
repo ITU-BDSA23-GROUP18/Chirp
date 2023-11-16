@@ -47,7 +47,6 @@ public class UserTimelineModel : PageModel
         var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name!);
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
-        Console.WriteLine($"Isfollowing: {IsFollowingAuthor}");
         
         /*var followers = await _authorRepository.GetFollowers(author);
         FollowersCount = followers.Count();*/ 
@@ -66,14 +65,12 @@ public class UserTimelineModel : PageModel
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
             return RedirectToPage("Public");
         }
     }
     
     public IActionResult OnPostFollow(string author)
     {
-        Console.WriteLine(author);
         try
         {
             _authorRepository.FollowAuthor(author, User.Identity?.Name!);
@@ -81,7 +78,6 @@ public class UserTimelineModel : PageModel
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
             return RedirectToPage("Public");
         }
     }

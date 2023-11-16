@@ -54,20 +54,16 @@ public class AuthorRepository : IAuthorRepository
     public void FollowAuthor(string followName, string currentUserName)
     {
         var authorToFollow = _authorDb.Authors!.SingleAsync(a => a.Name == followName);
-        Console.WriteLine($"Author to follow{authorToFollow}");
-        
         if (authorToFollow == null)
         {
             throw new ArgumentException($"Author to follow does not exist");
         }
         
         var signedInUser =  _authorDb.Authors!.Include(author => author.Following!).FirstOrDefault(a => a.Name == currentUserName);
-        Console.WriteLine($"Singed in user: {signedInUser}");
         if (signedInUser == null)
         {
             throw new ArgumentException($"Current user does not exist");
         }
-        Console.WriteLine($"Following: {authorToFollow.Result}");
         signedInUser.Following!.Add(authorToFollow.Result);
         _authorDb.SaveChanges();
     }
@@ -119,8 +115,6 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {followName} does not exist");
         }
-
-        Console.WriteLine($"Unfollowing {followAuthor}");
         currentUser.Following!.Remove(followAuthor);
         _authorDb.SaveChanges();
     }

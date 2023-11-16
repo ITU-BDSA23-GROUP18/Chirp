@@ -28,7 +28,6 @@ public class FollowingModel : PageModel
         var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name!);
         foreach (var author in myFollowing)
         {
-            Console.WriteLine(author.Name);
             var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
             Cheeps.AddRange(cheeps);
         }
