@@ -1,10 +1,5 @@
-﻿using Chirp.Core;
-using Chirp.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Text;
-using System.Text.Json;
-using Chirp.Web.Pages.Shared;
 
 namespace Chirp.Web.Pages;
 

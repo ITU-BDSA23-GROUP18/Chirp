@@ -18,5 +18,5 @@ public static class Extensions
         new AuthorDTO(a.Name, a.Email);
 
     public static ReactionDTO ToDTO(this Reaction r) =>
-        new ReactionDTO(r.ReactionType.ToString(), r.Author.Name);
+        new ReactionDTO(r.ReactionType.ToString(), r.AuthorId.ToString());
 }

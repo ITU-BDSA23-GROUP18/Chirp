@@ -1,6 +1,5 @@
-﻿using System.ComponentModel;
-
-namespace Chirp.Core;
+﻿namespace Chirp.Core;
+using System.ComponentModel;
 
 public enum ReactionType
 {
