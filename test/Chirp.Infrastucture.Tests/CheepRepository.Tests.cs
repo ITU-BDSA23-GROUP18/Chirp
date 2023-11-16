@@ -46,7 +46,6 @@ public class CheepRepositoryTests : IAsyncLifetime
         var cheepDtos = cheeps as CheepDTO[] ?? cheeps.ToArray();
         Assert.Equal(32, cheepDtos.Count());
         Assert.All(cheepDtos, c => Assert.Contains(c, allCheeps));
-
     }
 
     [Fact]
@@ -168,5 +167,4 @@ public class CheepRepositoryTests : IAsyncLifetime
             Assert.Contains(c, cheeps);
         });
     }
-
 }
