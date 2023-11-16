@@ -1,6 +1,1 @@
-﻿namespace Chirp.Core;
-
-public class Usings
-{
-    
-}
+﻿global using Chirp.Core.DTOs;

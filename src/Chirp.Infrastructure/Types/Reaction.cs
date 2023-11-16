@@ -1,8 +1,8 @@
-﻿namespace Chirp.Infrastructure;
+﻿namespace Chirp.Infrastructure.Types;
 
 public class Reaction
 {
-    public required Cheep Cheep { get; set; }
-    public required Author Author { get; set; }
+    public required Guid CheepId { get; set; }
+    public required Guid AuthorId { get; set; }
     public required ReactionType ReactionType { get; set; }
 }

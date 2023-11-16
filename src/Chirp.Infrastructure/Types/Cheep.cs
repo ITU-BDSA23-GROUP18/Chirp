@@ -1,4 +1,4 @@
-﻿namespace Chirp.Infrastructure;
+﻿namespace Chirp.Infrastructure.Types;
 
 public class Cheep
 {
@@ -7,5 +7,5 @@ public class Cheep
     public required Author Author { get; set; }
     public required string Message { get; set; }
     public DateTime TimeStamp { get; set; }
-    public List<Reaction> Reactions = new ();
+    public List<Reaction> Reactions { get; set; } = new ();
 }
