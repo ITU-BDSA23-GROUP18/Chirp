@@ -3,9 +3,9 @@ using System.Buffers;
 namespace Chirp.core;
 
 public record CheepDTO{
-    string Author{get;set;}
-    string Message{get;set;} 
-    string Timestamp{get;set;}
+    public string Author{get;set;}
+    public string Message{get;set;} 
+    public string Timestamp{get;set;}
 
     public CheepDTO(string author, string message, string timestamp)
     {
