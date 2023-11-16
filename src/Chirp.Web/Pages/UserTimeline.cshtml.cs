@@ -18,8 +18,10 @@ public class UserTimelineModel : PageModel
     public List<AuthorDTO?> FollowingList { get; set; }
 
     public int FollowingCount { get; set; }
-
+    
     public bool IsFollowingAuthor { get; set; }
+    
+    
 
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
@@ -41,48 +43,46 @@ public class UserTimelineModel : PageModel
 
         var following = await _authorRepository.GetFollowing(author);
         FollowingCount = following.Count();
+        
+        var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name!);
+        var pageUser = await _authorRepository.GetAuthorByName(author);
+        IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
+        Console.WriteLine($"Isfollowing: {IsFollowingAuthor}");
+        
+        /*var followers = await _authorRepository.GetFollowers(author);
+        FollowersCount = followers.Count();*/ 
 
         Cheeps = _cheepRepository.GetCheepFromAuthor(author, page).Result.ToList();
         return Page();
 
     }
 
-    public async Task<bool> IsFollowing(string followName, string currentUserName)
-    {
-        {
-            var following = await _authorRepository.GetFollowing(currentUserName);
-            var pageUser = await _authorRepository.GetAuthorByName(followName);
-            return following.Contains(pageUser.FirstOrDefault());
-        }
-    }
-
-    public void OnPostUnfollow(string followName, string currentUserName)
+    public IActionResult OnPostUnfollow(string author)
     {
         try
         {
-            _authorRepository.UnfollowAuthor(followName, currentUserName);
-            RedirectToPage("Public");
+            _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
+            return RedirectToPage("Public");
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            RedirectToPage("Public");
+            return RedirectToPage("Public");
         }
     }
-
-    public void OnPostFollow(string followName, string currentUserName)
+    
+    public IActionResult OnPostFollow(string author)
     {
-        Console.WriteLine($"follow name:{followName}, current user name: {currentUserName}");
-
+        Console.WriteLine(author);
         try
         {
-            _authorRepository.FollowAuthor(followName, currentUserName);
-            RedirectToPage("Public");
+            _authorRepository.FollowAuthor(author, User.Identity?.Name!);
+            return RedirectToPage("Public");
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            RedirectToPage("Public");
+            return RedirectToPage("Public");
         }
     }
 

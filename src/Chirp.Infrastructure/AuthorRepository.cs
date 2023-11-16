@@ -53,7 +53,7 @@ public class AuthorRepository : IAuthorRepository
 
     public void FollowAuthor(string followName, string currentUserName)
     {
-        var authorToFollow = _authorDb.Authors!.SingleAsync(a => a.Name == followName).Result;
+        var authorToFollow = _authorDb.Authors!.SingleAsync(a => a.Name == followName);
         Console.WriteLine($"Author to follow{authorToFollow}");
         
         if (authorToFollow == null)
@@ -67,26 +67,28 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Current user does not exist");
         }
-        
-        signedInUser.Following!.Add(authorToFollow);
+        Console.WriteLine($"Following: {authorToFollow.Result}");
+        signedInUser.Following!.Add(authorToFollow.Result);
         _authorDb.SaveChanges();
     }
     
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
-        var user = await _authorDb.Authors!.SingleAsync(a => a.Name == pageUser);
-
+        var user = await _authorDb.Authors!.Include(author => author.Followers!).FirstOrDefaultAsync(a => a.Name == pageUser);
+        //return list of authors in following
         if (user == null)
         {
             throw new ArgumentException("User does not exist");
         }
-
-        var followerList = await _authorDb.Authors!
-            .Where(a => user.Followers!.Contains(a))
-            .Select(a => new AuthorDTO(a.Name, a.Email))
-            .ToListAsync();
-
-        return followerList;
+        // return list of authors in following
+        var followerList = user.Followers!.ToList();
+        var followerListDto = new List<AuthorDTO>();
+        foreach (var author in followerList)
+        {
+            var authorDto = new AuthorDTO(author.Name, author.Email);
+            followerListDto.Add(authorDto);
+        }
+        return followerListDto;
     }
 
     public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
@@ -104,7 +106,6 @@ public class AuthorRepository : IAuthorRepository
         {
             var authorDto = new AuthorDTO(author.Name, author.Email);
             followingListDto.Add(authorDto);
-            Console.WriteLine("Auhor in following list: " + author.Name);
         }
         return followingListDto;
     }
@@ -118,7 +119,8 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {followName} does not exist");
         }
-        
+
+        Console.WriteLine($"Unfollowing {followAuthor}");
         currentUser.Following!.Remove(followAuthor);
         _authorDb.SaveChanges();
     }

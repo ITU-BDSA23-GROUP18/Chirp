@@ -30,7 +30,7 @@ public class PublicModel : PageModel
         return Page();
     }
     
-    public IActionResult OnPostCheep([FromQuery] int page, string message)
+    public IActionResult OnPostCheep(string message)
     {
         _repository.CreateCheep(message, User.Identity?.Name!);
         return RedirectToPage("Public");
