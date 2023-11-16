@@ -18,6 +18,10 @@
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Public">Home</a>
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/FollowingView">Following</a>
+                                }
                             </li>
                         </ul>
                         <partial name="_LoginPartial" />
