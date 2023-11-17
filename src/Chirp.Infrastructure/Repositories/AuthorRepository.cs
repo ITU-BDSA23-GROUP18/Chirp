@@ -1,12 +1,11 @@
-﻿using Chirp.core.DTOs;
 
-namespace Chirp.Infrastructure;
+namespace Chirp.Infrastructure.Repositories;
 
 public class AuthorRepository : IAuthorRepository
 {
-    private readonly ChirpDbContext _authorDb;
+    private readonly ChirpContext _authorDb;
 
-    public AuthorRepository(ChirpDbContext authorDb)
+    public AuthorRepository(ChirpContext authorDb)
     {
         _authorDb = authorDb;
         _authorDb.InitializeDatabase();
@@ -15,37 +14,31 @@ public class AuthorRepository : IAuthorRepository
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name) =>
          await _authorDb.Authors!
              .Where(a => a.Name == name)
-             .Select(a => 
-                 new AuthorDTO(a.Name, a.Email))
+             .Select(a => a.ToDTO())
              .ToListAsync();
 
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email) =>
         await _authorDb.Authors!
             .Where(a => a.Name == email)
-            .Select(a => 
-                new AuthorDTO(a.Name, a.Email))
+            .Select(a => a.ToDTO())
             .ToListAsync();
 
     public void CreateAuthor(string name, string email)
     {
-        var nameCheck =  _authorDb.Authors!.Any(a => a.Name == name);
-        var emailCheck = _authorDb.Authors!.Any(a => a.Email == email);
-        if (nameCheck)
-        {
+        if (_authorDb.Authors!.Any(a => a.Name == name))
             throw new ArgumentException($"Username {name} is already used");
-        }
 
-        if (emailCheck)
-        {
+        if (_authorDb.Authors!.Any(a => a.Email == email))
             throw new ArgumentException($"{email} is already used!");
-        }
         
         var author = new Author
         {
             AuthorId = Guid.NewGuid(),
             Name = name,
             Email = email,
-            Cheeps = new List<Cheep>()
+            Cheeps = new List<Cheep>(),
+            Following = new List<Author>(),
+            Followers = new List<Author>()
         };
         _authorDb.Authors!.Add(author);
         _authorDb.SaveChanges();

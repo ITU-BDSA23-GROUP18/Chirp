@@ -1,14 +1,11 @@
-﻿using Chirp.core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.core.DTOs;
-using Chirp.Web.Pages.Shared;
+
 
 namespace Chirp.Web.Pages;
 
 public class FollowingModel : PageModel
 {
-    private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorRepository;
     
     public List<AuthorDTO> FollowersList { get; set; }
@@ -19,7 +16,6 @@ public class FollowingModel : PageModel
     {
         FollowersList = new List<AuthorDTO>();
         FollowingList = new List<AuthorDTO>();
-        _repository = repository;
         _authorRepository = authorRepository;
     }
 

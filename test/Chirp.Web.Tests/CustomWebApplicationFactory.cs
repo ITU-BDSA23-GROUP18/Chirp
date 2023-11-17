@@ -1,6 +1,5 @@
 using System.Data.Common;
 using Chirp.Infrastructure;
-using Chirp.Infrastucture;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,7 @@ public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgr
         {
             var dbContextDescriptor = services.SingleOrDefault(
                 d => d.ServiceType ==
-                    typeof(DbContextOptions<ChirpDbContext>));
+                    typeof(DbContextOptions<ChirpContext>));
             if (dbContextDescriptor != null)
             {
                 services.Remove(dbContextDescriptor);
@@ -39,7 +38,7 @@ public class CusomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgr
                 return connection;
             });
 
-            services.AddDbContext<ChirpDbContext>((container, options) =>
+            services.AddDbContext<ChirpContext>((container, options) =>
             {
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);

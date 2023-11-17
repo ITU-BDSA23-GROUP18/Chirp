@@ -1,14 +1,13 @@
-﻿using Chirp.core.DTOs;
-using FluentValidation;
+namespace Chirp.Infrastructure.Repositories;
 
-namespace Chirp.Infrastructure;
+using FluentValidation;
 
 public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
-    private readonly ChirpDbContext _cheepDb;
+    private readonly ChirpContext _cheepDb;
 
-    public CheepRepository(ChirpDbContext cheepDb)
+    public CheepRepository(ChirpContext cheepDb)
     {
         _cheepDb = cheepDb;
         _cheepDb.InitializeDatabase();
@@ -20,8 +19,7 @@ public class CheepRepository : ICheepRepository
             .OrderByDescending(c => c.TimeStamp)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
-            .Select(c =>
-                new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
+            .Select(c => c.ToDTO())
             .ToListAsync();
 
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
@@ -31,8 +29,7 @@ public class CheepRepository : ICheepRepository
             .Where(c => c.Author.Name == authorName)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
-            .Select(c =>
-                new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
+            .Select(c => c.ToDTO())
             .ToListAsync();
 
     public async Task<int> CountCheeps() =>
@@ -74,6 +71,7 @@ public class CheepRepository : ICheepRepository
         var cheep = new Cheep
         {
             CheepId = Guid.NewGuid(),
+            AuthorId = author.AuthorId,
             Author = author,
             Message = message,
             TimeStamp = DateTime.UtcNow

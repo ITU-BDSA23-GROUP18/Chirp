@@ -1,8 +1,5 @@
-﻿using Chirp.core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Chirp.core.DTOs;
-using Chirp.Web.Pages.Shared;
 
 namespace Chirp.Web.Pages;
 
@@ -21,9 +18,6 @@ public class UserTimelineModel : PageModel
     
     public bool IsFollowingAuthor { get; set; }
     
-    
-    
-
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -55,7 +49,6 @@ public class UserTimelineModel : PageModel
 
         Cheeps = _cheepRepository.GetCheepFromAuthor(author, page).Result.ToList();
         return Page();
-
     }
 
     public IActionResult OnPostUnfollow(string author)
@@ -83,5 +76,4 @@ public class UserTimelineModel : PageModel
             return RedirectToPage();
         }
     }
-
 }
