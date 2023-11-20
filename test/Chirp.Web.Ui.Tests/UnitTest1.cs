@@ -9,10 +9,19 @@
     public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>
     {
         private readonly string _serverAddress;
+        private readonly CustomWebApplicationFactory _fixture;
+
+        private readonly HttpClient _client;
 
         public UiTest(CustomWebApplicationFactory fixture)
         {
             _serverAddress = fixture.ServerAddress;
+            _fixture = fixture;
+            _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions 
+            { 
+                AllowAutoRedirect = true, 
+                HandleCookies = true 
+            });
         }
 
         [Fact]
