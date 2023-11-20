@@ -15,7 +15,7 @@ public class ReactionRepository : IReactionRepository
     
     public void CreateReaction(string cheepId, string authorName, string reactionString)
     {
-        var cheep = _reactionDb.Cheeps.FirstOrDefault(c => c.CheepId == new Guid(cheepId));
+        Cheep? cheep = _reactionDb.Cheeps.FirstOrDefault(c => c.CheepId == new Guid(cheepId));
         var author = _reactionDb.Authors.FirstOrDefault(a => a.Name == authorName);
 
         if (cheep == null) throw new ArgumentException($"The given cheepId '{cheepId}' does not exist");

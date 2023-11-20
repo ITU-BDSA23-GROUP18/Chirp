@@ -1,4 +1,6 @@
-﻿namespace Chirp.Infrastructure.Types;
+﻿using Chirp.Core;
+
+namespace Chirp.Infrastructure.Types;
 
 public class Reaction
 {
