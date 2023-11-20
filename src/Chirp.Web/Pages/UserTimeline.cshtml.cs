@@ -36,18 +36,17 @@ public class UserTimelineModel : PageModel
         var nCheeps = await _cheepRepository.CountCheepsFromAuthor(author);
         Pagination = new PaginationModel(nCheeps, page);
 
+        Cheeps = _cheepRepository.GetCheepFromAuthor(author, page).Result.ToList();
+
         var following = await _authorRepository.GetFollowing(author);
         FollowingCount = following.Count();
-        
-        var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name!);
+        if (User.Identity == null || User.Identity.Name == null) {
+            return Page();
+        }
+        var myFollowing = await _authorRepository.GetFollowing(User.Identity.Name);
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
         
-        /*var followers = await _authorRepository.GetFollowers(author);
-        FollowersCount = followers.Count();*/ 
-        
-
-        Cheeps = _cheepRepository.GetCheepFromAuthor(author, page).Result.ToList();
         return Page();
     }
 

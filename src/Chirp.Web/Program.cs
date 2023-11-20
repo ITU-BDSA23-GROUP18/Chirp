@@ -15,7 +15,7 @@ public class Program
         builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
         builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
-        
+
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
         
@@ -34,7 +34,23 @@ public class Program
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
         builder.WebHost.UseUrls("https://localhost:7022");
-        
+        // add user on signin if they do not exists
+        builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+        {
+            options.Events.OnTokenValidated = async context =>
+            {
+                var authorRepository = context.HttpContext.RequestServices.GetRequiredService<IAuthorRepository>();
+                if (context.Principal == null) return;
+                var authorName = context.Principal.Identity?.Name;
+                if (authorName == null) return;
+                var author = await authorRepository.GetAuthorByName(authorName);
+                if (author == null || !author.Any())
+                {
+                    authorRepository.CreateAuthor(authorName, authorName);
+                }
+            };
+        });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
