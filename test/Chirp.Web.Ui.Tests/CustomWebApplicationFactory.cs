@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
 namespace Playwright.App.Tests.Infrastructure;
@@ -53,12 +54,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
-            //auth for tests
-            services.AddRazorPages(Options =>{
-                Options.Conventions.AuthorizePage("/");
-            });
-
-
         });
 
         builder.UseEnvironment("Development");
