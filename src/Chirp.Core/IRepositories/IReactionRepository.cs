@@ -1,4 +1,4 @@
-﻿namespace Chirp.Core.IRepositories;
+namespace Chirp.Core.IRepositories;
 
 public interface IReactionRepository
 {

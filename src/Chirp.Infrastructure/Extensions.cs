@@ -1,4 +1,7 @@
-﻿namespace Chirp.Infrastructure;
+﻿using Chirp.Core.DTOs;
+using Chirp.Infrastructure.Types;
+
+namespace Chirp.Infrastructure;
 
 public static class Extensions
 {
@@ -18,5 +21,5 @@ public static class Extensions
         new AuthorDTO(a.Name, a.Email);
 
     public static ReactionDTO ToDTO(this Reaction r) =>
-        new ReactionDTO(r.ReactionType.ToString(), r.AuthorId.ToString());
+        new ReactionDTO(r.ReactionType.ToString(), r.ToString());
 }
