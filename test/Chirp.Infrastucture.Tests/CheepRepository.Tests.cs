@@ -66,7 +66,6 @@ public class CheepRepositoryTests
     [InlineData("Rasmus", "rnie@itu.dk")]
     public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
     {
-
         _context.InitializeDatabase(true);
 
         var author = new Author
@@ -110,7 +109,6 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty()
     {
-
         SeedData(_context);
         var author = new Author
         {
@@ -144,7 +142,6 @@ public class CheepRepositoryTests
     [InlineData("I work at Microsoft", "Rasmus")]
     public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
     {
-
         SeedData(_context);
 
         var author = _context.Authors.First(a => a.Name == authorName);

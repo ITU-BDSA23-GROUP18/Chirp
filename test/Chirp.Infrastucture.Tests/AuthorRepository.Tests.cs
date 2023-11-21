@@ -36,7 +36,6 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestFindAuthorByEmail()
     {
-
         var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
         var Authors = new List<Author>() { a1 };
         _context.Authors.AddRange(Authors);
