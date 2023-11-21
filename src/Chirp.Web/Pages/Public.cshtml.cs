@@ -1,10 +1,6 @@
-﻿using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Text;
-using System.Text.Json;
-using Chirp.Web.Pages.Shared;
 
 namespace Chirp.Web.Pages;
 
@@ -32,7 +28,7 @@ public class PublicModel : PageModel
         return Page();
     }
     
-    public IActionResult OnPostCheep([FromQuery] int page, string message)
+    public IActionResult OnPostCheep(string message)
     {
         _repository.CreateCheep(message, User.Identity?.Name!);
         return RedirectToPage("Public");

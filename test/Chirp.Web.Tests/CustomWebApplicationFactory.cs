@@ -1,6 +1,5 @@
 using System.Data.Common;
 using Chirp.Infrastructure;
-using Chirp.Infrastucture;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;

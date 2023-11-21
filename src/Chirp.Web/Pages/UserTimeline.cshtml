@@ -1,14 +1,32 @@
 ﻿@page "/{author}"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model UserTimelineModel
+
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
-    var user = HttpContext.GetRouteValue("author");
+    var user = HttpContext.GetRouteValue("author")!.ToString();
 }
 
 <div>
     <h2> @user's Timeline </h2>
-
+    <a href="/FollowView/following">@($"Following: {Model.FollowingCount}")</a>
+    
+    @if (user != User.Identity!.Name!)
+    {
+        if (Model.IsFollowingAuthor)
+        {
+            <form form asp-page-handler="Unfollow" method="post">
+            <button class="share" type="submit"><i class="fa fa-send"></i> Unfollow</button>
+            </form>
+        }
+        else
+        {
+            <form form asp-page-handler="Follow" method="post">
+            <button class="share" type="submit"><i class="fa fa-send"></i> Follow</button>
+            </form>
+        }
+    }
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
@@ -32,6 +50,6 @@
     }
     
     @{
-        await Html.RenderPartialAsync("Shared/PageNumbering", Model.Pagination);
+        await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
     }
 </div>

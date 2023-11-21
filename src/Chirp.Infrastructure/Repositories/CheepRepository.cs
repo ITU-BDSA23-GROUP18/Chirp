@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+namespace Chirp.Infrastructure.Repositories;
 
-namespace Chirp.Infrastructure;
+using FluentValidation;
 
 public class CheepRepository : ICheepRepository
 {
@@ -14,32 +14,30 @@ public class CheepRepository : ICheepRepository
     }
 
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .Include(c => c.Author)
             .OrderByDescending(c => c.TimeStamp)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
-            .Select(c =>
-                new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
+            .Select(c => c.ToDTO())
             .ToListAsync();
 
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .Include(c => c.Author)
             .OrderByDescending(c => c.TimeStamp)
             .Where(c => c.Author.Name == authorName)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
-            .Select(c =>
-                new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString()))
+            .Select(c => c.ToDTO())
             .ToListAsync();
 
     public async Task<int> CountCheeps() =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .CountAsync();
     
     public async Task<int> CountCheepsFromAuthor(string authorName) =>
-        await _cheepDb.Cheeps
+        await _cheepDb.Cheeps!
             .Include(c => c.Author)
             .Where(c => c.Author.Name == authorName)
             .CountAsync();
@@ -56,28 +54,29 @@ public class CheepRepository : ICheepRepository
         Author author;
         
         //check if user exists
-        if (!_cheepDb.Authors.Any(a => a.Name == username))
+        if (!_cheepDb.Authors!.Any(a => a.Name == username))
         {
             author = new Author
             {
                 AuthorId = Guid.NewGuid(),
                 Name = username,
-                Email = Guid.NewGuid().ToString()+"@test.com"
+                Email = ""
 
             };
         }
         else
         {
-            author = _cheepDb.Authors.SingleAsync(a => a.Name == username).Result;
+            author = _cheepDb.Authors!.SingleAsync(a => a.Name == username).Result;
         }
         var cheep = new Cheep
         {
             CheepId = Guid.NewGuid(),
+            AuthorId = author.AuthorId,
             Author = author,
             Message = message,
             TimeStamp = DateTime.UtcNow
         };
-        _cheepDb.Cheeps.Add(cheep);
+        _cheepDb.Cheeps!.Add(cheep);
         _cheepDb.SaveChanges();
     }
     
