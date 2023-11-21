@@ -1,16 +1,12 @@
 namespace Chirp.Infrastructure.Tests;
 
-using Testcontainers.MsSql;
 using Xunit;
-
 using Microsoft.Data.Sqlite;
-using Chirp.Infrastucture;
 
 public class AuthorRepositoryTests
 {
     private readonly ChirpContext _context;
     private readonly AuthorRepository _repository;
-
 
     public AuthorRepositoryTests()
     {
@@ -18,7 +14,7 @@ public class AuthorRepositoryTests
         connection.Open();
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         _context = new ChirpContext(builder.Options);
-        _repository = new AuthorRepository(_context);
+        _repository = new AuthorRepository(_context, false);
     }
 
     [Theory]
@@ -26,8 +22,6 @@ public class AuthorRepositoryTests
     [InlineData("Roger")]
     public async void TestFindAuthorByName(string name)
     {
-
-
         var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = name, Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
         var Authors = new List<Author>() { a1 };
         _context.Authors.AddRange(Authors);
@@ -47,8 +41,6 @@ public class AuthorRepositoryTests
         var Authors = new List<Author>() { a1 };
         _context.Authors.AddRange(Authors);
         _context.SaveChanges();
-        
-
 
         // Act
         var authors = await _repository.GetAuthorByEmail("ropf@itu.dk");
@@ -62,8 +54,6 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestCreateCheep()
     {
-
-
         // Act
         _repository.CreateAuthor("John Doe", "John@doe.com");
 

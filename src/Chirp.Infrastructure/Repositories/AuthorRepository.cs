@@ -5,10 +5,10 @@ public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpContext _authorDb;
 
-    public AuthorRepository(ChirpContext authorDb)
+    public AuthorRepository(ChirpContext authorDb, bool seedDatabase = true)
     {
         _authorDb = authorDb;
-        _authorDb.InitializeDatabase();
+        _authorDb.InitializeDatabase(seedDatabase);
     }
 
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name) =>
@@ -30,7 +30,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (_authorDb.Authors!.Any(a => a.Email == email))
             throw new ArgumentException($"{email} is already used!");
-        
+
         var author = new Author
         {
             AuthorId = Guid.NewGuid(),
@@ -51,8 +51,8 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author to follow does not exist");
         }
-        
-        var signedInUser =  _authorDb.Authors!.Include(author => author.Following!).FirstOrDefault(a => a.Name == currentUserName);
+
+        var signedInUser = _authorDb.Authors!.Include(author => author.Following!).FirstOrDefault(a => a.Name == currentUserName);
         if (signedInUser == null)
         {
             throw new ArgumentException($"Current user does not exist");
@@ -60,7 +60,7 @@ public class AuthorRepository : IAuthorRepository
         signedInUser.Following!.Add(authorToFollow.Result);
         _authorDb.SaveChanges();
     }
-    
+
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
         var user = await _authorDb.Authors!.Include(author => author.Followers!).FirstOrDefaultAsync(a => a.Name == pageUser);
@@ -98,7 +98,7 @@ public class AuthorRepository : IAuthorRepository
         }
         return followingListDto;
     }
-    
+
     public void UnfollowAuthor(string followName, string currentUserName)
     {
         var followAuthor = _authorDb.Authors!.FirstOrDefault(a => a.Name == followName);

@@ -7,12 +7,12 @@ public class ReactionRepository : IReactionRepository
     public ReactionRepository(ChirpContext reactionDb)
     {
         _reactionDb = reactionDb;
-        _reactionDb.InitializeDatabase();
+        _reactionDb.InitializeDatabase(true);
     }
 
     public IEnumerable<string> GetAllReactionTypes() =>
         Enum.GetValues<ReactionType>().Select(r => r.ToString());
-    
+
     public void CreateReaction(string cheepId, string authorName, string reactionString)
     {
         Cheep? cheep = _reactionDb.Cheeps.FirstOrDefault(c => c.CheepId == new Guid(cheepId));
@@ -23,7 +23,7 @@ public class ReactionRepository : IReactionRepository
 
         var parsedReaction = Enum.TryParse<ReactionType>(reactionString, out var reactionType);
         if (!parsedReaction) throw new ArgumentException($"The given reactionType '{reactionString}' does not exist");
-        
+
         var reaction = new Reaction()
         {
             CheepId = cheep.CheepId,
@@ -35,13 +35,13 @@ public class ReactionRepository : IReactionRepository
 
         _reactionDb.Reactions.Add(reaction);
         cheep.Reactions.Add(reaction);
-        
+
         _reactionDb.SaveChanges();
     }
 
     public void RemoveReaction(string cheepId, string authorId)
     {
-        var reaction = _reactionDb.Reactions.FirstOrDefault(r => 
+        var reaction = _reactionDb.Reactions.FirstOrDefault(r =>
             r.Cheep.CheepId == new Guid(cheepId));
         if (reaction != null) _reactionDb.Reactions.Remove(reaction);
         _reactionDb.SaveChanges();

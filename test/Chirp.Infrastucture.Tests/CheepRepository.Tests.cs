@@ -5,12 +5,10 @@ using Microsoft.Data.Sqlite;
 
 namespace Chirp.Infrastructure.Tests;
 
-public class CheepRepositoryTests 
+public class CheepRepositoryTests
 {
     private readonly ChirpContext _context;
     private readonly CheepRepository _repository;
-
-
 
     public CheepRepositoryTests()
     {
@@ -18,7 +16,7 @@ public class CheepRepositoryTests
         connection.Open();
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         _context = new ChirpContext(builder.Options);
-        _repository = new CheepRepository(_context);
+        _repository = new CheepRepository(_context, false);
 
     }
 
@@ -28,36 +26,30 @@ public class CheepRepositoryTests
     public async Task GetCheeps_returns32Cheeps(int page)
     {
         SeedData(_context);
-        
+
         var cheeps = await _repository.GetCheep(page);
 
         Assert.Equal(32, cheeps.Count());
     }
-//-------------------------------------------------------------
+    //-------------------------------------------------------------
 
-   /* [Fact]
+    [Fact]
     public async void GetCheeps_onFirstPage_returns32FirstCheeps()
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
-        
-        SeedData(_context);
+        _context.InitializeDatabase(true);
 
         var cheeps = await _repository.GetCheep(); // page = 1
 
         var allCheeps = DbInitializer.Cheeps.Select(c => c.ToDTO());
 
         var cheepDtos = cheeps as CheepDTO[] ?? cheeps.ToArray();
+        allCheeps = allCheeps.ToList().ConvertAll(c => new CheepDTO(c.Author, c.Message, c.Timestamp, null));
+        var cheepDtosToCompare = cheepDtos.ToList().ConvertAll(c => new CheepDTO(c.Author, c.Message, c.Timestamp, null));
 
-        Assert.Equal(32, cheepDtos.Count());
-        Assert.All(cheepDtos, c => Assert.Contains(c, allCheeps));
+        Assert.Equal(32, cheepDtosToCompare.Count());
+        Assert.All(cheepDtosToCompare, c => Assert.Contains(c, allCheeps));
 
-    }*/
-
-    
+    }
 
     [Fact]
     public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
@@ -75,7 +67,8 @@ public class CheepRepositoryTests
     public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
     {
 
-        SeedData(_context);
+        _context.InitializeDatabase(true);
+
         var author = new Author
         {
             Name = name,
@@ -89,6 +82,10 @@ public class CheepRepositoryTests
         {
             aCheeps.Add(c.ToDTO());
         }
+        // Clear lists, since new lists are different objects and thereby not equal
+        aCheeps = aCheeps.ToList().ConvertAll(c => new CheepDTO(c.Author, c.Message, c.Timestamp, null));
+        cheeps = cheeps.ToList().ConvertAll(c => new CheepDTO(c.Author, c.Message, c.Timestamp, null));
+
         Assert.All(cheeps, c => Assert.Contains(c, aCheeps));
     }
 
@@ -97,7 +94,7 @@ public class CheepRepositoryTests
     [InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 2)]
 
     public async void GetCheepsFromAuthor_givenAuthorAndPage_returns32Cheeps(string name, string email, int page)
-    {   
+    {
         SeedData(_context);
 
         var author = new Author
@@ -107,7 +104,6 @@ public class CheepRepositoryTests
         };
 
         var cheeps = await _repository.GetCheepFromAuthor(author.Name, page);
-
         Assert.Equal(32, cheeps.Count());
     }
 
@@ -168,8 +164,6 @@ public class CheepRepositoryTests
         Assert.Contains(_context.Authors, a => a.Name == authorName);
     }
 
-    
-/*
     [Fact]
     public void ManyNewUsers_CanCreateCheeps_andReadCheep()
     {
@@ -188,11 +182,14 @@ public class CheepRepositoryTests
         Assert.AllAsync<CheepDTO>(newCheeps, async (c) =>
         {
             var cheeps = await _repository.GetCheepFromAuthor(c.Author);
+            cheeps = cheeps.ToList().ConvertAll(c => new CheepDTO(c.Author, c.Message, c.Timestamp, null));
+
             Assert.Contains(c, cheeps);
         });
-    }*/
-    
-    void SeedData(ChirpContext _context ){
+    }
+
+    void SeedData(ChirpContext _context)
+    {
         var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
         var a2 = new Author() { AuthorId = Guid.NewGuid(), Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>() };
         var a3 = new Author() { AuthorId = Guid.NewGuid(), Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>() };
@@ -273,7 +270,7 @@ public class CheepRepositoryTests
         var c63 = new Cheep() { CheepId = Guid.NewGuid(), AuthorId = a10.AuthorId, Author = a10, Message = "It came from a grove of Scotch firs, and I were strolling on the soft gravel, and finally the dining-room.", TimeStamp = DateTime.Parse("2023-08-01 13:14:04") };
         var c64 = new Cheep() { CheepId = Guid.NewGuid(), AuthorId = a10.AuthorId, Author = a10, Message = "Nor can piety itself, at such a pair of as a lobster if he had needed it; but no, it''s like that, does he?", TimeStamp = DateTime.Parse("2023-08-01 13:15:42") };
 
-        var Cheeps = new List<Cheep>() { c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24, c25, c26, c27, c28, c29, c30, c31, c32 ,  c33, c34, c35, c36, c37, c38, c39, c40, c41, c42, c43, c44, c45, c46, c47, c48, c49, c50, c51, c52, c53, c54, c55, c56, c57, c58, c59, c60, c61, c62, c63, c64 };
+        var Cheeps = new List<Cheep>() { c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24, c25, c26, c27, c28, c29, c30, c31, c32, c33, c34, c35, c36, c37, c38, c39, c40, c41, c42, c43, c44, c45, c46, c47, c48, c49, c50, c51, c52, c53, c54, c55, c56, c57, c58, c59, c60, c61, c62, c63, c64 };
 
         _context.Authors.AddRange(Authors);
         _context.Cheeps.AddRange(Cheeps);

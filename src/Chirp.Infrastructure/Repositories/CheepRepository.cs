@@ -7,10 +7,10 @@ public class CheepRepository : ICheepRepository
     private const int CheepsPerPage = 32;
     private readonly ChirpContext _cheepDb;
 
-    public CheepRepository(ChirpContext cheepDb)
+    public CheepRepository(ChirpContext cheepDb, bool seedDatabase = true)
     {
         _cheepDb = cheepDb;
-        _cheepDb.InitializeDatabase();
+        _cheepDb.InitializeDatabase(seedDatabase);
     }
 
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
@@ -35,24 +35,24 @@ public class CheepRepository : ICheepRepository
     public async Task<int> CountCheeps() =>
         await _cheepDb.Cheeps!
             .CountAsync();
-    
+
     public async Task<int> CountCheepsFromAuthor(string authorName) =>
         await _cheepDb.Cheeps!
             .Include(c => c.Author)
             .Where(c => c.Author.Name == authorName)
             .CountAsync();
-    
+
     public void CreateCheep(string message, string username)
     {
         var cheepValidator = new CheepValidator();
-        var cheepValidationResult = cheepValidator.Validate(new NewCheep{Message = message});
+        var cheepValidationResult = cheepValidator.Validate(new NewCheep { Message = message });
         if (!cheepValidationResult.IsValid)
         {
             throw new ValidationException(cheepValidationResult.Errors);
         }
 
         Author author;
-        
+
         //check if user exists
         if (!_cheepDb.Authors!.Any(a => a.Name == username))
         {
@@ -60,7 +60,7 @@ public class CheepRepository : ICheepRepository
             {
                 AuthorId = Guid.NewGuid(),
                 Name = username,
-                Email = ""
+                Email = Guid.NewGuid().ToString()
 
             };
         }
@@ -79,12 +79,12 @@ public class CheepRepository : ICheepRepository
         _cheepDb.Cheeps!.Add(cheep);
         _cheepDb.SaveChanges();
     }
-    
+
     public class NewCheep
     {
         public required string Message { get; set; }
     }
-    
+
     public class CheepValidator : AbstractValidator<NewCheep>
     {
         public CheepValidator()
