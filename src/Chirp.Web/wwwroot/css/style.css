@@ -4,8 +4,14 @@ body {
   font-size: 14px;
 }
 
+.nullInput{
+    border: 1px solid red;
+}
+
 a {
   color: #26776F;
+  text-decoration: none;
+  cursor: pointer;  
 }
 
 a:hover {
@@ -41,8 +47,9 @@ input[type="submit"] {
 div.page {
   background: white;
   border: 1px solid #cc6e6e;
-  width: 700px;
+  width: 900px;
   margin: 30px auto;
+  box-shadow: 0.1px 0.1px 10px rgba(0, 0, 0, 0.2);
 }
 
 div.page h1 {
@@ -57,7 +64,7 @@ div.page h1 {
 }
 
 div.page h1 img {
-  height: 1em;
+  height: 1em; 
 }
 
 div.page div.navigation {
@@ -72,7 +79,7 @@ div.page div.navigation a {
   color: #888;
   font-weight: bold;
   text-decoration: none;
-  padding-left: 1rem;
+  padding-left: 10rem;
 }
 
 div.page div.navigation a:hover{
@@ -255,3 +262,23 @@ div.cheep button.share:hover{
     background: #DD6F6F;
     color: white;
 }
+
+textarea{
+    resize: none;
+    border: 1px solid #000000;
+}
+
+.char-count {
+    font-size: 12px;
+    color: rgb(128, 128, 128);
+    float: right;
+    margin-right: 0.7rem;
+}
+
+.nav-item{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    display: inline;
+}
+
+

@@ -130,7 +130,6 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheepsFromAuthor_onAPageOutOfRange_returnsEmpty()
     {
-
         var author = new Author
         {
             Name = "Helge",
@@ -165,7 +164,6 @@ public class CheepRepositoryTests
     [InlineData("I can walk non water!", "Jesus")]
     public void CreateCheep_givenCheepWithNonExistingAuthor_CreatesAuthor(string message, string authorName)
     {
-
         _repository.CreateCheep(message, authorName);
         Assert.Contains(_context.Authors, a => a.Name == authorName);
     }
@@ -175,12 +173,9 @@ public class CheepRepositoryTests
     [Fact]
     public void ManyNewUsers_CanCreateCheeps_andReadCheep()
     {
-        // 
-
-
+        //Use GUID as username since the username must be uniqe
         List<CheepDTO> newCheeps = new Faker<CheepDTO>()
-            .CustomInstantiator(f => new CheepDTO(f.Random.Words(), f.Name.FirstName(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy")))
-            .RuleFor(c => c.Author, (f, c) => f.Name.FirstName())
+            .CustomInstantiator(f => new CheepDTO(Guid.NewGuid().ToString()[4..], f.Random.Words(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"), new List<ReactionDTO>()))
             .RuleFor(c => c.Message, (f, c) => f.Random.Words())
             .RuleFor(c => c.Timestamp, (f, c) => f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"))
             .GenerateBetween(50, 100);

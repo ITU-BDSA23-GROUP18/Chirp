@@ -1,13 +1,13 @@
-﻿namespace Chirp.core;
+﻿namespace Chirp.Core.IRepositories;
 
 public interface ICheepRepository
 {
-    //Get cheeps
+    // Get methods
     public Task<IEnumerable<CheepDTO>> GetCheep(int page = 1);
     public Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(String authorName, int page = 1);
     public Task<int> CountCheeps();
-    public Task<int> CountCheepsFromAuthor(String authorName);
+    public Task<int> CountCheepsFromAuthor(string authorName);
     
     //Post cheeps
-    public void CreateCheep(string message, String authorName);
+    public void CreateCheep(string message, string username);
 }
