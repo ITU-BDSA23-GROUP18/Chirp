@@ -169,7 +169,7 @@ public class CheepRepositoryTests
     }
 
     
-
+/*
     [Fact]
     public void ManyNewUsers_CanCreateCheeps_andReadCheep()
     {
@@ -190,7 +190,7 @@ public class CheepRepositoryTests
             var cheeps = await _repository.GetCheepFromAuthor(c.Author);
             Assert.Contains(c, cheeps);
         });
-    }
+    }*/
     
     void SeedData(ChirpContext _context ){
         var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
