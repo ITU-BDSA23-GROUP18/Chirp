@@ -37,7 +37,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             Headless = false,
-            SlowMo = 100,    
+            SlowMo = 400,    
         });
         _context = await CreateBrowserContextAsync(_browser);
     }
@@ -76,15 +76,14 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GotoAsync(_serverAddress);
         for(int i = 2; i<10; i++)
         {
-            await Page.GetByRole(AriaRole.Link, new() { Name = i.ToString() }).ClickAsync();
-            CheckUrl(Page.Url, _serverAddress+"/?page="+i);
-
+            await Page.GetByRole(AriaRole.Link, new() { Name = i.ToString(),Exact = true}).ClickAsync();
+            CheckUrl(Page.Url, _serverAddress+"?page="+i);
         }
     }
     private void CheckUrl(string url, string expectedUrl)
     {
         if(url.Equals(expectedUrl) == false){
-            throw new Exception("The page url is not correct");
+            throw new Exception("The page url is not correct expected: "+expectedUrl+" but was: "+url+"");
         }
     }
 
@@ -119,7 +118,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _context?.DisposeAsync().GetAwaiter().GetResult();
         _browser?.DisposeAsync().GetAwaiter().GetResult();
     }
-    
+
     /*
      [Test]
 public async Task MyTest()
