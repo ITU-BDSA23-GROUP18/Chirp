@@ -8,12 +8,17 @@ using Chirp.Infrastucture;
 
 public class AuthorRepositoryTests
 {
-
+    private readonly ChirpContext _context;
+    private readonly AuthorRepository _repository;
 
 
     public AuthorRepositoryTests()
     {
-        // Arrange
+        var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
+        var _repository = new AuthorRepository(_context);
 
     }
 
@@ -22,11 +27,7 @@ public class AuthorRepositoryTests
     [InlineData("Roger")]
     public async void TestFindAuthorByName(string name)
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new AuthorRepository(_context);
+
 
         var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = name, Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
         var Authors = new List<Author>() { a1 };

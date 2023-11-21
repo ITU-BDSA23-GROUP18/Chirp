@@ -14,7 +14,7 @@ public class CheepRepositoryTests
 
     public CheepRepositoryTests()
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
+        var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         _context = new ChirpContext(builder.Options);
