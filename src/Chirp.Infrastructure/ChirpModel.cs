@@ -1,5 +1,4 @@
 
-
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Chirp.Infrastructure;
@@ -12,13 +11,12 @@ public class ChirpContext : DbContext
 
     public ChirpContext(DbContextOptions<ChirpContext> options) : base(options)
     {
-
     }
 
-    public void InitializeDatabase()
+    public void InitializeDatabase(bool seedDatabase)
     {
         Database.EnsureCreated();
-        DbInitializer.SeedDatabase(this);
+        if (seedDatabase) DbInitializer.SeedDatabase(this);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,9 +30,7 @@ public class ChirpContext : DbContext
 
         modelBuilder.Entity<Reaction>().HasIndex(r => r.CheepId).IsUnique();
     }
-    
-    
-    
+
     /*public class ChirpContextFactory : IDesignTimeDbContextFactory<ChirpContext>
     {
         public ChirpContext CreateContext(string[] args)
@@ -45,6 +41,6 @@ public class ChirpContext : DbContext
 
             return new ChirpContext(optionsBuilder.Options);
         }
-    }*/ 
+    }*/
 }
 
