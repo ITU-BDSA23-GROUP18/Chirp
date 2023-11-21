@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Chirp.core.Tests;
+namespace Chirp.Core.Tests;
 
 public class CheepDTOTests
 {
