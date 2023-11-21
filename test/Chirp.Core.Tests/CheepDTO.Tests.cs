@@ -2,7 +2,6 @@ namespace Chirp.Core.Tests;
 
 public class CheepDTOTests
 {
-
     [Theory]
     [InlineData("test1", "test2", "test3", null)]
     [InlineData("test2", "test3", "test4", null)]
@@ -24,7 +23,6 @@ public class CheepDTOTests
     [InlineData("test3", "test4", "", null)]
     public void NullValuesInCheepDTOTest(string author, string message, string timestamp, List<ReactionDTO> reactions)
     {
-
         var exceptionType = typeof(ArgumentNullException);
 
         Assert.Throws(exceptionType, () =>
