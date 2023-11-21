@@ -19,7 +19,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-
         var testHost = builder.Build();
 
         builder.ConfigureServices(services =>
@@ -59,7 +58,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         builder.UseEnvironment("Development");
 
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        
 
         _host = builder.Build();
         _host.Start();
@@ -71,12 +69,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             .Select(x => new Uri(x))
             .Last();
 
-
         testHost.Start();
         return testHost;
     }
 
-    
     protected override void Dispose(bool disposing)
     {
         _host?.Dispose();

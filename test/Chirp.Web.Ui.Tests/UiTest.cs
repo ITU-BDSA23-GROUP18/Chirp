@@ -54,7 +54,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         var page = await _context.NewPageAsync();
 
         await page.GotoAsync(_serverAddress);
-
     }
     [Fact]
     public async Task CreateCheepTest()
