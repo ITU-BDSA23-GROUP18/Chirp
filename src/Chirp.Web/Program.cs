@@ -17,7 +17,7 @@ public class Program
 
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
-        
+
         // Try to get remote connection string
         /*string? connectionString = builder.Configuration.GetConnectionString("AzureSQLDBConnectionstring");
         if (connectionString == null) throw new Exception("Connection string not found");
@@ -62,12 +62,12 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-        
+
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
-        
+
         app.UseAuthorization();
         app.UseAuthentication();
 
