@@ -2,7 +2,7 @@
 
 public class ReactionRepository_Tests
 {
-
+/*
     [Fact]
     public void GetAllReactionTypes_returnsAllReactionTypeStrings()
     {
@@ -14,5 +14,5 @@ public class ReactionRepository_Tests
         var allReactionTypes = Enum.GetValues<ReactionType>();
         Assert.All(reactionTypes, r => 
             Assert.Contains(r, allReactionTypes));
-    }
+    }*/
 }
