@@ -1,33 +1,22 @@
 using SQLitePCL;
 using Testcontainers.MsSql;
+using Xunit;
+using Microsoft.Data.Sqlite;
 
 namespace Chirp.Infrastructure.Tests;
 
-public class CheepRepositoryTests : IAsyncLifetime
+public class CheepRepositoryTests 
 {
 
-    private readonly MsSqlContainer _msSqlContainer;
+
 
     public CheepRepositoryTests()
     {
-        _msSqlContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-        .Build();
+
 
     }
-    public async Task InitializeAsync()
-    {
 
-        await _msSqlContainer.StartAsync();
-        var optionsBuilder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        using var context = new ChirpContext(optionsBuilder.Options);
-        await context.Database.MigrateAsync();
-
-    }
-    public async Task DisposeAsync()
-    {
-        await _msSqlContainer.DisposeAsync();
-    }
+    
 
     
 
@@ -36,8 +25,10 @@ public class CheepRepositoryTests : IAsyncLifetime
     [InlineData(2)]
     public async Task GetCheeps_returns32Cheeps(int page)
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
 
         SeedData(_context);
@@ -52,14 +43,16 @@ public class CheepRepositoryTests : IAsyncLifetime
         Assert.Equal(32, cheeps.Count());
     }
 //-------------------------------------------------------------
-/*
-    [Fact]
+
+   /* [Fact]
     public async void GetCheeps_onFirstPage_returns32FirstCheeps()
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
-
+        
         SeedData(_context);
 
         var cheeps = await _repository.GetCheep(); // page = 1
@@ -71,15 +64,17 @@ public class CheepRepositoryTests : IAsyncLifetime
         Assert.Equal(32, cheepDtos.Count());
         Assert.All(cheepDtos, c => Assert.Contains(c, allCheeps));
 
-    }
-*/
+    }*/
+
     
 
     [Fact]
     public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
 
         SeedData(_context);
@@ -94,8 +89,10 @@ public class CheepRepositoryTests : IAsyncLifetime
     [InlineData("Rasmus", "rnie@itu.dk")]
     public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
 
 
@@ -122,8 +119,10 @@ public class CheepRepositoryTests : IAsyncLifetime
 
     public async void GetCheepsFromAuthor_givenAuthorAndPage_returns32Cheeps(string name, string email, int page)
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
 
         
@@ -145,8 +144,10 @@ public class CheepRepositoryTests : IAsyncLifetime
     [Fact]
     public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty()
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
 
         SeedData(_context);
@@ -164,8 +165,10 @@ public class CheepRepositoryTests : IAsyncLifetime
     [Fact]
     public async void GetCheepsFromAuthor_onAPageOutOfRange_returnsEmpty()
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
         SeedData(_context);
 
@@ -187,8 +190,10 @@ public class CheepRepositoryTests : IAsyncLifetime
     [InlineData("I work at Microsoft", "Rasmus")]
     public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
 
         SeedData(_context);
@@ -206,9 +211,12 @@ public class CheepRepositoryTests : IAsyncLifetime
     [InlineData("I can walk non water!", "Jesus")]
     public void CreateCheep_givenCheepWithNonExistingAuthor_CreatesAuthor(string message, string authorName)
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
+
         _repository.CreateCheep(message, authorName);
         Assert.Contains(_context.Authors, a => a.Name == authorName);
     }
@@ -219,8 +227,10 @@ public class CheepRepositoryTests : IAsyncLifetime
     public void ManyNewUsers_CanCreateCheeps_andReadCheep()
     {
         // 
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new CheepRepository(_context);
 
         List<CheepDTO> newCheeps = new Faker<CheepDTO>()
@@ -330,3 +340,4 @@ public class CheepRepositoryTests : IAsyncLifetime
         _context.SaveChanges();
     }
 }
+

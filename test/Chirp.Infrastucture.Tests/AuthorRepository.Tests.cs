@@ -1,31 +1,20 @@
 namespace Chirp.Infrastructure.Tests;
 
 using Testcontainers.MsSql;
-public class AuthorRepositoryTests : IAsyncLifetime
+using Xunit;
+
+using Microsoft.Data.Sqlite;
+using Chirp.Infrastucture;
+
+public class AuthorRepositoryTests
 {
 
 
-    private readonly MsSqlContainer _msSqlContainer;
+
     public AuthorRepositoryTests()
     {
         // Arrange
-        _msSqlContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-        .Build();
-    }
 
-    public async Task InitializeAsync()
-    {
-
-        await _msSqlContainer.StartAsync();
-        var optionsBuilder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        using var context = new ChirpContext(optionsBuilder.Options);
-        await context.Database.MigrateAsync();
-
-    }
-    public async Task DisposeAsync()
-    {
-        await _msSqlContainer.DisposeAsync();
     }
 
     [Theory]
@@ -33,8 +22,10 @@ public class AuthorRepositoryTests : IAsyncLifetime
     [InlineData("Roger")]
     public async void TestFindAuthorByName(string name)
     {
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new AuthorRepository(_context);
 
         var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = name, Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>() };
@@ -52,8 +43,10 @@ public class AuthorRepositoryTests : IAsyncLifetime
     public async void TestFindAuthorByEmail()
     {
 
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new AuthorRepository(_context);
 
         var a1 = new Author() { AuthorId = Guid.NewGuid(), Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>() };
@@ -76,8 +69,10 @@ public class AuthorRepositoryTests : IAsyncLifetime
     public async void TestCreateCheep()
     {
 
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlServer(_msSqlContainer.GetConnectionString());
-        var _context = new ChirpContext(builder.Options);
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        using var _context = new ChirpContext(builder.Options);
         var _repository = new AuthorRepository(_context);
         // Act
         _repository.CreateAuthor("John Doe", "John@doe.com");
