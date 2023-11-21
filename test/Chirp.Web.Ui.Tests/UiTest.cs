@@ -1,6 +1,8 @@
 namespace Chirp.Web.Ui.Tests;
 
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using Playwright.App.Tests.Infrastructure;
@@ -35,35 +37,55 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             Headless = false,
-            SlowMo = 1000,
+            SlowMo = 100,    
         });
         _context = await CreateBrowserContextAsync(_browser);
     }
 
     [Fact]
-    public async Task LockInAndThenLockOut()
+    public async Task OpenPageTest()
     {
         var page = await _context.NewPageAsync();
 
         await page.GotoAsync(_serverAddress);
 
-        //Act
     }
     [Fact]
     public async Task CreateCheepTest()
     {
-        var page = await _context.NewPageAsync();
+        var Page = await _context.NewPageAsync();
 
-        await page.GotoAsync(_serverAddress);
+        await Page.GotoAsync(_serverAddress);
+        //the current time is used such that we avoid duplicate cheeps 
+        //and make a uniq finger pirnt for this cheep
+        for (int i = 0; i < 10; i++)
+        {
+            var currentTime = DateTime.Now.ToString("HH.mm.ss dd.MM.yyyy");
+            //await page.GetByText(" Chirp!").ClickAsync();
+            await Page.GetByPlaceholder("What's on your heart, mavjdk?").FillAsync(currentTime);
+            await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
+            //see the cheep in the timeline
+            await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
+        }
+    }
+    [Fact]
+    public async Task GoToNextPageTest()
+    {
+        var Page = await _context.NewPageAsync();
 
-        await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
+        await Page.GotoAsync(_serverAddress);
+        for(int i = 2; i<10; i++)
+        {
+            await Page.GetByRole(AriaRole.Link, new() { Name = i.ToString() }).ClickAsync();
+            CheckUrl(Page.Url, _serverAddress+"/?page="+i);
 
-        var textArea = await page.QuerySelectorAsync("#textArea");
-
-        //await Page.GetByText("mavjdk this is a test Good: 0| Ish: 0| Bad: 0").ClickAsync();
-        //await page.Locator("placeholder=Login").ClickAsync();
-
-
+        }
+    }
+    private void CheckUrl(string url, string expectedUrl)
+    {
+        if(url.Equals(expectedUrl) == false){
+            throw new Exception("The page url is not correct");
+        }
     }
 
     private async Task<IBrowserContext> CreateBrowserContextAsync(IBrowser browser)
@@ -97,13 +119,15 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _context?.DisposeAsync().GetAwaiter().GetResult();
         _browser?.DisposeAsync().GetAwaiter().GetResult();
     }
-
-
-
+    
     /*
      [Test]
 public async Task MyTest()
 {
+
+    await Page.GotoAsync("about:blank");
+
+    await Page.GotoAsync("chrome-error://chromewebdata/");
 
     
 
@@ -123,7 +147,7 @@ public async Task MyTest()
 
     await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
 
-    await Page.GetByPlaceholder("What's on your heart, mavjdk?").ClickAsync();
+
 
     await Page.GetByPlaceholder("What's on your heart, mavjdk?").FillAsync("This is a test 2");
 
