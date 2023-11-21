@@ -7,38 +7,29 @@ namespace Chirp.Infrastructure.Tests;
 
 public class CheepRepositoryTests 
 {
+    private readonly ChirpContext _context;
+    private readonly CheepRepository _repository;
 
 
 
     public CheepRepositoryTests()
     {
-
+        using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
+        _context = new ChirpContext(builder.Options);
+        _repository = new CheepRepository(_context);
 
     }
-
-    
-
-    
 
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
     public async Task GetCheeps_returns32Cheeps(int page)
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
-
         SeedData(_context);
         
-        
-
         var cheeps = await _repository.GetCheep(page);
-
-        
-
 
         Assert.Equal(32, cheeps.Count());
     }
@@ -71,12 +62,6 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheeps_onAPageOutOfRange_returnsEmpty()
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
-
         SeedData(_context);
 
         var cheeps = await _repository.GetCheep(666);
@@ -89,12 +74,6 @@ public class CheepRepositoryTests
     [InlineData("Rasmus", "rnie@itu.dk")]
     public async void GetCheepsFromAuthor_givenAuthor_returnsOnlyCheepsByAuthor(string name, string email)
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
-
 
         SeedData(_context);
         var author = new Author
@@ -118,17 +97,8 @@ public class CheepRepositoryTests
     [InlineData("Jacqualine Gilcoine", "Jacqualine.Gilcoine@gmail.com", 2)]
 
     public async void GetCheepsFromAuthor_givenAuthorAndPage_returns32Cheeps(string name, string email, int page)
-    {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
-
-        
+    {   
         SeedData(_context);
-
-
 
         var author = new Author
         {
@@ -144,11 +114,6 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheepsFromAuthor_givenNonExistingAuthor_returnsEmpty()
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
 
         SeedData(_context);
         var author = new Author
@@ -165,12 +130,6 @@ public class CheepRepositoryTests
     [Fact]
     public async void GetCheepsFromAuthor_onAPageOutOfRange_returnsEmpty()
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
-        SeedData(_context);
 
         var author = new Author
         {
@@ -190,11 +149,6 @@ public class CheepRepositoryTests
     [InlineData("I work at Microsoft", "Rasmus")]
     public void CreateCheep_givenCheepWithAuthor_savesThatCheep(string message, string authorName)
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
 
         SeedData(_context);
 
@@ -211,11 +165,6 @@ public class CheepRepositoryTests
     [InlineData("I can walk non water!", "Jesus")]
     public void CreateCheep_givenCheepWithNonExistingAuthor_CreatesAuthor(string message, string authorName)
     {
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
 
         _repository.CreateCheep(message, authorName);
         Assert.Contains(_context.Authors, a => a.Name == authorName);
@@ -227,11 +176,7 @@ public class CheepRepositoryTests
     public void ManyNewUsers_CanCreateCheeps_andReadCheep()
     {
         // 
-        using var connection = new SqliteConnection("Filename=:memory:");
-        connection.Open();
-        var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
-        using var _context = new ChirpContext(builder.Options);
-        var _repository = new CheepRepository(_context);
+
 
         List<CheepDTO> newCheeps = new Faker<CheepDTO>()
             .CustomInstantiator(f => new CheepDTO(f.Random.Words(), f.Name.FirstName(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy")))
