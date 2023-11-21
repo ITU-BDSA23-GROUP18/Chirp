@@ -19,7 +19,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email) =>
         await _authorDb.Authors!
-            .Where(a => a.Name == email)
+            .Where(a => a.Email == email)
             .Select(a => a.ToDTO())
             .ToListAsync();
 
