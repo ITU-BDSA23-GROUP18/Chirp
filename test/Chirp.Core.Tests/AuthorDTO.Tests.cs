@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Chirp.Core.Tests;
 
 public class authorDTOTests

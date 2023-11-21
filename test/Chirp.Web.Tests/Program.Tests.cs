@@ -1,6 +1,3 @@
-using System.Text;
-using System.Text.Json;
-
 namespace Chirp.Web.Tests;
 
 public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
@@ -62,16 +59,5 @@ public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
         var content = await response.Content.ReadAsStringAsync();
 
         Assert.Contains($"There are no cheeps so far.", content);
-    }
-    public async void CreateAndDeleteUserTest(string email, string password){
-        //create the user and login
-    }
-    //mabye we want to check if the github login works
-
-    public async void CreateCheepTest(){
-        //login to a test user
-        //create a cheep
-        //see that the cheep is in timeline
-        //logout
     }
 }

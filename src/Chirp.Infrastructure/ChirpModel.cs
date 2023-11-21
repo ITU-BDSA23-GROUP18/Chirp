@@ -1,7 +1,4 @@
 
-
-using Microsoft.EntityFrameworkCore.Design;
-
 namespace Chirp.Infrastructure;
 
 public class ChirpContext : DbContext
@@ -32,8 +29,6 @@ public class ChirpContext : DbContext
 
         modelBuilder.Entity<Reaction>().HasIndex(r => r.CheepId).IsUnique();
     }
-    
-    
     
     /*public class ChirpContextFactory : IDesignTimeDbContextFactory<ChirpContext>
     {

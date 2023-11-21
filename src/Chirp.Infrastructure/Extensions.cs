@@ -1,7 +1,4 @@
-﻿using Chirp.Core.DTOs;
-using Chirp.Infrastructure.Types;
-
-namespace Chirp.Infrastructure;
+﻿namespace Chirp.Infrastructure;
 
 public static class Extensions
 {
