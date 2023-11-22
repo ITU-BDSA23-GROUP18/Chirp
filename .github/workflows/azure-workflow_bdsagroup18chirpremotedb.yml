@@ -25,6 +25,9 @@ jobs:
       - name: Build with dotnet
         run: dotnet build src/Chirp.Web/ --configuration Release
 
+      - name: Ensure browsers are installed
+        run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
+
       - name: Test
         run: dotnet test --no-build --verbosity normal
 
