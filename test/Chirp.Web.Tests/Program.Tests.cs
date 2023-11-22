@@ -1,6 +1,3 @@
-using System.Text;
-using System.Text.Json;
-
 namespace Chirp.Web.Tests;
 
 public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>

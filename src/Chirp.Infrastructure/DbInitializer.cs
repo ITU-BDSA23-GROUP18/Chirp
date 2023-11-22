@@ -1,5 +1,3 @@
-using Chirp.Core.DTOs;
-
 namespace Chirp.Infrastructure;
 
 public static class DbInitializer

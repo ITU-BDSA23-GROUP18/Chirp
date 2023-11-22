@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -18,6 +17,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Web.Tests", "test\Chirp.Web.Tests\Chirp.Web.Tests.csproj", "{3F0E2277-619A-481E-987B-74920DB8EC1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Web.Ui.Tests", "test\Chirp.Web.Ui.Tests\Chirp.Web.Ui.Tests.csproj", "{62D318AA-0E76-42AC-A573-F4759842D404}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Core.Tests", "test\Chirp.Core.Tests\Chirp.Core.Tests.csproj", "{E4538668-0993-4F21-99E1-F027D792FC94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,10 +48,17 @@ Global
 		{3F0E2277-619A-481E-987B-74920DB8EC1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F0E2277-619A-481E-987B-74920DB8EC1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F0E2277-619A-481E-987B-74920DB8EC1F}.Release|Any CPU.Build.0 = Release|Any CPU
+
 		{62D318AA-0E76-42AC-A573-F4759842D404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62D318AA-0E76-42AC-A573-F4759842D404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62D318AA-0E76-42AC-A573-F4759842D404}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62D318AA-0E76-42AC-A573-F4759842D404}.Release|Any CPU.Build.0 = Release|Any CPU
+
+		{E4538668-0993-4F21-99E1-F027D792FC94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4538668-0993-4F21-99E1-F027D792FC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4538668-0993-4F21-99E1-F027D792FC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4538668-0993-4F21-99E1-F027D792FC94}.Release|Any CPU.Build.0 = Release|Any CPU
+
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8DE0B480-D744-4572-A0B9-B83A2E0B5278} = {B8CBA98C-DE43-4FB4-AC55-43902701518B}
@@ -60,5 +67,6 @@ Global
 		{CE6B06CF-F51C-492D-83D0-DA7D036B67C0} = {FA3C076B-4683-40B5-92A8-FA556D0FC98C}
 		{3F0E2277-619A-481E-987B-74920DB8EC1F} = {FA3C076B-4683-40B5-92A8-FA556D0FC98C}
 		{62D318AA-0E76-42AC-A573-F4759842D404} = {FA3C076B-4683-40B5-92A8-FA556D0FC98C}
+		{E4538668-0993-4F21-99E1-F027D792FC94} = {FA3C076B-4683-40B5-92A8-FA556D0FC98C}
 	EndGlobalSection
 EndGlobal
