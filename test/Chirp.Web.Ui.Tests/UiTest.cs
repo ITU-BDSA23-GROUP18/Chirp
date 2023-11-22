@@ -42,8 +42,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            Headless = false,
-            SlowMo = 400,
+            Headless = false
         });
         _context = await CreateBrowserContextAsync(_browser);
     }
@@ -65,7 +64,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         //and make a uniq finger pirnt for this cheep
         for (int i = 0; i < 10; i++)
         {
-            var currentTime = DateTime.Now.ToString("HH.mm.ss dd.MM.yyyy");
+            var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
             //await page.GetByText(" Chirp!").ClickAsync();
             await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
             await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
@@ -96,7 +95,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         //33 is used because one page can only hold 32 cheeps
         for (int i = 0; i < 33; i++)
         {
-            var currentTime = DateTime.Now.ToString("HH.mm.ss dd.MM.yyyy");
+            var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
             ListOfCheeps.Add(currentTime);
             //await page.GetByText(" Chirp!").ClickAsync();
             await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
