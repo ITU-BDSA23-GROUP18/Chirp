@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 // Modified from: https://mazeez.dev/posts/auth-in-integration-tests
 public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
-
     public const string AuthenticationScheme = "Test";
 
     public TestAuthHandler(
