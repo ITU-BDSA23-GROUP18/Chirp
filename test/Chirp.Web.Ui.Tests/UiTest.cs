@@ -2,7 +2,6 @@ namespace Chirp.Web.Ui.Tests;
 
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using Playwright.App.Tests.Infrastructure;
@@ -16,8 +15,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     private readonly CustomWebApplicationFactory _fixture;
 
     private readonly HttpClient _client;
-    private IBrowser _browser;
-    private IBrowserContext _context;
+    private IBrowser? _browser;
+    private IBrowserContext? _context;
     /// <summary>
     /// Constructor for the UiTest
     /// </summary>
@@ -42,8 +41,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            // Disable for debugging, and optionally use slowMo.
-            Headless = true
+            Headless = false,
+            SlowMo = 400,
         });
         _context = await CreateBrowserContextAsync(_browser);
     }
@@ -51,14 +50,14 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     [Fact]
     public async Task OpenPageTest()
     {
-        var page = await _context.NewPageAsync();
+        var page = await _context!.NewPageAsync();
 
         await page.GotoAsync(_serverAddress);
     }
     [Fact]
     public async Task CreateCheepTest()
     {
-        var Page = await _context.NewPageAsync();
+        var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
         //the current time is used such that we avoid duplicate cheeps 
@@ -76,7 +75,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     [Fact]
     public async Task GoToNextPageTest()
     {
-        var Page = await _context.NewPageAsync();
+        var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
         for (int i = 2; i < 10; i++)
@@ -88,7 +87,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     [Fact]
     public async Task Create_Cheeps_and_see_userTimeLine()
     {
-        var Page = await _context.NewPageAsync();
+        var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
 

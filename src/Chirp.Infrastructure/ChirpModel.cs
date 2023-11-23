@@ -1,14 +1,10 @@
 namespace Chirp.Infrastructure;
 
-public class ChirpContext : DbContext
+public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(options)
 {
-    public DbSet<Cheep>? Cheeps { get; set; }
-    public DbSet<Author>? Authors { get; set; }
-    public DbSet<Reaction>? Reactions { get; set; }
-
-    public ChirpContext(DbContextOptions<ChirpContext> options) : base(options)
-    {
-    }
+    public DbSet<Cheep> Cheeps { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Reaction> Reactions { get; set; }
 
     public void InitializeDatabase(bool seedDatabase)
     {
