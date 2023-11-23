@@ -116,6 +116,25 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByText(new Regex(ListOfCheeps[0], RegexOptions.IgnoreCase)).ClickAsync();
     }
 
+    [Fact]
+    public async Task FollowAUserTest(){
+        var Page = await _context.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        
+    }
+    public async Task UnFollowAUserTest(){
+
+    }
+    public async Task SeeFollowersTest(){
+
+    }
+    public async Task SeeFollowingTest(){
+
+    }
+
+
     /// <summary>
     /// Compairs the 2 urls and see if the are the same
     /// Excetion Thrown if they are not the same
@@ -144,6 +163,10 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         return context;
     }
+    
+    
+
+
     /// <summary>
     /// Disposes the browser and context after each test
     /// </summary>
