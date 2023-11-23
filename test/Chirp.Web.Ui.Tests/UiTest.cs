@@ -168,7 +168,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GotoAsync(_serverAddress + "Helge");
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
-
     }
     
     /// <summary>
