@@ -30,7 +30,7 @@ public class AuthorRepositoryTests
         var authors = await _repository.GetAuthorByName(name);
         var author = authors.FirstOrDefault();
         // Assert
-        Assert.Equal(name, author.Name);
+        Assert.Equal(name, author?.Name);
 
     }
     [Fact]
@@ -46,7 +46,7 @@ public class AuthorRepositoryTests
         var author = authors.FirstOrDefault();
 
         //Assert
-        Assert.Equal("Helge", author.Name);
+        Assert.Equal("Helge", author?.Name);
 
     }
 
@@ -59,6 +59,6 @@ public class AuthorRepositoryTests
         var authors = await _repository.GetAuthorByName("John Doe");
         var author = authors.FirstOrDefault();
         //Assert
-        Assert.Equal("John Doe", author.Name);
+        Assert.Equal("John Doe", author?.Name);
     }
 }
