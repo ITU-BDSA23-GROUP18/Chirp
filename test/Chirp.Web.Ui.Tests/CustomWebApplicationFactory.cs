@@ -50,6 +50,18 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 var connection = container.GetRequiredService<DbConnection>();
                 options.UseSqlite(connection);
             });
+
+            var authService = services.SingleOrDefault(
+                d => d.ServiceType ==
+                    typeof(IAuthenticationService));
+            if (authService != null)
+            {
+                services.Remove(authService);
+            }
+
+            services.AddAuthentication(TestAuthHandler.AuthenticationScheme)
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                    TestAuthHandler.AuthenticationScheme, options => { });
         });
 
         builder.UseEnvironment("Development");
@@ -63,6 +75,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         var addresses = server.Features.Get<IServerAddressesFeature>() ?? throw new InvalidOperationException(
                 "No server addresses found.");
         ClientOptions.BaseAddress = addresses.Addresses
+
             .Select(x => new Uri(x))
             .Last();
 
