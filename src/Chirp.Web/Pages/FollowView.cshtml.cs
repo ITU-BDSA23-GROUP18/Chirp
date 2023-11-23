@@ -19,12 +19,12 @@ public class FollowingModel : PageModel
         _authorRepository = authorRepository;
     }
 
-    public async Task<ActionResult> OnGet([FromQuery] int page, string followType)
+    public async Task<ActionResult> OnGet([FromQuery] int page, string author, string followType)
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name!);
+        var myFollowing = await _authorRepository.GetFollowing(author);
         var followingDtos = myFollowing.ToList();
         FollowingList = followingDtos;
         
@@ -35,7 +35,7 @@ public class FollowingModel : PageModel
             return Page();
         }
         
-        var myFollowers = await _authorRepository.GetFollowers(User.Identity?.Name!);
+        var myFollowers = await _authorRepository.GetFollowers(author);
         var followersDtos = myFollowers.ToList();
         FollowersList = followersDtos;
         

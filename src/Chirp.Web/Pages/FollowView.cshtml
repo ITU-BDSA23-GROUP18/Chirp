@@ -1,10 +1,11 @@
-﻿@page "/FollowView/{followType}"
+﻿@page "/FollowView/{author}/{followType}"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model FollowingModel
 
 @{
     ViewData["Title"] = "Chirp! - Following";
     Layout = "Shared/_Layout";
+    var author = HttpContext.GetRouteValue("author")!.ToString();
     var followType = HttpContext.GetRouteValue("followType")!.ToString();
 }
 
@@ -19,12 +20,12 @@
             if (Model.FollowingList.Any())
             {
                 <ul id="messagelist" class="cheeps">
-                    @foreach (var author in Model.FollowingList)
+                    @foreach (var user in Model.FollowingList)
                     {
                         <li>
                             <p>
                                 <strong>
-                                    <a href="/@author.Name">@author.Name</a>
+                                    <a href="/@user.Name">@user.Name</a>
                                 </strong>
                             </p>
                         </li>
@@ -40,13 +41,13 @@
         {
             if (Model.FollowersList.Any())
             {
-                <ul id="userList" class="authors">
-                    @foreach (var author in Model.FollowersList)
+                <ul id="messagelist" class="cheeps">
+                    @foreach (var user in Model.FollowersList)
                     {
                         <li>
                             <p>
                                 <strong>
-                                    <a href="/@author">@author</a>
+                                    <a href="/@user.Name">@user.Name</a>
                                 </strong>
                             </p>
                         </li>

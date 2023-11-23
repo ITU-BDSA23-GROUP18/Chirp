@@ -8,7 +8,7 @@ public class CheepDTOTests
     [InlineData("test3", "test4", "test5")]
     public void CreateCheepDTOTest(string author, string message, string timestamp)
     {
-        List<ReactionDTO> reactions = [];
+        List<ReactionDTO> reactions = new List<ReactionDTO>();
         var cheepDTO = new CheepDTO(author, message, timestamp, reactions);
 
         Assert.Equal(cheepDTO.Author, cheepDTO.Author);
