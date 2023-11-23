@@ -45,7 +45,7 @@ public class CheepRepository : ICheepRepository
     public void CreateCheep(string message, string username)
     {
         var cheepValidator = new CheepValidator();
-        var cheepValidationResult = cheepValidator.Validate(new NewCheep { Message = message });
+        var cheepValidationResult = cheepValidator.Validate(message);
         if (!cheepValidationResult.IsValid)
         {
             throw new ValidationException(cheepValidationResult.Errors);
@@ -80,16 +80,11 @@ public class CheepRepository : ICheepRepository
         _cheepDb.SaveChanges();
     }
 
-    public class NewCheep
-    {
-        public required string Message { get; set; }
-    }
-
-    public class CheepValidator : AbstractValidator<NewCheep>
+    private class CheepValidator : AbstractValidator<string>
     {
         public CheepValidator()
         {
-            RuleFor(c => c.Message).NotEmpty().MaximumLength(160);
+            RuleFor(s => s).NotEmpty().MaximumLength(160);
         }
     }
 }
