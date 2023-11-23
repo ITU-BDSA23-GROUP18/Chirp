@@ -86,10 +86,10 @@ public class AuthorRepositoryTests
         var jackFolloweringList = await _repository.GetFollowing("Jack Doe");
         var jillFolloweringList = await _repository.GetFollowing("jill Doe");
         Assert.Equal("John Doe", janeFolloweringList.First().Name);
-        Assert.Equal("John Doe",jackFolloweringList.First().Name);
+        Assert.Equal("John Doe", jackFolloweringList.First().Name);
         Assert.Equal("John Doe", jillFolloweringList.First().Name);
-
     }
+    
     [Fact]
     public async void TestGetFollowing()
     {
@@ -105,9 +105,5 @@ public class AuthorRepositoryTests
         {
             Assert.Contains(follower.Name, new List<string>() { "Jane Doe", "Jack Doe", "jill Doe" });
         }
-
     }
-    
-
-
 }

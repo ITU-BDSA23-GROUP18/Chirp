@@ -7,7 +7,6 @@ public static class DbInitializer
 
     public static void SeedDatabase(ChirpContext chirpContext)
     {
-
         if (chirpContext.Authors.Any() && chirpContext.Cheeps.Any()) return;
 
         SetData();

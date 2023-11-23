@@ -116,7 +116,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByText(new Regex(ListOfCheeps[0], RegexOptions.IgnoreCase)).ClickAsync();
     }
     [Fact]
-    public async Task SeeFollowerTimeLineTest(){
+    public async Task SeeFollowerTimeLineTest()
+    {
 
         var Page = await _context.NewPageAsync();
 
@@ -129,9 +130,9 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByText("You are not following anybody!.").ClickAsync();
     }
 
-
     [Fact]
-    public async Task FollowUsersTest(){
+    public async Task FollowUsersTest()
+    {
         var Page = await _context.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
@@ -175,7 +176,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     /// We know that the user "Wendell Ballan" follows 3 users by default
     /// </summary>
     [Fact]
-    public async Task seeAUserThatFollowsOtherUsersTest(){
+    public async Task seeAUserThatFollowsOtherUsersTest()
+    {
         //Wendell Ballan follows 3 users by default if this is changed this test will fail
 
         var Page = await _context.NewPageAsync();
@@ -214,9 +216,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         return context;
     }
     
-    
-
-
     /// <summary>
     /// Disposes the browser and context after each test
     /// </summary>
