@@ -43,6 +43,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             // Disable for debugging, and optionally use slowMo.
+            SlowMo = 400,
             Headless = true
         });
         _context = await CreateBrowserContextAsync(_browser);
@@ -122,8 +123,31 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GotoAsync(_serverAddress);
 
-        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
+
+        await Page.GetByText("You are not following anybody!.").ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "/Jacqualine Gilcoine/");
+
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
+
+        //following number does not update in the UI so we have to go to the following page
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Jacqualine Gilcoine" }).ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "/Helge/");
+
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
+        //this is still wrong and shoud be fixed
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Helge" }).ClickAsync();
+
     }
+    [Fact]
     public async Task UnFollowAUserTest(){
 
     }
