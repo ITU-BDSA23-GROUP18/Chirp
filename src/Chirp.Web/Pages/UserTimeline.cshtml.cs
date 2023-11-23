@@ -10,11 +10,9 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; }
     public PaginationModel? Pagination { get; private set; }
 
-    public List<AuthorDTO> FollowersList { get; set; }
-
-    public List<AuthorDTO?> FollowingList { get; set; }
-
     public int FollowingCount { get; set; }
+    
+    public int FollowersCount { get; set; }
     
     public bool IsFollowingAuthor { get; set; }
     
@@ -23,8 +21,6 @@ public class UserTimelineModel : PageModel
         Cheeps = new List<CheepDTO>();
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
-        FollowersList = new List<AuthorDTO>();
-        FollowingList = new List<AuthorDTO?>();
         FollowingCount = 0;
     }
 
@@ -40,9 +36,14 @@ public class UserTimelineModel : PageModel
 
         var following = await _authorRepository.GetFollowing(author);
         FollowingCount = following.Count();
+            
+        var followers = await _authorRepository.GetFollowers(author);
+        FollowersCount = followers.Count();
+        
         if (User.Identity == null || User.Identity.Name == null) {
             return Page();
         }
+        
         var myFollowing = await _authorRepository.GetFollowing(User.Identity.Name);
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());

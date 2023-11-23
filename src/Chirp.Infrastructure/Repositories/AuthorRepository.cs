@@ -58,6 +58,7 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"Current user does not exist");
         }
         signedInUser.Following.Add(authorToFollow.Result);
+        authorToFollow.Result.Followers.Add(signedInUser);
         _authorDb.SaveChanges();
     }
 
