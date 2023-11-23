@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 
 namespace Playwright.App.Tests.Infrastructure;
 
