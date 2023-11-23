@@ -7,7 +7,6 @@ public record AuthorDTO
     public AuthorDTO(string name, string email)
     {
         if (name == null || name.Equals("")) throw new ArgumentNullException(nameof(name), "name is null or empty");
-        if (email == null || email.Equals("")) throw new ArgumentNullException(nameof(email), "email is null or empty");
         Name = name;
         Email = email;
     }
