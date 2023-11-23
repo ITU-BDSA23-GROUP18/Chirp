@@ -10,7 +10,10 @@
 
 <div>
     <h2> @user's Timeline </h2>
-    <a href="/FollowView/following">@($"Following: {Model.FollowingCount}")</a>
+    <ul>
+        <a href="/FollowView/@user/following">@($"Following: {Model.FollowingCount}")</a>
+        <a href="/FollowView/@user/follower">@($"Followers: {Model.FollowersCount}")</a>
+    </ul>
     
     @if (user != User.Identity!.Name!)
     {
