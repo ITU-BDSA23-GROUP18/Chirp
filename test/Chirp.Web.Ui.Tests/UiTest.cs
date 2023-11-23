@@ -119,7 +119,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     public async Task SeeFollowerTimeLineTest()
     {
 
-        var Page = await _context.NewPageAsync();
+        var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress );
 
@@ -133,7 +133,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     [Fact]
     public async Task FollowUsersTest()
     {
-        var Page = await _context.NewPageAsync();
+        var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
 
@@ -148,17 +148,13 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
 
         //following number does not update in the UI so we have to go to the following page
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
-
-        await Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Jacqualine Gilcoine" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Followers: 1" }).WaitForAsync();
 
         await Page.GotoAsync(_serverAddress + "Helge");
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
         //this is still wrong and shoud be fixed
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
-
-        await Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Helge" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Followers: 1" }).WaitForAsync();
 
         //unfollow the users so that the test can be run again
         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
@@ -179,7 +175,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     {
         //Wendell Ballan follows 3 users by default if this is changed this test will fail
 
-        var Page = await _context.NewPageAsync();
+        var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress + "Wendell Ballan");
 
