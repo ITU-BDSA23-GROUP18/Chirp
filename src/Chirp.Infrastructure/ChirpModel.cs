@@ -1,24 +1,15 @@
-
-
-using Microsoft.EntityFrameworkCore.Design;
-
 namespace Chirp.Infrastructure;
 
-public class ChirpContext : DbContext
+public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(options)
 {
-    public DbSet<Cheep>? Cheeps { get; set; }
-    public DbSet<Author>? Authors { get; set; }
-    public DbSet<Reaction>? Reactions { get; set; }
+    public DbSet<Cheep> Cheeps { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<Reaction> Reactions { get; set; }
 
-    public ChirpContext(DbContextOptions<ChirpContext> options) : base(options)
-    {
-
-    }
-
-    public void InitializeDatabase()
+    public void InitializeDatabase(bool seedDatabase)
     {
         Database.EnsureCreated();
-        DbInitializer.SeedDatabase(this);
+        if (seedDatabase) DbInitializer.SeedDatabase(this);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,9 +23,7 @@ public class ChirpContext : DbContext
 
         modelBuilder.Entity<Reaction>().HasIndex(r => r.CheepId).IsUnique();
     }
-    
-    
-    
+
     /*public class ChirpContextFactory : IDesignTimeDbContextFactory<ChirpContext>
     {
         public ChirpContext CreateContext(string[] args)
@@ -45,6 +34,5 @@ public class ChirpContext : DbContext
 
             return new ChirpContext(optionsBuilder.Options);
         }
-    }*/ 
+    }*/
 }
-
