@@ -61,4 +61,53 @@ public class AuthorRepositoryTests
         //Assert
         Assert.Equal("John Doe", author.Name);
     }
+
+    [Fact]
+    public async void TestFollowAuthor()
+    {
+        _repository.CreateAuthor("John Doe", "John@doe.com");
+        _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
+        _repository.FollowAuthor("Jane Doe", "John Doe");
+        var followerList = await _repository.GetFollowers("Jane Doe");
+        var follower = followerList.First();
+        Assert.Equal("John Doe", follower.Name);
+    }
+    [Fact]
+    public async void TestGetFollowers()
+    {
+        _repository.CreateAuthor("John Doe", "John@doe.com");
+        _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
+        _repository.CreateAuthor("Jack Doe", "Jack@doe.com");
+        _repository.CreateAuthor("jill Doe", "jill@doe.com");
+        _repository.FollowAuthor("Jane Doe", "John Doe");
+        _repository.FollowAuthor("Jack Doe", "John Doe");
+        _repository.FollowAuthor("jill Doe", "John Doe");
+        var janeFolloweringList = await _repository.GetFollowing("Jane Doe");
+        var jackFolloweringList = await _repository.GetFollowing("Jack Doe");
+        var jillFolloweringList = await _repository.GetFollowing("jill Doe");
+        Assert.Equal("John Doe",jackFolloweringList.First().Name);
+        Assert.Equal("John Doe", janeFolloweringList.First().Name);
+        Assert.Equal("John Doe", jillFolloweringList.First().Name);
+
+    }
+    [Fact]
+    public async void TestGetFollowing()
+    {
+        _repository.CreateAuthor("John Doe", "John@doe.com");
+        _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
+        _repository.CreateAuthor("Jack Doe", "Jack@doe.com");
+        _repository.CreateAuthor("jill Doe", "jill@doe.com");
+        _repository.FollowAuthor("Jane Doe", "John Doe");
+        _repository.FollowAuthor("Jack Doe", "John Doe");
+        _repository.FollowAuthor("jill Doe", "John Doe");
+        var followerList = await _repository.GetFollowing("John Doe");
+        foreach (var follower in followerList)
+        {
+            Assert.Contains(follower.Name, new List<string>() { "Jane Doe", "Jack Doe", "jill Doe" });
+        }
+
+    }
+    
+
+
 }
