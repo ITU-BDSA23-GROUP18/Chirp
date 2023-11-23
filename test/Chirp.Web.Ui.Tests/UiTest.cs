@@ -43,8 +43,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             // Disable for debugging, and optionally use slowMo.
-            SlowMo = 400,
-            Headless = false
+            //SlowMo = 400,
+            Headless = true //false if you want to see the browser
         });
         _context = await CreateBrowserContextAsync(_browser);
     }
@@ -211,6 +211,10 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByText("You are not following anybody!.").ClickAsync();
     }
+    /// <summary>
+    /// This test is used to see if the number of followers is correct.
+    /// We know that the user "Wendell Ballan" follows 3 users by default
+    /// </summary>
     [Fact]
     public async Task seeAUserThatFollowsOtherUsersTest(){
         //Wendell Ballan follows 3 users by default if this is changed this test will fail
