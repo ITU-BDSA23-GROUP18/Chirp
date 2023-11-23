@@ -118,7 +118,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     }
 
     [Fact]
-    public async Task FollowAUserTest(){
+    public async Task FollowUsersTest(){
         var Page = await _context.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
@@ -158,7 +158,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByText("You are not following anybody!.").ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-
+        
         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
@@ -198,13 +198,16 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
 
     }
-    public async Task SeeFollowersTest(){
+    [Fact]
+    public async Task SeeFollowerTimeLineTest(){
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
 
+        await Page.GetByRole(AriaRole.Heading, new() { Name = "Following Timeline" }).ClickAsync();
+
+        await Page.GetByText("You are not following anybody!.").ClickAsync();
     }
-    public async Task SeeFollowingTest(){
-
-    }
-
+    [Fact]
+    
 
     /// <summary>
     /// Compairs the 2 urls and see if the are the same
