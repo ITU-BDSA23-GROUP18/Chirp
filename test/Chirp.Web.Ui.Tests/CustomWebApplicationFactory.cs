@@ -94,7 +94,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         if (_host is null)
         {
             // This forces WebApplicationFactory to bootstrap the server
-            using var _ = CreateDefaultClient();
+            using var client = CreateDefaultClient();
         }
     }
 }

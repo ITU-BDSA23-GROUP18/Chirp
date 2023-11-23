@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
-
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileNameMustMatchTypeName", Justification = "Razor Page")]
 public class PublicModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
@@ -24,7 +24,7 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnGet([FromQuery] int page)
     {
-        //If a page query is not given in the url set the page=1
+        // If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
         var nCheeps = _cheepRepository.CountCheeps().Result;

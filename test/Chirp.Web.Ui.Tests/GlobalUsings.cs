@@ -1,5 +1,6 @@
-global using Xunit;
 global using System.Linq;
+global using System.Data.Common;
+global using Xunit;
 global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Hosting.Server;
 global using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -10,4 +11,3 @@ global using Chirp.Web;
 global using Chirp.Infrastructure;
 global using Microsoft.Data.Sqlite;
 global using Microsoft.EntityFrameworkCore;
-global using System.Data.Common;

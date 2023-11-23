@@ -82,28 +82,28 @@ public class CheepRepository : ICheepRepository
 
         Author author;
 
-        //check if user exists
+        // Check if user exists
         if (!_cheepDb.Authors.Any(a => a.Name == username))
         {
             author = new Author
             {
                 AuthorId = Guid.NewGuid(),
                 Name = username,
-                Email = Guid.NewGuid().ToString()
-
+                Email = Guid.NewGuid().ToString(),
             };
         }
         else
         {
             author = _cheepDb.Authors.SingleAsync(a => a.Name == username).Result;
         }
+
         var cheep = new Cheep
         {
             CheepId = Guid.NewGuid(),
             AuthorId = author.AuthorId,
             Author = author,
             Message = message,
-            TimeStamp = DateTime.UtcNow
+            TimeStamp = DateTime.UtcNow,
         };
         _cheepDb.Cheeps.Add(cheep);
         _cheepDb.SaveChanges();
@@ -120,4 +120,3 @@ public class CheepRepository : ICheepRepository
         }
     }
 }
-

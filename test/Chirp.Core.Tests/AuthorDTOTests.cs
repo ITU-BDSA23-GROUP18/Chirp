@@ -1,6 +1,6 @@
 namespace Chirp.Core.Tests;
 
-public class authorDTOTests
+public class AuthorDTOTests
 {
     [Theory]
     [InlineData("test1", "test2@test.com", "", "")]
@@ -22,7 +22,7 @@ public class authorDTOTests
 
         Assert.Throws(exceptionType, () =>
         {
-            var CheepDTO = new AuthorDTO(name!, email!, profilePictureUrl!, displayName);
+            var AuthorDTO = new AuthorDTO(name!, email!, profilePictureUrl!, displayName);
         });
     }
 }

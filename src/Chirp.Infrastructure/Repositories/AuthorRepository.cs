@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Http;
 
+=======
+>>>>>>> 77392f1 (Add stylecop and fix all warnings)
 namespace Chirp.Infrastructure.Repositories;
 /// <summary>
 /// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
@@ -65,7 +68,7 @@ public class AuthorRepository : IAuthorRepository
             Email = email,
             Cheeps = new List<Cheep>(),
             Following = new List<Author>(),
-            Followers = new List<Author>()
+            Followers = new List<Author>(),
         };
         _authorDb.Authors.Add(author);
         await _authorDb.SaveChangesAsync();
@@ -104,12 +107,14 @@ public class AuthorRepository : IAuthorRepository
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
         var user = await _authorDb.Authors.Include(author => author.Followers).FirstOrDefaultAsync(a => a.Name == pageUser);
-        //return list of authors in following
+
+        // Return list of authors in following
         if (user == null)
         {
             throw new ArgumentException("User does not exist");
         }
-        // return list of authors in following
+
+        // Return list of authors in following
         var followerList = user.Followers.ToList();
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
@@ -117,6 +122,7 @@ public class AuthorRepository : IAuthorRepository
             var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followerListDto.Add(authorDto);
         }
+
         return followerListDto;
     }
     /// <summary>
@@ -128,11 +134,13 @@ public class AuthorRepository : IAuthorRepository
     public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
     {
         var user = await _authorDb.Authors.Include(author => author.Following).FirstOrDefaultAsync(a => a.Name == userName);
-        //return list of authors in following
+
+        // Return list of authors in following
         if (user == null)
         {
             throw new ArgumentException("User does not exist");
         }
+
         // return list of authors in following
         var followingList = user.Following.ToList();
         var followingListDto = new List<AuthorDTO>();
@@ -141,6 +149,7 @@ public class AuthorRepository : IAuthorRepository
             var authorDto = new AuthorDTO(author.Name, author.Email,author.DisplayName, author.ProfilePictureUrl);
             followingListDto.Add(authorDto);
         }
+
         return followingListDto;
     }
     /// <summary>
@@ -158,6 +167,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {followName} does not exist");
         }
+
         currentUser.Following.Remove(followAuthor);
         followAuthor.Followers.Remove(currentUser);
 

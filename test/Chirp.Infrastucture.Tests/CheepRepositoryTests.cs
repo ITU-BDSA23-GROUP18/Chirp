@@ -1,5 +1,3 @@
-using SQLitePCL;
-using Testcontainers.MsSql;
 using Xunit;
 using Microsoft.Data.Sqlite;
 
@@ -42,7 +40,6 @@ public class CheepRepositoryTests
 
         Assert.Equal(32, cheeps.Count());
     }
-    //-------------------------------------------------------------
 
     [Fact]
     public async void GetCheeps_onFirstPage_returns32FirstCheeps()
@@ -77,7 +74,7 @@ public class CheepRepositoryTests
         var author = new Author
         {
             Name = name,
-            Email = email
+            Email = email,
         };
 
         var cheeps = await _repository.GetCheepFromAuthor(author.Name);
@@ -87,6 +84,7 @@ public class CheepRepositoryTests
         {
             aCheeps.Add(c.ToDTO());
         }
+
         Assert.All(cheeps, c => Assert.Contains(c, aCheeps, new CheepDTOComparer()));
     }
 
@@ -101,7 +99,7 @@ public class CheepRepositoryTests
         var author = new Author
         {
             Name = name,
-            Email = email
+            Email = email,
         };
 
         var cheeps = await _repository.GetCheepFromAuthor(author.Name, page);
@@ -115,7 +113,7 @@ public class CheepRepositoryTests
         var author = new Author
         {
             Name = "OndFisk",
-            Email = "rasmus@microsoft.com"
+            Email = "rasmus@microsoft.com",
         };
 
         var cheeps = await _repository.GetCheepFromAuthor(author.Name);
@@ -129,7 +127,7 @@ public class CheepRepositoryTests
         var author = new Author
         {
             Name = "Helge",
-            Email = "ropf@itu.dk"
+            Email = "ropf@itu.dk",
         };
 
         var cheeps = await _repository.GetCheepFromAuthor(author.Name, 666);
@@ -137,8 +135,7 @@ public class CheepRepositoryTests
         Assert.Empty(cheeps);
     }
 
-    //Testing CreateCheep
-
+    // Testing CreateCheep
     [Theory]
     [InlineData("Hello my name is Helge", "Helge")]
     [InlineData("I work at Microsoft", "Rasmus")]
@@ -166,7 +163,7 @@ public class CheepRepositoryTests
     [Fact]
     public void ManyNewUsers_CanCreateCheeps_andReadCheep()
     {
-        //Use GUID as username since the username must be uniqe
+        // Use GUID as username since the username must be uniqe
         List<CheepDTO> newCheeps = new Faker<CheepDTO>()
             .CustomInstantiator(f => new CheepDTO(Guid.NewGuid().ToString()[4..], f.Random.Words(), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"), f.Date.Recent().ToString("HH:mm:ss dd/MM/yyyy"), new List<ReactionDTO>(), "", ""))
             .RuleFor(c => c.Message, (f, c) => f.Random.Words())
@@ -185,7 +182,7 @@ public class CheepRepositoryTests
         });
     }
 
-    static void SeedData(ChirpContext _context)
+    private static void SeedData(ChirpContext context)
     {
         var a1 = new Author() { Name = "Roger Histand", Email = "Roger+Histand@hotmail.com" };
         var a2 = new Author() { Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk" };
@@ -200,7 +197,7 @@ public class CheepRepositoryTests
         var a11 = new Author() { Name = "Helge", Email = "ropf@itu.dk" };
         var a12 = new Author() { Name = "Rasmus", Email = "rnie@itu.dk" };
 
-        var Authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
+        var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
 
         var c1 = new Cheep() { AuthorId = a10.AuthorId, Author = a10, Message = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
         var c2 = new Cheep() { AuthorId = a10.AuthorId, Author = a10, Message = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
@@ -267,10 +264,10 @@ public class CheepRepositoryTests
         var c63 = new Cheep() { AuthorId = a10.AuthorId, Author = a10, Message = "It came from a grove of Scotch firs, and I were strolling on the soft gravel, and finally the dining-room.", TimeStamp = DateTime.Parse("2023-08-01 13:14:04") };
         var c64 = new Cheep() { AuthorId = a10.AuthorId, Author = a10, Message = "Nor can piety itself, at such a pair of as a lobster if he had needed it; but no, it''s like that, does he?", TimeStamp = DateTime.Parse("2023-08-01 13:15:42") };
 
-        var Cheeps = new List<Cheep>() { c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24, c25, c26, c27, c28, c29, c30, c31, c32, c33, c34, c35, c36, c37, c38, c39, c40, c41, c42, c43, c44, c45, c46, c47, c48, c49, c50, c51, c52, c53, c54, c55, c56, c57, c58, c59, c60, c61, c62, c63, c64 };
+        var cheeps = new List<Cheep>() { c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23, c24, c25, c26, c27, c28, c29, c30, c31, c32, c33, c34, c35, c36, c37, c38, c39, c40, c41, c42, c43, c44, c45, c46, c47, c48, c49, c50, c51, c52, c53, c54, c55, c56, c57, c58, c59, c60, c61, c62, c63, c64 };
 
-        _context.Authors.AddRange(Authors);
-        _context.Cheeps.AddRange(Cheeps);
-        _context.SaveChanges();
+        context.Authors.AddRange(authors);
+        context.Cheeps.AddRange(cheeps);
+        context.SaveChanges();
     }
 }

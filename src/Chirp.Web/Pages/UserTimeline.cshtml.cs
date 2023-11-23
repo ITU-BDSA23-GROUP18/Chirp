@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
-
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileNameMustMatchTypeName", Justification = "Razor Page")]
 public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
@@ -30,7 +31,7 @@ public class UserTimelineModel : PageModel
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int page)
     {
-        //If a page query is not given in the url set the page=1
+        // If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
 
         var nCheeps = await _cheepRepository.CountCheepsFromAuthor(author);
@@ -72,7 +73,7 @@ public class UserTimelineModel : PageModel
             await _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
             return RedirectToPage();
         }
-        catch 
+        catch
         {
             return RedirectToPage();
         }
@@ -102,7 +103,7 @@ public class UserTimelineModel : PageModel
             await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
             return RedirectToPage();
         }
-        catch 
+        catch
         {
             return RedirectToPage();
         }

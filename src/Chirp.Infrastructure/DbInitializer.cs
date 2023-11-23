@@ -2,9 +2,14 @@ namespace Chirp.Infrastructure;
 
 public static class DbInitializer
 {
+<<<<<<< HEAD
     public static List<Cheep> Cheeps { get; set; } = new();
     public static List<Author> Authors { get; set; } = new();
     public static List<Reaction> Reactions { get; set; } = new();
+=======
+    public static List<Cheep> Cheeps { get; set; } = [];
+    public static List<Author> Authors { get; set; } = [];
+>>>>>>> 77392f1 (Add stylecop and fix all warnings)
 
     public static void SeedDatabase(ChirpContext chirpContext)
     {

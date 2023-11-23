@@ -1,6 +1,6 @@
 ﻿@page "/FollowView/{author}/{followType}"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model FollowingModel
+@model FollowViewModel
 
 @{
     ViewData["Title"] = "Chirp! - Following";
@@ -11,7 +11,7 @@
 
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet"  href="css/style.css" />
+<link rel="stylesheet" href="css/style.css" />
 <div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
@@ -67,8 +67,7 @@
             }
         }
         {
-                await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+            await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
         }
     }
 </div>
-    

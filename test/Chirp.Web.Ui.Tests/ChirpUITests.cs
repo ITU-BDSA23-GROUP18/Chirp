@@ -6,10 +6,11 @@ using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using Playwright.App.Tests.Infrastructure;
 using Xunit;
+
 /// <summary>
-/// The UiTest class is used to test the UI of the application
+/// The UiTest class is used to test the UI of the application.
 /// </summary>
-public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDisposable
+public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly string _serverAddress;
     private readonly CustomWebApplicationFactory _fixture;
@@ -17,24 +18,113 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     private readonly HttpClient _client;
     private IBrowser? _browser;
     private IBrowserContext? _context;
+
     /// <summary>
-    /// Constructor for the UiTest
+    /// Initializes a new instance of the <see cref="ChirpUITests"/> class.
     /// </summary>
-    public UiTest(CustomWebApplicationFactory fixture)
+    public ChirpUITests(CustomWebApplicationFactory fixture)
     {
         _serverAddress = fixture.ServerAddress;
         _fixture = fixture;
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = true,
-            HandleCookies = true
+            HandleCookies = true,
         });
 
         InitializeBrowserAsync().GetAwaiter().GetResult();
     }
 
+    [Fact]
+    public async Task OpenPageTest()
+    {
+        var page = await _context!.NewPageAsync();
+
+        await page.GotoAsync(_serverAddress);
+    }
+
+    [Fact]
+    public async Task CreateCheepTest()
+    {
+        var page = await _context!.NewPageAsync();
+
+        await page.GotoAsync(_serverAddress);
+
+        // The current time is used such that we avoid duplicate cheeps
+        // And make a uniqe finger print for this cheep
+        for (int i = 0; i < 10; i++)
+        {
+            var currentTime = DateTime.Now.ToString("HH.mm.ss dd.MM.yyyy");
+
+            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
+            await page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
+
+            // See the cheep in the timeline
+            await page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
+        }
+    }
+
+    [Fact]
+    public async Task GoToNextPageTest()
+    {
+        var page = await _context!.NewPageAsync();
+
+        await page.GotoAsync(_serverAddress);
+        for (int i = 2; i < 10; i++)
+        {
+            await page.GetByRole(AriaRole.Link, new() { Name = i.ToString(), Exact = true }).ClickAsync();
+            CheckUrl(page.Url, _serverAddress + "?page=" + i);
+        }
+    }
+
+    [Fact]
+    public async Task Create_Cheeps_and_see_userTimeLine()
+    {
+        var page = await _context!.NewPageAsync();
+
+        await page.GotoAsync(_serverAddress);
+
+        var listOfCheeps = new List<string>();
+
+        // 33 is used because one page can only hold 32 cheeps
+        for (int i = 0; i < 33; i++)
+        {
+            var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
+            listOfCheeps.Add(currentTime);
+
+            await page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
+            await page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
+
+            // See the cheep in the timeline
+            await page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
+        }
+
+        // Go to the user timeline
+        await Page.GetByText("TestUser's page").ClickAsync();
+        for (int i = 1; i < listOfCheeps.Count; i++)
+        {
+            await page.GetByText(new Regex(listOfCheeps[i], RegexOptions.IgnoreCase)).ClickAsync();
+        }
+
+        // The first should be on the 2nd page
+        await page.GetByRole(AriaRole.Link, new() { Name = "2", Exact = true }).ClickAsync();
+
+        await page.GetByText(new Regex(listOfCheeps[0], RegexOptions.IgnoreCase)).ClickAsync();
+    }
+
     /// <summary>
-    /// Initializes the browser and context for the tests
+    /// Disposes the browser and context after each test.
+    /// </summary>
+    public void Dispose()
+    {
+        // Dispose browser and context here
+        _context?.DisposeAsync().GetAwaiter().GetResult();
+        _browser?.DisposeAsync().GetAwaiter().GetResult();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Initializes the browser and context for the tests.
     /// </summary>
     private async Task InitializeBrowserAsync()
     {
@@ -183,10 +273,10 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
     /// <summary>
     /// Compairs the 2 urls and see if the are the same
-    /// Excetion Thrown if they are not the same
+    /// Excetion Thrown if they are not the same.
     /// </summary>
-    /// <param name="url"></param>
-    /// <param name="expectedUrl"></param>
+    /// <param name="url">Url to test.</param>
+    /// <param name="expectedUrl">The expected Url.</param>
     private void CheckUrl(string url, string expectedUrl)
     {
         if (url.Equals(expectedUrl) == false)
@@ -194,16 +284,17 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
             throw new Exception("The page url is not correct expected: " + expectedUrl + " but was: " + url + "");
         }
     }
+
     /// <summary>
-    /// Creates the Browser context for each test
+    /// Creates the Browser context for each test.
     /// </summary>
-    /// <param name="browser"></param>
-    /// <returns></returns>
+    /// <param name="browser">The browser to create context for.</param>
+    /// <returns>The context for the browser.</returns>
     private async Task<IBrowserContext> CreateBrowserContextAsync(IBrowser browser)
     {
         var contextOptions = new BrowserNewContextOptions()
         {
-            IgnoreHTTPSErrors = true // This will ignore HTTPS errors
+            IgnoreHTTPSErrors = true, // This will ignore HTTPS errors
         };
         var context = await browser.NewContextAsync(contextOptions);
 
