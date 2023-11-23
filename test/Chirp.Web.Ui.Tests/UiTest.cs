@@ -44,7 +44,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         {
             // Disable for debugging, and optionally use slowMo.
             SlowMo = 400,
-            Headless = true
+            Headless = false
         });
         _context = await CreateBrowserContextAsync(_browser);
     }

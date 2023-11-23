@@ -30,8 +30,8 @@ public static class DbInitializer
         var a10 = new Author() { AuthorId = Guid.NewGuid(), Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Cheeps = new List<Cheep>(), Following = new List<Author>(), Followers = new List<Author>() };
         var a11 = new Author() { AuthorId = Guid.NewGuid(), Name = "Helge", Email = "ropf@itu.dk", Cheeps = new List<Cheep>(), Following = new List<Author>(), Followers = new List<Author>() };
         var a12 = new Author() { AuthorId = Guid.NewGuid(), Name = "Rasmus", Email = "rnie@itu.dk", Cheeps = new List<Cheep>(), Following = new List<Author>(), Followers = new List<Author>() };
-
-        Authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 };
+        var a13 = new Author() { AuthorId = Guid.NewGuid(), Name = "TestUser", Email = "", Cheeps = new List<Cheep>(), Following = new List<Author>(), Followers = new List<Author>() };
+        Authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13 };
         
        a3.Following!.Add(a1);
        a3.Following!.Add(a2);
