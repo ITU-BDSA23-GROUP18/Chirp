@@ -30,7 +30,7 @@ public static class DbInitializer
         var a10 = new Author() { Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com" };
         var a11 = new Author() { Name = "Helge", Email = "ropf@itu.dk" };
         var a12 = new Author() { Name = "Rasmus", Email = "rnie@itu.dk" };
-        var a13 = new Author() { Name = "TestUser", Email = ""};
+        var a13 = new Author() { Name = "TestUser", Email = "test@test.test"};
         Authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 ,a13 };
 
         a3.Following.Add(a1);

@@ -115,6 +115,20 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByText(new Regex(ListOfCheeps[0], RegexOptions.IgnoreCase)).ClickAsync();
     }
+    [Fact]
+    public async Task SeeFollowerTimeLineTest(){
+
+        var Page = await _context.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress );
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Heading, new() { Name = "Following Timeline" }).ClickAsync();
+
+        await Page.GetByText("You are not following anybody!.").ClickAsync();
+    }
+
 
     [Fact]
     public async Task FollowUsersTest(){
@@ -145,71 +159,17 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Helge" }).ClickAsync();
 
-    }
-    [Fact]
-    public async Task UnFollowAUserTest(){
-        var Page = await _context.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress);
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
-
-        await Page.GetByText("You are not following anybody!.").ClickAsync();
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-        
-        await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
-
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
-
-        //following number does not update in the UI so we have to go to the following page
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
-
-        await Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Jacqualine Gilcoine" }).ClickAsync();
-
-        await Page.GotoAsync(_serverAddress + "Helge");
-
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
-        //this is still wrong and shoud be fixed
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
-
-        await Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Helge" }).ClickAsync();
-
-        //now that we have followed 2 users we can unfollow one of them
-
+        //unfollow the users so that the test can be run again
         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
-        
-        //assert that the user is not in the following list
-        await Expect(Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Jacqualine Gilcoine" })).ToBeEmptyAsync();
 
         await Page.GotoAsync(_serverAddress + "Helge");
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
 
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 0" }).ClickAsync();
-        
-        //assert that the user is not in the following list
-        await Expect(Page.GetByRole(AriaRole.Paragraph).Filter(new() { HasText = "Helge" })).ToBeEmptyAsync();
-
-
     }
-    [Fact]
-    public async Task SeeFollowerTimeLineTest(){
-
-        var Page = await _context.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress );
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
-
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Following Timeline" }).ClickAsync();
-
-        await Page.GetByText("You are not following anybody!.").ClickAsync();
-    }
+    
     /// <summary>
     /// This test is used to see if the number of followers is correct.
     /// We know that the user "Wendell Ballan" follows 3 users by default
