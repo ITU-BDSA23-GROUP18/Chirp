@@ -79,14 +79,14 @@ public class AuthorRepositoryTests
         _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
         _repository.CreateAuthor("Jack Doe", "Jack@doe.com");
         _repository.CreateAuthor("jill Doe", "jill@doe.com");
-        _repository.FollowAuthor("Jane Doe", "John Doe");
-        _repository.FollowAuthor("Jack Doe", "John Doe");
-        _repository.FollowAuthor("jill Doe", "John Doe");
+        _repository.FollowAuthor("John Doe", "Jane Doe");
+        _repository.FollowAuthor("John Doe", "Jack Doe");
+        _repository.FollowAuthor("John Doe", "jill Doe");
         var janeFolloweringList = await _repository.GetFollowing("Jane Doe");
         var jackFolloweringList = await _repository.GetFollowing("Jack Doe");
         var jillFolloweringList = await _repository.GetFollowing("jill Doe");
-        Assert.Equal("John Doe",jackFolloweringList.First().Name);
         Assert.Equal("John Doe", janeFolloweringList.First().Name);
+        Assert.Equal("John Doe",jackFolloweringList.First().Name);
         Assert.Equal("John Doe", jillFolloweringList.First().Name);
 
     }
