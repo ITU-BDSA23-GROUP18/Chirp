@@ -1,4 +1,6 @@
 
+using Microsoft.AspNetCore.Authentication;
+
 namespace Playwright.App.Tests.Infrastructure;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
