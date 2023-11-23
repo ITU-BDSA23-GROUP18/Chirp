@@ -200,6 +200,11 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     }
     [Fact]
     public async Task SeeFollowerTimeLineTest(){
+
+        var Page = await _context.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress );
+
         await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
 
         await Page.GetByRole(AriaRole.Heading, new() { Name = "Following Timeline" }).ClickAsync();
@@ -207,7 +212,15 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByText("You are not following anybody!.").ClickAsync();
     }
     [Fact]
-    
+    public async Task seeAUserThatFollowsOtherUsersTest(){
+        //Wendell Ballan follows 3 users by default if this is changed this test will fail
+
+        var Page = await _context.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress + "Wendell Ballan");
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 3" }).ClickAsync();
+    }
 
     /// <summary>
     /// Compairs the 2 urls and see if the are the same
