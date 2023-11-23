@@ -1,7 +1,4 @@
 
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Options;
-
 namespace Playwright.App.Tests.Infrastructure;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
@@ -75,9 +72,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         _host.Start();
 
         var server = _host.Services.GetRequiredService<IServer>();
-        var addresses = server.Features.Get<IServerAddressesFeature>();
+        var addresses = server.Features.Get<IServerAddressesFeature>() ?? throw new InvalidOperationException(
+                "No server addresses found.");
+        ClientOptions.BaseAddress = addresses.Addresses
 
-        ClientOptions.BaseAddress = addresses!.Addresses
             .Select(x => new Uri(x))
             .Last();
 
