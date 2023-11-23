@@ -15,12 +15,12 @@
         <div class="dropdown">
             <input type="button" onclick="dropdownFunction()" id="dropdown_btn" class="dropbtn">
             <label for="dropdown_btn">
-                <img class="dropdown_img" src="images/icon1.png"/>
+                <img class="dropdown_img" src="images/defualt_user_pic.png"/>
             </label>
             <div id="dropdown" class="dropdown-content">
                 <a href="\@User.Identity.Name">My page</a>
                 <a href="#">Settings</a>
-                <a class="nav-link text-dark" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
+                <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
             </div>
         </div>
                                 

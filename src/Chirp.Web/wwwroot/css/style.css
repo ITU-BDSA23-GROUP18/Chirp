@@ -284,11 +284,9 @@ textarea{
 
 .dropbtn {
     visibility: hidden;
-    
-}
-
-.dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
+    width: 1vw;
+    height: 1vw;
+    border-radius: 50%;
 }
 
 .dropdown {
@@ -314,12 +312,16 @@ textarea{
 }
 
 .dropdown_img{
-    width: 2vw;
-    height: 2vw;
+    width: 1.5vw;
+    height: 1.5vw;
     border-radius: 50%;
     border: none;
     cursor: pointer;
     margin-right: 0.5rem;
+}
+
+.dropdown_img:hover{
+    background-color: #DD6F6F;
 }
 
 .dropdown a:hover {background-color: #ddd;}
