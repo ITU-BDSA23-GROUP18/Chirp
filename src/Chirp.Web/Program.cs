@@ -18,8 +18,8 @@ public class Program
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 
-        // Try to get remote connection string
-        /*string? connectionString = builder.Configuration.GetConnectionString("AzureSQLDBConnectionstring");
+                /*// Try to get remote connection string
+        string? connectionString = builder.Configuration.GetConnectionString("AzureSQLDBConnectionstring");
         if (connectionString == null) throw new Exception("Connection string not found");
         if (!connectionString.Contains("Password")) {
             string? pass = builder.Configuration["Chirp:azuredbkey"];
@@ -29,8 +29,9 @@ public class Program
                 connectionString += $"Password={pass};";
             }
         }
-        
-        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(connectionString));*/
+
+        builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(connectionString));
+        */
 
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();

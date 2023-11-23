@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
@@ -8,6 +8,8 @@ public class PublicModel : PageModel
     private readonly ICheepRepository _repository;
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
+    
+    public string ImagePath { get; set; } = "images/placeholder.png";
     
     public PublicModel(ICheepRepository repository)
     {

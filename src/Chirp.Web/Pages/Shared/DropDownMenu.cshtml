@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Authentication.OpenIdConnect
+@using Microsoft.Extensions.Options
+@using Microsoft.Identity.Web
+
+@inject IOptionsMonitor<MicrosoftIdentityOptions> AzureAdb2COptions
+
+@{
+    var options = AzureAdb2COptions.Get(OpenIdConnectDefaults.AuthenticationScheme);
+}
+
+
+<ul class="navbar-nav">
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <div class="dropdown">
+            <input type="button" onclick="dropdownFunction()" id="dropdown_btn" class="dropbtn">
+            <label for="dropdown_btn">
+                <img class="dropdown_img" src="images/icon1.png"/>
+            </label>
+            <div id="dropdown" class="dropdown-content">
+                <a href="\@User.Identity.Name">My page</a>
+                <a href="#">Settings</a>
+                <a class="nav-link text-dark" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
+            </div>
+        </div>
+                                
+    }
+    else
+    {
+        <a class="nav-link text-dark" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a>
+    }
+</ul>
+
+<script>
+    /* When the user clicks on the button, 
+    toggle between hiding and showing the dropdown content */
+    function dropdownFunction() {
+      document.getElementById("dropdown").classList.toggle("show");
+    }
+    
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+}
+</script>
