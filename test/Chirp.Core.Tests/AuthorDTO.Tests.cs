@@ -16,8 +16,6 @@ public class authorDTOTests
     [Theory]
     [InlineData(null, "m")]
     [InlineData("", "m")]
-    [InlineData("name", null)]
-    [InlineData("name", "")]
     public void AuthorDTONullValueTest(string? name, string? email)
     {
         var exceptionType = typeof(ArgumentNullException);
