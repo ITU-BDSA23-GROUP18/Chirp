@@ -112,4 +112,24 @@ public class AuthorRepository : IAuthorRepository
         currentUser.Following.Remove(followAuthor);
         _authorDb.SaveChanges();
     }
+    public void ChangeUsername(string name, string newName){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        author.Name = newName;
+        _authorDb.SaveChanges();
+    }
+
+
+    public void ChangeEmail(string name, string newEmail){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        author.Email = newEmail;
+        _authorDb.SaveChanges();
+    }
 }

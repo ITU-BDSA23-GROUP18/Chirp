@@ -15,17 +15,23 @@
         <h2> About me </h2>
 
         <h5>Username:</h5>
-        <p>@User.Identity.Name</p>
+        <form method="post" asp-page-handler="cheep" class="cheep">
+            <textarea class="aboutme" id="textArea" rows="1" maxlength="20" name="message" oninput="countChars()"  placeholder= @User.Identity.Name></textarea>
+            <button class="changer"> Change</button>
+        </form>
 
         <h5>Email:</h5>
-        <p>@Model.Email</p>
+        <form method="post" asp-page-handler="cheep" class="cheep">
+            <textarea class="aboutme" id="textArea" rows="1" maxlength="20" name="message" oninput="countChars()"  placeholder= @Model.Email></textarea>
+            <button class="changer" onclick=@Model> Change</button>
+        </form>
         <br/>
 
         <h4>Your Followers</h4>
         if (Model.Followers.Any()){
 
 
-            <ul id="messagelist" class="followers">
+            <ul id="followerlist" class="followers">
                 @foreach (var follower in Model.Followers)
                 {
                     <li>
