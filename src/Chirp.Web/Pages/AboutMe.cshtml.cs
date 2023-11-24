@@ -9,14 +9,14 @@ public class AboutMeModel : PageModel
     private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> yourCheeps { get; private set; }
-    public List<AuthorDTO> Following { get; private set; }
+    public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     public string Email { get; private set; }
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         yourCheeps = new List<CheepDTO>();
-        Following = new List<AuthorDTO>();
+        Followers = new List<AuthorDTO>();
         _repository = repository;
         _authorRepository = authorRepository;
     }
@@ -32,10 +32,10 @@ public class AboutMeModel : PageModel
         
         foreach (var author in Author)
         {
-            var Following = _authorRepository.GetFollowing(author.Name).Result.ToList();
+            var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
             var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
             yourCheeps.AddRange(cheeps);
-            this.Following.AddRange(Following);
+            this.Followers.AddRange(Followers);
         }
         
         var nCheeps = yourCheeps.Count;
