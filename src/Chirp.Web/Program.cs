@@ -44,6 +44,7 @@ public class Program
                 var authorRepository = context.HttpContext.RequestServices.GetRequiredService<IAuthorRepository>();
                 if (context.Principal == null) return;
                 var authorName = context.Principal.Identity?.Name;
+                var authorEmail = context.Principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
                 if (authorName == null) return;
                 var author = await authorRepository.GetAuthorByName(authorName);
                 if (author == null || !author.Any())

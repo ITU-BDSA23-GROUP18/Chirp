@@ -8,12 +8,15 @@ public class AboutMeModel : PageModel
 {
     private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorRepository;
-    public List<CheepDTO> Cheeps { get; private set; }
+    public List<CheepDTO> yourCheeps { get; private set; }
+    public List<AuthorDTO> yourFolowers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
+    public string Email { get; private set; }
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
-        Cheeps = new List<CheepDTO>();
+        yourCheeps = new List<CheepDTO>();
+        yourFolowers = new List<AuthorDTO>();
         _repository = repository;
         _authorRepository = authorRepository;
     }
@@ -23,14 +26,19 @@ public class AboutMeModel : PageModel
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name!);
-        foreach (var author in myFollowing)
+        var Author = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
+        Email = Author.FirstOrDefault().Email;
+
+        
+        foreach (var author in Author)
         {
+            var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
             var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
-            Cheeps.AddRange(cheeps);
+            yourCheeps.AddRange(cheeps);
+            yourFolowers.AddRange(Followers);
         }
         
-        var nCheeps = Cheeps.Count;
+        var nCheeps = yourCheeps.Count;
         Pagination = new PaginationModel(nCheeps, page);
         
         return Page();

@@ -97,6 +97,17 @@ div.page h2 {
   color: #571010;
   text-shadow: 0 1px 2px #ccc;
 }
+div.page  h4{
+    margin: 0 0 15px;
+    color: #571010;
+    text-shadow: 0 1px 2px #ccc;
+}
+
+div.page h5 {
+  font-size: 1.1em;
+  color: #a71e1e;
+  text-shadow: 0 1px 2px #ccc;
+}
 
 div.page div.body {
   padding: 10px;
