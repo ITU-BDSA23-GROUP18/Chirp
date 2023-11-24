@@ -14,7 +14,7 @@
     {
         <h2> Write a cheep! </h2>
         <form method="post" asp-page-handler="cheep" class="cheep">
-            <textarea id="textarea" class="cheepbox" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
+            <textarea id="textArea" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
             <div class="char-count" id="charCount">0/160 characters</div>
             <button class="share"><i class="fa fa-send"></i> Cheep!</button>
         </form>

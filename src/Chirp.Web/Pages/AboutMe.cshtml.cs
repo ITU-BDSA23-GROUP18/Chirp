@@ -43,28 +43,4 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public IActionResult OnChangeUsername(string author)
-    {
-        try
-        {
-            _authorRepository.ChangeUsername(author, User.Identity?.Name!);
-            return RedirectToPage();
-        }
-        catch 
-        {
-            return RedirectToPage();
-        }
-    }
-    public IActionResult OnChangeEmail(string email)
-    {
-        try
-        {
-            _authorRepository.ChangeEmail(email, User.Identity?.Name!);
-            return RedirectToPage();
-        }
-        catch 
-        {
-            return RedirectToPage();
-        }
-    }
 }
