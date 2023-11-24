@@ -256,12 +256,35 @@ li.topic {
   min-height: 20px;
 }
 
-textarea{
+textarea.cheepbox{
     width: 99%;
     height: 5rem;
     resize: none;
     border-radius: 5px;
 }
+
+textarea.aboutme{
+    width: 10em;
+    height: 1.79em;
+    outline: none;
+    border: 0;
+    resize: none;
+    
+}
+
+
+
+button.changer{
+
+  margin-right: 2em;
+  background: none;
+	color: inherit;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
 
 div.cheep button.share{
     align-items: end;
