@@ -20,12 +20,30 @@
         <h5>Email:</h5>
         <p>@Model.Email</p>
         <br/>
-        <h4> Your Cheeps:</h4>
 
-        if (Model.yourFolowers.Any()){
-            
+
+        if (Model.Following.Any()){
+            <h4> Your Followers:</h4>
+            <ul id="messagelist" class="followers">
+                @foreach (var follower in Model.Following)
+                {
+                    <li>
+                        <p>
+                            <strong>
+                                <a href="/@follower">@follower</a>
+                            </strong>
+                        </p>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <header>You have no followers</header>
+            <br />
         }
 
+        <h4> Your Cheeps:</h4>
         if (Model.yourCheeps.Any())
         {
             <ul id="messagelist" class="cheeps">
