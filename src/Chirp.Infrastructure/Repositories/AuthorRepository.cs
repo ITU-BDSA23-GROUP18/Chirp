@@ -127,9 +127,19 @@ public class AuthorRepository : IAuthorRepository
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
-            throw new ArgumentException($"Author {name} does not exist");
+            throw new ArgumentException();
         }
         author.Email = newEmail;
+        _authorDb.SaveChanges();
+    }
+
+    public void deleteAuthor(string name){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        _authorDb.Authors.Remove(author);
         _authorDb.SaveChanges();
     }
 }

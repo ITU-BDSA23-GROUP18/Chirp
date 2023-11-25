@@ -15,15 +15,15 @@
         <h2> About me </h2>
 
         <h5>Username:</h5>
-        <form method="post" asp-page-handler="cheep" class="cheep">
-            <textarea class="aboutme" id="textArea" rows="1" maxlength="20" name="message" oninput="countChars()"  placeholder= @User.Identity.Name></textarea>
+        <form method="post" asp-page-handler="change">
+            <textarea class="aboutme" id="username" name=username value="hello" rows="1" maxlength="20" name="message" placeholder= @User.Identity.Name></textarea>
             <button class="changer"> Change</button>
         </form>
 
         <h5>Email:</h5>
-        <form method="post" asp-page-handler="cheep" class="cheep">
-            <textarea class="aboutme" id="textArea" rows="1" maxlength="20" name="message" oninput="countChars()"  placeholder= @Model.Email></textarea>
-            <button class="changer" onclick=@Model> Change</button>
+        <form method="post" asp-page-handler="change">
+            <textarea class="aboutme" id="email" value="" rows="1" maxlength="20" name="message" placeholder= @Model.Email></textarea>
+            <button class="changer"> Change</button>
         </form>
         <br/>
 
@@ -75,6 +75,9 @@
             <header>You have send no cheeps</header>
             <br />
         }
+        <form method="post" asp-page-handler="change" class="cheep">
+            <button class="delete"> Delete your account</button>
+        </form>
         
         {
 

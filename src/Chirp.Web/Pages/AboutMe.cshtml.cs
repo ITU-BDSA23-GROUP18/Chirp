@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Query;
 
 
 namespace Chirp.Web.Pages;
@@ -7,7 +8,7 @@ namespace Chirp.Web.Pages;
 public class AboutMeModel : PageModel
 {
     private readonly ICheepRepository _repository;
-    private readonly IAuthorRepository _authorRepository;
+    public readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> yourCheeps { get; private set; }
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
@@ -43,27 +44,29 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public IActionResult OnChangeUsername(string author)
+     public IActionResult OnPost(string newName)
     {
         try
         {
-            _authorRepository.ChangeUsername(author, User.Identity?.Name!);
+            _authorRepository.ChangeUsername(User.Identity?.Name!,newName );
             return RedirectToPage();
         }
         catch 
         {
+            Console.WriteLine(newName + " is already taken");
             return RedirectToPage();
         }
     }
-    public IActionResult OnChangeEmail(string email)
+    public async Task<ActionResult> OnPsst(string newEmail)
     {
         try
         {
-            _authorRepository.ChangeEmail(email, User.Identity?.Name!);
+            _authorRepository.ChangeEmail(User.Identity?.Name!, newEmail);
             return RedirectToPage();
         }
         catch 
         {
+            Console.WriteLine("Email not changed");
             return RedirectToPage();
         }
     }

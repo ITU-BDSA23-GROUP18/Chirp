@@ -20,4 +20,6 @@ public interface IAuthorRepository
     public void ChangeUsername(string newName, string currentUserName);
 
     public void ChangeEmail(string newEmail, string currentUserName);
+
+    public void deleteAuthor(string currentUserName);
 }
