@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Query;
-
-
 namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
@@ -36,8 +34,6 @@ public class AboutMeModel : PageModel
         {
             Email = "Email...";
         }
-        
-
         
         foreach (var author in Author)
         {
