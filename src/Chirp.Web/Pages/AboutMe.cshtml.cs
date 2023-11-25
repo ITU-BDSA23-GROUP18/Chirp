@@ -28,7 +28,15 @@ public class AboutMeModel : PageModel
         page = page <= 1 ? 1 : page;
         
         var Author = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
-        Email = Author.FirstOrDefault().Email;
+        if (Author.FirstOrDefault().Email != User.Identity?.Name!)
+        {
+            Email = Author.FirstOrDefault().Email;
+        }
+        else 
+        {
+            Email = "No email";
+        }
+        
 
         
         foreach (var author in Author)
@@ -44,16 +52,17 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public IActionResult OnPostChangeName(string newName)
+     public IActionResult OnPostChangeEmail(string newEmail)
     {
         try
         {
-            //_authorRepository.ChangeUsername(User.Identity?.Name!,newName );
+            Console.WriteLine(newEmail);
+            _authorRepository.ChangeEmail(User.Identity?.Name!,newEmail );
             return RedirectToPage();
         }
         catch 
         {
-            Console.WriteLine(newName + " is already taken");
+            Console.WriteLine(newEmail + " is already taken");
             return RedirectToPage();
         }
     }
@@ -61,11 +70,14 @@ public class AboutMeModel : PageModel
     {
         try
         {
+            Console.WriteLine("the author name is:"+authorName);
             _authorRepository.deleteAuthor(authorName);
-            return RedirectToPage();
+            //Should signout the user
+            return RedirectToPage("Public");
         }
         catch 
         {
+            Console.WriteLine("the author name is:"+authorName);
             Console.WriteLine("Author"+ authorName+"does not exist");
             return RedirectToPage();
         }

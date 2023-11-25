@@ -15,15 +15,12 @@
         <h2> About me </h2>
 
         <h5>Username:</h5>
-        <form method="post" asp-page-handler="change">
-            <textarea class="aboutme" id="newName" name=username value="hello" rows="1" maxlength="20" name="message" placeholder= @User.Identity.Name></textarea>
-            <button class="changer"> Change</button>
-        </form>
+        <p>@User.Identity.Name</p>
 
         <h5>Email:</h5>
-        <form method="post" asp-page-handler="change">
-            <textarea class="aboutme" id="email" value="" rows="1" maxlength="20" name="message" placeholder= @Model.Email></textarea>
-            <button class="changer"> Change</button>
+        <form method="post" asp-page-handler="changeemail" class="changeemail">
+            <textarea class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+            <button> Change</button>
         </form>
         <br/>
 
@@ -75,8 +72,8 @@
             <header>You have send no cheeps</header>
             <br />
         }
-        <form method="post" asp-page-handler="change" class="cheep">
-            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete"> Delete your account</button>
+        <form method="post">
+            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name> Delete your account</button>
         </form>
         
         {
