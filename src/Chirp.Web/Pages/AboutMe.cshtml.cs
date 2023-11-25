@@ -34,7 +34,7 @@ public class AboutMeModel : PageModel
         }
         else 
         {
-            Email = "No email";
+            Email = "Email...";
         }
         
 
@@ -72,7 +72,7 @@ public class AboutMeModel : PageModel
         {
             Console.WriteLine("the author name is:"+authorName);
             _authorRepository.deleteAuthor(authorName);
-            //Should signout the user
+            //Need to signout the user
             return RedirectToPage("Public");
         }
         catch 
