@@ -21,5 +21,5 @@ public interface IAuthorRepository
 
     public void ChangeEmail(string newEmail, string currentUserName);
 
-    public void deleteAuthor(string currentUserName);
+    public void deleteAuthor(string name);
 }

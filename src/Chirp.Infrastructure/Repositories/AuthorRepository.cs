@@ -29,7 +29,7 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"Username {name} is already used");
 
         if (_authorDb.Authors.Any(a => a.Email == email))
-            throw new ArgumentException($"{email} is already used!");
+            throw new ArgumentException($"{"email"} is already used!");
 
         var author = new Author
         {
@@ -139,7 +139,8 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
-        _authorDb.Authors.Remove(author);
-        _authorDb.SaveChanges();
+        Console.WriteLine("Deleting author: " + author.Name);
+        //_authorDb.Authors.Remove(author);
+        //_authorDb.SaveChanges();
     }
 }

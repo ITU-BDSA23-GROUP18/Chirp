@@ -44,11 +44,11 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public IActionResult OnPost(string newName)
+     public IActionResult OnPostChangeName(string newName)
     {
         try
         {
-            _authorRepository.ChangeUsername(User.Identity?.Name!,newName );
+            //_authorRepository.ChangeUsername(User.Identity?.Name!,newName );
             return RedirectToPage();
         }
         catch 
@@ -57,16 +57,16 @@ public class AboutMeModel : PageModel
             return RedirectToPage();
         }
     }
-    public async Task<ActionResult> OnPsst(string newEmail)
+    public async Task<ActionResult> OnPostDeleteAccount(string authorName)
     {
         try
         {
-            _authorRepository.ChangeEmail(User.Identity?.Name!, newEmail);
+            _authorRepository.deleteAuthor(authorName);
             return RedirectToPage();
         }
         catch 
         {
-            Console.WriteLine("Email not changed");
+            Console.WriteLine("Author"+ authorName+"does not exist");
             return RedirectToPage();
         }
     }

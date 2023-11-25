@@ -16,7 +16,7 @@
 
         <h5>Username:</h5>
         <form method="post" asp-page-handler="change">
-            <textarea class="aboutme" id="username" name=username value="hello" rows="1" maxlength="20" name="message" placeholder= @User.Identity.Name></textarea>
+            <textarea class="aboutme" id="newName" name=username value="hello" rows="1" maxlength="20" name="message" placeholder= @User.Identity.Name></textarea>
             <button class="changer"> Change</button>
         </form>
 
@@ -76,7 +76,7 @@
             <br />
         }
         <form method="post" asp-page-handler="change" class="cheep">
-            <button class="delete"> Delete your account</button>
+            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete"> Delete your account</button>
         </form>
         
         {
