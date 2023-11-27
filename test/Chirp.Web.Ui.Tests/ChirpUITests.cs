@@ -54,9 +54,9 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
         // And make a uniqe finger print for this cheep
         for (int i = 0; i < 10; i++)
         {
-            var currentTime = DateTime.Now.ToString("HH.mm.ss dd.MM.yyyy");
+            var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
 
-            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
+            await page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
             await page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
 
             // See the cheep in the timeline
@@ -100,7 +100,7 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
         }
 
         // Go to the user timeline
-        await Page.GetByText("TestUser's page").ClickAsync();
+        await page.GetByText("TestUser's page").ClickAsync();
         for (int i = 1; i < listOfCheeps.Count; i++)
         {
             await page.GetByText(new Regex(listOfCheeps[i], RegexOptions.IgnoreCase)).ClickAsync();
