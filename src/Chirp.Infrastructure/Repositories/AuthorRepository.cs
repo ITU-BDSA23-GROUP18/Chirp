@@ -29,7 +29,7 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"Username {name} is already used");
 
         if (_authorDb.Authors.Any(a => a.Email == email))
-            throw new ArgumentException($"{email} is already used!");
+            throw new ArgumentException($"{"email"} is already used!");
 
         var author = new Author
         {
@@ -110,6 +110,30 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"Author {followName} does not exist");
         }
         currentUser.Following.Remove(followAuthor);
+        _authorDb.SaveChanges();
+    }
+
+    public void ChangeEmail(string name, string newEmail){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException();
+        }
+        if (_authorDb.Authors.Any(a => a.Email == newEmail)){
+            throw new ArgumentException($"{"email"} is already used!");
+        }
+        author.Email = newEmail;
+        _authorDb.SaveChanges();
+    }
+
+    public void deleteAuthor(string name){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        Console.WriteLine("Deleting author: " + author.Name);
+        _authorDb.Authors.Remove(author);
         _authorDb.SaveChanges();
     }
 }

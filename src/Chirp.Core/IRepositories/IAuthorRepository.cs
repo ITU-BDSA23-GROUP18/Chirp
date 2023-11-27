@@ -16,4 +16,8 @@ public interface IAuthorRepository
     public void FollowAuthor(string followName, string currentUserName);
 
     public void UnfollowAuthor(string followName, string currentUserName);
+
+    public void ChangeEmail(string newEmail, string currentUserName);
+
+    public void deleteAuthor(string name);
 }
