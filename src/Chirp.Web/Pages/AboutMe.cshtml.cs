@@ -10,7 +10,7 @@ public class AboutMeModel : PageModel
     public List<CheepDTO> yourCheeps { get; private set; }
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
-    public string Email { get; private set; }
+    public string ?Email { get; private set; }
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
@@ -58,7 +58,7 @@ public class AboutMeModel : PageModel
         }
         catch 
         {
-            Console.WriteLine(newEmail + " is already taken");
+            Console.WriteLine("Email: " + newEmail + " is already taken");
             return RedirectToPage();
         }
     }
