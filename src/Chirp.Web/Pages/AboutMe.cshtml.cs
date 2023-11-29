@@ -12,6 +12,8 @@ public class AboutMeModel : PageModel
     public PaginationModel? Pagination { get; private set; }
     public string Email { get; private set; }
     
+    public string? ProfilePicture { get; private set; }
+    
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         yourCheeps = new List<CheepDTO>();
@@ -45,6 +47,8 @@ public class AboutMeModel : PageModel
         
         var nCheeps = yourCheeps.Count;
         Pagination = new PaginationModel(nCheeps, page);
+
+        ProfilePicture = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
         
         return Page();
     }
@@ -75,6 +79,19 @@ public class AboutMeModel : PageModel
         {
             Console.WriteLine("the author name is:"+authorName);
             Console.WriteLine("Author"+ authorName+"does not exist");
+            return RedirectToPage();
+        }
+    }
+    
+    public async Task<ActionResult> OnPostChangeProfilePicture(IFormFile file)
+    {
+        try
+        {
+            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, file);
+            return RedirectToPage();
+        }
+        catch 
+        {
             return RedirectToPage();
         }
     }

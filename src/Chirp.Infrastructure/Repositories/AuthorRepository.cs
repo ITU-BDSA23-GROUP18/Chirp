@@ -206,7 +206,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (ProfilePictureUrl == "")
         {
-            return "wwwroot/images/default-profile-picture.png";
+            return "images/defualt_user_pic.png";
         }
         
         return ProfilePictureUrl;
