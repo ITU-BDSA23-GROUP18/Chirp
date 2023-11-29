@@ -37,7 +37,7 @@ public class AboutMeModel : PageModel
         
         foreach (var author in Author)
         {
-            var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
+            var Followers = _authorRepository.GetFollowing(author.Name).Result.ToList();
             var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
             yourCheeps.AddRange(cheeps);
             this.Followers.AddRange(Followers);

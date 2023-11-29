@@ -56,6 +56,7 @@
                 {
                     <li>
                         <p>
+                            <img src="https://avatars.githubusercontent.com/@follower.Name" width="30" alt="Avatar" class="avatar">
                             <strong>
                                 <a href="/@follower.Name">@follower.Name</a>
                             </strong>
@@ -69,7 +70,7 @@
             <header>You have no followers</header>
             <br />
         }
-        <br/>
+
         <h4>Your Cheeps</h4>
         
         if (Model.yourCheeps.Any())
@@ -95,6 +96,8 @@
             <header>You have send no cheeps</header>
             <br />
         }
+        <br/>
+        <br/>
         <form method="post">
             <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete" > Delete your account</button>
         </form>
