@@ -24,7 +24,7 @@
         <h5>Email:</h5>
         <form method="post" asp-page-handler="changeemail" class="changeemail">
             <textarea onclick =toggle() class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
-            <button id = "changeemail" hidden> Change</button>
+            <button id = "changeemail" hidden class="changer"> Change</button>
         </form>
         <br/>
 
@@ -96,7 +96,7 @@
             <br />
         }
         <form method="post">
-            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name > Delete your account</button>
+            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete" > Delete your account</button>
         </form>
         
         {
