@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 
 namespace Chirp.Infrastructure.Repositories;
 
@@ -75,7 +76,7 @@ public class AuthorRepository : IAuthorRepository
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl);
             followerListDto.Add(authorDto);
         }
         return followerListDto;
@@ -94,7 +95,7 @@ public class AuthorRepository : IAuthorRepository
         var followingListDto = new List<AuthorDTO>();
         foreach (var author in followingList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl);
             followingListDto.Add(authorDto);
         }
         return followingListDto;
@@ -136,4 +137,79 @@ public class AuthorRepository : IAuthorRepository
         _authorDb.Authors.Remove(author);
         _authorDb.SaveChanges();
     }
+    
+    public async Task UploadProfilePicture(string name, IFormFile file)
+    {
+        var user = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (user == null)
+        {
+            Console.WriteLine($"User with Id {name} not found.");
+            return;
+        }
+
+        // Check file size (10MB limit)
+        if (file.Length > 10 * 1024 * 1024)
+        {
+            Console.WriteLine("File size exceeds the limit of 10MB.");
+            return;
+        }
+
+        // Check file type (jpeg, png, gif)
+        var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".gif" };
+        var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        if (!allowedExtensions.Contains(fileExtension))
+        {
+            Console.WriteLine("Invalid file type. Accepted file types: jpeg, png, gif.");
+            return;
+        }
+
+        // generate unique URL for the file and save it in the database
+        var fileName = $"{Guid.NewGuid()}{fileExtension}";
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+        var fileUrl = $"/images/{fileName}";
+        
+        // delete old profile picture if it exists
+        if (user.ProfilePictureUrl != "")
+        {
+            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfilePictureUrl);
+            if (File.Exists(oldFilePath))
+            {
+                File.Delete(oldFilePath);
+            }
+        }
+        
+        user.ProfilePictureUrl = fileUrl;
+        await _authorDb.SaveChangesAsync();
+    }
+    
+    public async Task DeleteProfilePicture(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        author.ProfilePictureUrl = null;
+        await _authorDb.SaveChangesAsync();
+    }
+    
+    public async Task<string?> GetProfilePicture(string name)
+    {
+        var author = GetAuthorByName(name).Result.FirstOrDefault();
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        
+        var ProfilePictureUrl = author.ProfilePictureUrl;
+
+        if (ProfilePictureUrl == "")
+        {
+            return "wwwroot/images/default-profile-picture.png";
+        }
+        
+        return ProfilePictureUrl;
+    }
+    
 }

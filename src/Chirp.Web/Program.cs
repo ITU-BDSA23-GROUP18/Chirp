@@ -36,6 +36,7 @@ public class Program
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
         builder.WebHost.UseUrls("https://localhost:7022");
+        
         // add user on signin if they do not exists
         builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
         {
@@ -46,7 +47,7 @@ public class Program
                 var authorName = context.Principal.Identity?.Name;
                 if (authorName == null) return;
                 var author = await authorRepository.GetAuthorByName(authorName);
-                if (author == null || !author.Any())
+                if (!author.Any())
                 {
                     authorRepository.CreateAuthor(authorName, authorName);
                 }

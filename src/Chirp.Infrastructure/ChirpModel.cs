@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore;
+
 namespace Chirp.Infrastructure;
 
 public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(options)
@@ -23,16 +26,5 @@ public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(op
 
         modelBuilder.Entity<Reaction>().HasIndex(r => r.CheepId).IsUnique();
     }
-
-    /*public class ChirpContextFactory : IDesignTimeDbContextFactory<ChirpContext>
-    {
-        public ChirpContext CreateContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<ChirpContext>();
-            var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
-            optionsBuilder.UseSqlite($"Data Source={dbPath}");
-
-            return new ChirpContext(optionsBuilder.Options);
-        }
-    }*/
+    
 }

@@ -27,13 +27,8 @@
                                     
                                 }
                             </li>
-                            <li>
-                                @if (User.Identity!.IsAuthenticated)
-                                {
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/AboutMe">About me</a>
-                                }
                         </ul>
-                        <partial name="DropDownMenu" />
+                        <partial name="DropDownMenu"/>
                     </div>
                 </div>
             </nav>

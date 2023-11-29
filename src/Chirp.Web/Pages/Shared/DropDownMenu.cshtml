@@ -8,14 +8,13 @@
     var options = AzureAdb2COptions.Get(OpenIdConnectDefaults.AuthenticationScheme);
 }
 
-
 <ul class="navbar-nav">
     @if (User.Identity!.IsAuthenticated)
     {
         <div class="dropdown">
             <input type="button" onclick="dropdownFunction()" id="dropdown_btn" class="dropbtn">
             <label for="dropdown_btn">
-                <img class="dropdown_img" src="images/defualt_user_pic.png"/>
+                <img alt="profilePicture" class="dropdown_img" src="images/defualt_user_pic.png">
             </label>
             <div id="dropdown" class="dropdown-content">
                 <a href="\@User.Identity.Name">My page</a>
@@ -50,5 +49,5 @@
           }
         }
       }
-}
+    } 
 </script>

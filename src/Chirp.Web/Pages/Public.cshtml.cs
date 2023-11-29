@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
@@ -6,23 +7,24 @@ namespace Chirp.Web.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
+    private readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     
-    public string ImagePath { get; set; } = "images/placeholder.png";
     
-    public PublicModel(ICheepRepository repository)
+    public PublicModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
         _repository = repository;
+        _authorRepository = authorRepository;
     }
 
-    public IActionResult OnGet([FromQuery] int page)
+    public async Task<IActionResult> OnGet([FromQuery] int page)
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        var nCheeps = _repository.CountCheeps().Result;
+        var nCheeps = await _repository.CountCheeps();
         Pagination = new PaginationModel(nCheeps, page);
         
         Cheeps = _repository.GetCheep(page).Result.ToList();

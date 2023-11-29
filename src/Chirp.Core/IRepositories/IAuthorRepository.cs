@@ -1,4 +1,6 @@
-﻿namespace Chirp.Core.IRepositories;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Chirp.Core.IRepositories;
 
 public interface IAuthorRepository
 {
@@ -20,4 +22,10 @@ public interface IAuthorRepository
     public void ChangeEmail(string newEmail, string currentUserName);
 
     public void deleteAuthor(string name);
+    
+    public Task UploadProfilePicture(string name, IFormFile image);
+    
+    public Task DeleteProfilePicture(string name);
+    
+    public Task<string?> GetProfilePicture(string name);
 }

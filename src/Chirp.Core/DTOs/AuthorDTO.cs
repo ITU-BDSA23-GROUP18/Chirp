@@ -1,16 +1,17 @@
 using System.Net.Mime;
 
 namespace Chirp.Core.DTOs;
-
 public record AuthorDTO
 {
     public string Name { get; private set; }
     public string Email { get; private set; }
-    //public Image ProfilePicture { get; private set; }
-    public AuthorDTO(string name, string email)
+
+    public string ProfilePictureUrl { get; private set; } = "";
+    public AuthorDTO(string name, string email, string? profilePictureUrl)
     {
         if (name == null || name.Equals("")) throw new ArgumentNullException(nameof(name), "name is null or empty");
         Name = name;
         Email = email;
+        ProfilePictureUrl = profilePictureUrl;
     }
 }
