@@ -7,7 +7,6 @@ namespace Chirp.Web.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
-    private readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     
@@ -16,7 +15,6 @@ public class PublicModel : PageModel
     {
         Cheeps = new List<CheepDTO>();
         _repository = repository;
-        _authorRepository = authorRepository;
     }
 
     public async Task<IActionResult> OnGet([FromQuery] int page)
