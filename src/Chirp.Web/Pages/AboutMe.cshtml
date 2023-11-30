@@ -8,12 +8,25 @@
 
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet"  href="css/style.css" />
-<div>
-    @if (User.Identity?.IsAuthenticated ?? false)
-    {
-        <h2> About me </h2>
-        
+@if(Model.IsDarkMode)
+{
+    <link rel="stylesheet"  href="css/darkmode.css" />
+}
+else
+{
+    <link rel="stylesheet"  href="css/style.css" />
+}
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+        <span style="font-size: 20px; background-color: #fff; padding: 0 10px;">
+            About Me
+        </span>
+    </div>
+    
+    <br>
+    <div style="margin-left: 1.5rem">
         <h5>Username:</h5>
         <p>@User.Identity.Name</p>
 
@@ -24,8 +37,8 @@
         </form>
         <br/>
 
-        <h4>Your Followers</h4>
-        if (Model.Followers.Any()){
+        <h5>Your Followers</h5>
+        @if (Model.Followers.Any()){
 
 
             <ul id="followerlist" class="followers">
@@ -47,9 +60,9 @@
             <br />
         }
         <br/>
-        <h4>Your Cheeps</h4>
+        <h5>Your Cheeps</h5>
         
-        if (Model.yourCheeps.Any())
+        @if (Model.yourCheeps.Any())
         {
             <ul id="messagelist" class="cheeps">
                 @foreach (var cheep in Model.yourCheeps)
@@ -71,14 +84,55 @@
         {
             <header>You have send no cheeps</header>
             <br />
+            
         }
-        <form method="post">
-            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name> Delete your account</button>
-        </form>
+    <form method="post">
+        <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name> Delete your account</button>
+    </form>
+    </div>
+    <br><br>
+    <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
+        <span style="font-size: 20px; background-color: #fff; padding: 0 10px;">
+            Appearance
+        </span>
+    </div>
+    <br>
+    
+    <ul class="settings_ul">
+        <li class="settings_li">
+            <h5>Dark mode</h5>
+            @if (Model.IsDarkMode)
+            {
+                <i>Disable dark mode</i>
+            }
+            else
+            {
+                <i>Enable dark mode</i>
+            }
+        </li>
         
-        {
-
-        }
+            <li class="settings_li">
+                <label class="switch">
+                    <form method="post">
+                        @if(Model.IsDarkMode)
+                        {
+                            <input type="checkbox" name="darkmode" checked onclick="clickDarkMode()">
+                        }else
+                        {
+                            <input type="checkbox" name="darkmode" onclick="clickDarkMode()">
+                        }
+                        <span class="slider round"></span>
+                        <button id="darkmode_btn" style="display: none" asp-page-handler="SetDarkMode"></button>
+                    </form>
+                </label>
+            </li>
+    </ul>
     }
-</div>
+
+<script>
+    function clickDarkMode() {
+        document.getElementById("darkmode_btn").click();
+    }
+</script>
+
 

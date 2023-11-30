@@ -11,4 +11,8 @@ public class Author
     public List<Author> Following { get; set; } = new List<Author>();
     public List<Author> Followers { get; set; } = new List<Author>();
     public string? ProfilePictureUrl { get; set; }
+    
+    // for individual user/"Author" preferences:
+    public bool IsDarkMode { get; set; }
+    public int FontSizeScale { get; set; }
 }

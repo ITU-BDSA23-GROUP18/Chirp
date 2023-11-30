@@ -13,6 +13,10 @@ public class AboutMeModel : PageModel
     public string Email { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
     
+    // for individual user/"Author" preferences:
+    public bool IsDarkMode { get; private set; }
+    public int fontSizeScale { get; private set; }
+    
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         yourCheeps = new List<CheepDTO>();
@@ -53,6 +57,10 @@ public class AboutMeModel : PageModel
         Pagination = new PaginationModel(nCheeps, page);
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        
+        IsDarkMode = await _authorRepository.IsDarkMode(User.Identity?.Name!);
+        
+        fontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity?.Name!);
         
         return Page();
     }
@@ -95,5 +103,12 @@ public class AboutMeModel : PageModel
             Console.WriteLine("Author"+ authorName+"does not exist");
             return RedirectToPage();
         }
+    }
+    public async Task<IActionResult> OnPostSetDarkMode()
+    {
+        var isDarkMode = !await _authorRepository.IsDarkMode(User.Identity?.Name!);
+        
+        await _authorRepository.SetDarkMode(User.Identity?.Name!, isDarkMode);
+        return RedirectToPage();
     }
 }

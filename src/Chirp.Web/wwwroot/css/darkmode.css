@@ -1,5 +1,5 @@
 body {
-  background: #eccaca;
+  background: #393838;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
 }
@@ -9,7 +9,7 @@ body {
 }
 
 a {
-  color: #26776F;
+  color: #529896;
   text-decoration: none;
   cursor: pointer;  
 }
@@ -20,8 +20,8 @@ a:hover {
 
 input[type="text"],
 input[type="password"] {
-  background: white;
-  border: 1px solid #e6c0bf;
+  background: #504f4f;
+  border: 1px solid #857472;
   padding: 2px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -41,11 +41,11 @@ input[type="submit"] {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  color: white;
+  color: #4f4f4f;
 }
 
 div.page {
-  background: white;
+  background: #4f4f4f;
   border: 1px solid #cc6e6e;
   width: 900px;
   margin: 30px auto;
@@ -68,7 +68,7 @@ div.page h1 img {
 }
 
 div.page div.navigation {
-  background: #eee;
+  background: #4f4f4f;
   font-size: 12px;
   letter-spacing: .5px;
   text-align: right;  
@@ -123,7 +123,7 @@ div.page div.footer {
 
 div.page div.followstatus {
   border: 1px solid #ccc;
-  background: #E3EBEA;
+  background: #4f4f4f;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -140,7 +140,7 @@ div.page ul.cheeps {
 div.page ul.cheeps li {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
+  background: #4f4f4f;
   border: 1px solid #DBF3F1;
   border-radius: 2px;
   -moz-border-radius: 5px;
@@ -165,7 +165,7 @@ div.page ul.cheeps li small {
 div.page div.cheepbox {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
+  background: #4f4f4f;
   border: 1px solid #e29494;
   border-radius: 2px;
   -moz-border-radius: 5px;
@@ -195,7 +195,7 @@ div.message {
   list-style: none;
   margin: 10px 10px 0;
 
-  background: #f3b9b9;
+  background: #4f4f4f;
   border: 1px solid #ce8181;
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -205,7 +205,7 @@ div.message {
 }
 
 ul.message li {
-  background: #f3b9b9;
+  background: #4f4f4f;
   border: 1px solid #ce8181;
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -216,7 +216,7 @@ ul.message li {
 
 div.error {
   margin: 10px 0;
-  background: #FAE4E4;
+  background: #4f4f4f;
   border: 1px solid #DD6F6F;
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -228,7 +228,7 @@ div.error {
 div.topics {
   width: 180px;
   height: 250px;
-  background: #ffffff;
+  background: #4f4f4f;
   border: 1px solid #e29494;
   border-radius: 2px;
   position: fixed;
@@ -248,7 +248,7 @@ ul.topic {
 li.topic {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
+  background: #4f4f4f;
   border: 1px solid #DBF3F1;
   border-radius: 2px;
   -moz-border-radius: 5px;
