@@ -216,14 +216,14 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"Author {name} does not exist");
         }
         
-        var ProfilePictureUrl = author.ProfilePictureUrl;
+        var profilePictureUrl = author.ProfilePictureUrl;
 
-        if (string.IsNullOrEmpty(ProfilePictureUrl))
+        if (string.IsNullOrEmpty(profilePictureUrl))
         {
             return "images/defualt_user_pic.png";
         }
         
-        return ProfilePictureUrl;
+        return profilePictureUrl;
     }
     
 }
