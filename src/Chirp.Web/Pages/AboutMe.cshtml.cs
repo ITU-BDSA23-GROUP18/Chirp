@@ -19,7 +19,11 @@ public class AboutMeModel : PageModel
         _repository = repository;
         _authorRepository = authorRepository;
     }
-
+    /// <summary>
+    /// Gets the cheeps from the author with the given currentUserName
+    /// </summary>
+    /// <param name="page"></param>
+    /// <returns></returns>
     public async Task<ActionResult> OnGet([FromQuery] int page)
     {
         //If a page query is not given in the url set the page=1
@@ -49,7 +53,12 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public async Task<ActionResult> OnPostChangeEmail(string newEmail)
+    /// <summary>
+    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// </summary>
+    /// <param name="newEmail"></param>
+    /// <returns></returns>
+    public async Task<ActionResult> OnPostChangeEmail(string newEmail)
     {
         try
         {
@@ -63,6 +72,11 @@ public class AboutMeModel : PageModel
             return RedirectToPage();
         }
     }
+    /// <summary>
+    /// Follows the author with the given followName from the author with the given currentUserName
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <returns></returns>
     public async Task<ActionResult> OnPostDeleteAccount(string authorName)
     {
         try
