@@ -10,7 +10,7 @@ public class AboutMeModel : PageModel
     public List<CheepDTO> yourCheeps { get; private set; }
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
-    public string Email { get; private set; }
+    public string Email { get; private set; } = "Email...";
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
@@ -25,17 +25,18 @@ public class AboutMeModel : PageModel
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        var Author = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
-        if (Author.FirstOrDefault().Email != User.Identity?.Name!)
+        var Authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
+        var Author = Authors.FirstOrDefault();
+        if (Author != null && Author.Email != User.Identity?.Name!)
         {
-            Email = Author.FirstOrDefault().Email;
+            Email = Author.Email;
         }
         else 
         {
             Email = "Email...";
         }
         
-        foreach (var author in Author)
+        foreach (var author in Authors)
         {
             var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
             var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
@@ -48,12 +49,12 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public IActionResult OnPostChangeEmail(string newEmail)
+     public async Task<ActionResult> OnPostChangeEmail(string newEmail)
     {
         try
         {
             Console.WriteLine(newEmail);
-            _authorRepository.ChangeEmail(User.Identity?.Name!,newEmail );
+            await _authorRepository.ChangeEmail(User.Identity?.Name!,newEmail );
             return RedirectToPage();
         }
         catch 
@@ -67,7 +68,7 @@ public class AboutMeModel : PageModel
         try
         {
             Console.WriteLine("the author name is:"+authorName);
-            _authorRepository.deleteAuthor(authorName);
+            await _authorRepository.DeleteAuthor(authorName);
             //Need to signout the user
             return RedirectToPage("Public");
         }

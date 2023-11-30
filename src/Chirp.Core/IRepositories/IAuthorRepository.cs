@@ -11,13 +11,13 @@ public interface IAuthorRepository
     public Task<IEnumerable<AuthorDTO>> GetFollowing(string pageUserName);
 
     // Post methods
-    public void CreateAuthor(string name, string email);
+    public Task<bool> CreateAuthor(string name, string email);
 
-    public void FollowAuthor(string followName, string currentUserName);
+    public Task<bool> FollowAuthor(string followName, string currentUserName);
 
-    public void UnfollowAuthor(string followName, string currentUserName);
+    public Task<bool> UnfollowAuthor(string followName, string currentUserName);
 
-    public void ChangeEmail(string newEmail, string currentUserName);
+    public Task<bool> ChangeEmail(string newEmail, string currentUserName);
 
-    public void deleteAuthor(string name);
+    public Task<bool> DeleteAuthor(string name);
 }

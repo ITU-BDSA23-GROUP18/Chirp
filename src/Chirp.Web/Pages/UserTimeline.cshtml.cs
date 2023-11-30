@@ -51,11 +51,11 @@ public class UserTimelineModel : PageModel
         return Page();
     }
 
-    public IActionResult OnPostUnfollow(string author)
+    public async Task<ActionResult> OnPostUnfollow(string author)
     {
         try
         {
-            _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
+            await _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
             return RedirectToPage();
         }
         catch 
@@ -64,11 +64,11 @@ public class UserTimelineModel : PageModel
         }
     }
     
-    public IActionResult OnPostFollow(string author)
+    public async Task<ActionResult> OnPostFollow(string author)
     {
         try
         {
-            _authorRepository.FollowAuthor(author, User.Identity?.Name!);
+            await _authorRepository.FollowAuthor(author, User.Identity?.Name!);
             return RedirectToPage();
         }
         catch 

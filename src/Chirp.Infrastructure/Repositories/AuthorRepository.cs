@@ -23,7 +23,7 @@ public class AuthorRepository : IAuthorRepository
             .Select(a => a.ToDTO())
             .ToListAsync();
 
-    public void CreateAuthor(string name, string email)
+    public async Task<bool> CreateAuthor(string name, string email)
     {
         if (_authorDb.Authors.Any(a => a.Name == name))
             throw new ArgumentException($"Username {name} is already used");
@@ -41,25 +41,27 @@ public class AuthorRepository : IAuthorRepository
             Followers = new List<Author>()
         };
         _authorDb.Authors.Add(author);
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
 
-    public void FollowAuthor(string followName, string currentUserName)
+    public async Task<bool> FollowAuthor(string followName, string currentUserName)
     {
-        var authorToFollow = _authorDb.Authors.SingleAsync(a => a.Name == followName);
+        var authorToFollow = await _authorDb.Authors.SingleAsync(a => a.Name == followName);
         if (authorToFollow == null)
         {
             throw new ArgumentException($"Author to follow does not exist");
         }
 
-        var signedInUser = _authorDb.Authors.Include(author => author.Following).FirstOrDefault(a => a.Name == currentUserName);
+        var signedInUser = await _authorDb.Authors.Include(author => author.Following).FirstOrDefaultAsync(a => a.Name == currentUserName);
         if (signedInUser == null)
         {
             throw new ArgumentException($"Current user does not exist");
         }
-        signedInUser.Following.Add(authorToFollow.Result);
-        authorToFollow.Result.Followers.Add(signedInUser);
-        _authorDb.SaveChanges();
+        signedInUser.Following.Add(authorToFollow);
+        authorToFollow.Followers.Add(signedInUser);
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
 
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
@@ -100,20 +102,21 @@ public class AuthorRepository : IAuthorRepository
         return followingListDto;
     }
 
-    public void UnfollowAuthor(string followName, string currentUserName)
+    public async Task<bool> UnfollowAuthor(string followName, string currentUserName)
     {
-        var followAuthor = _authorDb.Authors.FirstOrDefault(a => a.Name == followName);
-        var currentUser = _authorDb.Authors.Include(author => author.Following)
-            .FirstOrDefault(a => a.Name == currentUserName);
+        var followAuthor = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == followName);
+        var currentUser = await _authorDb.Authors.Include(author => author.Following)
+            .FirstOrDefaultAsync(a => a.Name == currentUserName);
         if (followAuthor == null || currentUser == null)
         {
             throw new ArgumentException($"Author {followName} does not exist");
         }
         currentUser.Following.Remove(followAuthor);
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
 
-    public void ChangeEmail(string name, string newEmail){
+    public async Task<bool> ChangeEmail(string name, string newEmail){
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
@@ -123,10 +126,11 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"{"email"} is already used!");
         }
         author.Email = newEmail;
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
 
-    public void deleteAuthor(string name){
+    public async Task<bool> DeleteAuthor(string name){
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
@@ -134,6 +138,7 @@ public class AuthorRepository : IAuthorRepository
         }
         Console.WriteLine("Deleting author: " + author.Name);
         _authorDb.Authors.Remove(author);
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
 }
