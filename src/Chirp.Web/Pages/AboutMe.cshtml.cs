@@ -67,7 +67,7 @@ public class AboutMeModel : PageModel
         try
         {
             Console.WriteLine("the author name is:"+authorName);
-            _authorRepository.deleteAuthor(authorName);
+            _authorRepository.DeleteAuthor(authorName);
             //Need to signout the user
             return RedirectToPage("Public");
         }

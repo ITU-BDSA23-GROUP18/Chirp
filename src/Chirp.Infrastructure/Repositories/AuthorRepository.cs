@@ -113,7 +113,8 @@ public class AuthorRepository : IAuthorRepository
         _authorDb.SaveChanges();
     }
 
-    public void ChangeEmail(string name, string newEmail){
+    public void ChangeEmail(string name, string newEmail)
+    {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
@@ -126,7 +127,8 @@ public class AuthorRepository : IAuthorRepository
         _authorDb.SaveChanges();
     }
 
-    public void deleteAuthor(string name){
+    public void DeleteAuthor(string name)
+    {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {

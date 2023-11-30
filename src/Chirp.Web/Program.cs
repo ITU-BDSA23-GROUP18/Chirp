@@ -47,7 +47,7 @@ public class Program
                 //var authorEmail = context.Principal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
                 if (authorName == null) return;
                 var author = await authorRepository.GetAuthorByName(authorName);
-                if (author == null || !author.Any())
+                if (!author.Any())
                 {
                     authorRepository.CreateAuthor(authorName, authorName);
                 }
