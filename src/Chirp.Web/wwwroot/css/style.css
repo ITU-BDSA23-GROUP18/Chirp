@@ -424,18 +424,19 @@ textarea{
 
 .profilePicture_img_nav {
     object-fit: cover;
-    width: 2vw;
-    height: 2vw;
+    width: 3vw;
+    height: 3vw;
     border-radius: 50%;
     border: none;
     margin-right: 1rem;
     cursor: pointer;
+}
 
-    .img_username_ul {
+    .img_follow_ul {
         display: block;
     }
 
-    .img_username_ul li {
+    .img_follow_ul li {
         display: inline-block;
         margin-right: 1rem;
     }
@@ -475,6 +476,4 @@ textarea{
     .show {
         display: block;
     }
-    
-    
-}
+

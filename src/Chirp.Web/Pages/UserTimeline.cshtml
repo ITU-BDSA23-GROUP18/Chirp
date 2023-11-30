@@ -9,9 +9,9 @@
 }
 
 <div>
-    <ul class="img_username_ul">
+    <ul class="img_follow_ul">
         <li>
-            @if (user == User.Identity.Name)
+            @if (user == User.Identity!.Name)
             {
                 <div class="profilePicture-container">
                     <form method="post" asp-page-handler="UploadProfilePicture" class="UploadProfilePicture" enctype="multipart/form-data">
@@ -36,9 +36,6 @@
         <li>
             <a href="/FollowView/@user/follower">@($"Followers: {Model.FollowersCount}")</a>
         </li>
-    </ul>
-    <ul>
-        
     </ul>
     <h5> @user's Timeline </h5>
 

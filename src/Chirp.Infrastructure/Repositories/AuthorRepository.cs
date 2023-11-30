@@ -218,8 +218,6 @@ public class AuthorRepository : IAuthorRepository
         }
         
         var profilePictureUrl = author.ProfilePictureUrl;
-        
-        Console.WriteLine(profilePictureUrl);
 
         if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl =="")
         {
