@@ -1,5 +1,3 @@
-using System.Net.Mime;
-
 namespace Chirp.Core.DTOs;
 public record AuthorDTO
 {
