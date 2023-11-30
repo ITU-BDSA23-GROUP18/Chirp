@@ -10,7 +10,8 @@ public class AboutMeModel : PageModel
     public List<CheepDTO> yourCheeps { get; private set; }
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
-    public string Email { get; private set; } = "Email...";
+    public string Email { get; private set; }
+    public string? ProfilePictureUrl { get; private set; }
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
@@ -50,6 +51,8 @@ public class AboutMeModel : PageModel
         
         var nCheeps = yourCheeps.Count;
         Pagination = new PaginationModel(nCheeps, page);
+
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
         
         return Page();
     }

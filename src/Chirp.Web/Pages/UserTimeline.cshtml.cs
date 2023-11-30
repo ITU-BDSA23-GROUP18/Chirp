@@ -16,6 +16,10 @@ public class UserTimelineModel : PageModel
     
     public bool IsFollowingAuthor { get; set; }
     
+    public string? ProfilePictureUrl { get; private set; }
+    
+    public string? AuthorProfilePictureUrl { get; private set; }
+    
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -48,6 +52,12 @@ public class UserTimelineModel : PageModel
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
         
+        AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
+
         return Page();
     }
     /// <summary>
@@ -77,6 +87,20 @@ public class UserTimelineModel : PageModel
         try
         {
             await _authorRepository.FollowAuthor(author, User.Identity?.Name!);
+            return RedirectToPage();
+        }
+        catch 
+        {
+            return RedirectToPage();
+        }
+    }
+    
+    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
+    {
+        Console.WriteLine(profilePicture.FileName);
+        try
+        {
+            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
             return RedirectToPage();
         }
         catch 

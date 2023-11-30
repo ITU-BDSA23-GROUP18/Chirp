@@ -1,4 +1,6 @@
-﻿namespace Chirp.Core.IRepositories;
+using Microsoft.AspNetCore.Http;
+
+namespace Chirp.Core.IRepositories;
 /// <summary>
 /// The IAuthorRepository interface is used to define the methods that the AuthorRepository class must implement
 /// </summary>
@@ -28,7 +30,6 @@ public interface IAuthorRepository
     /// <param name="pageUserName"></param>
     /// <returns></returns>
     public Task<IEnumerable<AuthorDTO>> GetFollowing(string pageUserName);
-
     /// <summary>
     /// Creates an author with the given name and email
     /// </summary>
@@ -58,4 +59,10 @@ public interface IAuthorRepository
     /// </summary>
     /// <param name="name"></param>
     public Task<bool> DeleteAuthor(string name);
+    
+    public Task UploadProfilePicture(string name, IFormFile image);
+    
+    public Task DeleteProfilePicture(string name);
+    
+    public Task<string?> GetProfilePicture(string name);
 }

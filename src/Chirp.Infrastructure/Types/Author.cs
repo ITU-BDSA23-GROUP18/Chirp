@@ -1,4 +1,6 @@
-﻿namespace Chirp.Infrastructure.Types;
+﻿using System.Net.Mime;
+
+namespace Chirp.Infrastructure.Types;
 
 public class Author
 {
@@ -8,4 +10,5 @@ public class Author
     public List<Cheep> Cheeps { get; set; } = new List<Cheep>();
     public List<Author> Following { get; set; } = new List<Author>();
     public List<Author> Followers { get; set; } = new List<Author>();
+    public string? ProfilePictureUrl { get; set; }
 }
