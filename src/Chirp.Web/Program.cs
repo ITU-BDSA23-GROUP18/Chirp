@@ -14,11 +14,11 @@ public class Program
         builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
         builder.Services.AddRazorPages().AddMicrosoftIdentityUI();
-/*
+
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
- */
-        // Try to get remote connection string
+ 
+ /*       // Try to get remote connection string
         string? connectionString = builder.Configuration.GetConnectionString("AzureSQLDBConnectionstring");
         if (connectionString == null) throw new Exception("Connection string not found");
         if (!connectionString.Contains("Password")) {
@@ -31,7 +31,7 @@ public class Program
         }
         
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlServer(connectionString));
-
+*/
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<IReactionRepository, ReactionRepository>();

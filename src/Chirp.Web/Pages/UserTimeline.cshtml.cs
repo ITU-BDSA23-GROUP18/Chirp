@@ -18,6 +18,8 @@ public class UserTimelineModel : PageModel
     
     public string? ProfilePictureUrl { get; private set; }
     
+    public string? AuthorProfilePictureUrl { get; private set; }
+    
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -50,7 +52,8 @@ public class UserTimelineModel : PageModel
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
         
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
+        AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
         
         return Page();
     }

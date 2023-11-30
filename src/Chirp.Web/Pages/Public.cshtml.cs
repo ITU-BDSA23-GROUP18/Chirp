@@ -11,6 +11,7 @@ public class PublicModel : PageModel
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     
+    public string? ProfilePictureUrl { get; private set; }
     
     public PublicModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
@@ -26,6 +27,8 @@ public class PublicModel : PageModel
         
         var nCheeps = await _repository.CountCheeps();
         Pagination = new PaginationModel(nCheeps, page);
+        
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
         
         Cheeps = _repository.GetCheep(page).Result.ToList();
         return Page();
