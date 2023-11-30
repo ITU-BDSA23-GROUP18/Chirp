@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 
 namespace Chirp.Web.Pages;
 
@@ -35,10 +34,13 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
-    public IActionResult OnPostChangeReaction(string cheepString, string reactionType)
+    public IActionResult OnPostChangeReaction(string cheepId, string reactionType)
     {
         
-        var cheep = JsonConvert.DeserializeObject<CheepDTO>(cheepString);
+        Console.WriteLine("Hello:" + cheepId + " - " + Cheeps.Count);
+        Cheeps.ForEach(c => Console.WriteLine(c));
+        var cheep = Cheeps.First(c => c.CheepId == cheepId);
+        
         var author = User.Identity?.Name!;
         if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return RedirectToPage("Public");
         
