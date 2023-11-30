@@ -1,5 +1,6 @@
 ﻿@page "/"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Chirp.Infrastructure.Types
 @model PublicModel
 @{
     ViewData["Title"] = "Chirp!";
@@ -53,15 +54,20 @@
                         </strong>
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
+
                         <br>
-                        
-                        <text onclick=@Model.ChangeReaction(cheep, "Good")>Good: </text>
+                    
+                        <form method="post">
+                            <input type="hidden" name="cheepString" value="@Json.Serialize(cheep)">
+                            <input type="hidden" name="reactionType" value="Good">
+                            <button asp-page-handler="ChangeReaction">Good:</button>
+                        </form>
                         @cheep.Reactions.Count(r => r.ReactionType == "Good")
                         <text>|</text>
-                        <text onclick=@Model.ChangeReaction(cheep, "Ish")>Ish: </text>
+                        @* <button onclick=@Model.ChangeReaction(cheep, "Good")>Ish:</button> *@
                         @cheep.Reactions.Count(r => r.ReactionType == "Ish")
                         <text>|</text>
-                        <text onclick=@Model.ChangeReaction(cheep, "Bad")>Bad: </text>
+                        @* <button onclick=@Model.ChangeReaction(cheep, "Good")>Bad:</button> *@
                         @cheep.Reactions.Count(r => r.ReactionType == "Bad")
                     </p>
                 </li>

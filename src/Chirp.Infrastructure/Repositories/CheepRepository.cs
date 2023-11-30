@@ -16,6 +16,7 @@ public class CheepRepository : ICheepRepository
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
+            .Include(c => c.Reactions)
             .OrderByDescending(c => c.TimeStamp)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
@@ -25,6 +26,7 @@ public class CheepRepository : ICheepRepository
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
+            .Include(c => c.Reactions)
             .OrderByDescending(c => c.TimeStamp)
             .Where(c => c.Author.Name == authorName)
             .Skip(CheepsPerPage * (page - 1))
