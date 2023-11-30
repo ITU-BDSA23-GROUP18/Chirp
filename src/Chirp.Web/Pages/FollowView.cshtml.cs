@@ -26,7 +26,10 @@ public class FollowingModel : PageModel
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
         
         var myFollowing = await _authorRepository.GetFollowing(author);
         var followingDtos = myFollowing.ToList();

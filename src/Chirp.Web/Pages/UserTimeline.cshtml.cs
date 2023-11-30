@@ -53,8 +53,11 @@ public class UserTimelineModel : PageModel
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
         
         AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
-        
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
+
         return Page();
     }
 

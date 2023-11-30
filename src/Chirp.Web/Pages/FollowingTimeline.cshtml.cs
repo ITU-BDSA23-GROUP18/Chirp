@@ -32,7 +32,10 @@ public class FollowingTimelineModel : PageModel
             Cheeps.AddRange(cheeps);
         }
         
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
         
         var nCheeps = Cheeps.Count;
         Pagination = new PaginationModel(nCheeps, page);

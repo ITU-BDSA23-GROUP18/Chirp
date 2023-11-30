@@ -28,7 +28,10 @@ public class PublicModel : PageModel
         var nCheeps = await _repository.CountCheeps();
         Pagination = new PaginationModel(nCheeps, page);
         
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
         
         Cheeps = _repository.GetCheep(page).Result.ToList();
         return Page();
