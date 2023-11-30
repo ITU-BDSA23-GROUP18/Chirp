@@ -57,12 +57,16 @@ public class UserTimelineModel : PageModel
         
         return Page();
     }
-
-    public IActionResult OnPostUnfollow(string author)
+    /// <summary>
+    /// Unfollows the author with the given author name
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
+    public async Task<ActionResult> OnPostUnfollow(string author)
     {
         try
         {
-            _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
+            await _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
             return RedirectToPage();
         }
         catch 
@@ -70,12 +74,16 @@ public class UserTimelineModel : PageModel
             return RedirectToPage();
         }
     }
-    
-    public IActionResult OnPostFollow(string author)
+    /// <summary>
+    /// Follows the author with the given author name
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
+    public async Task<ActionResult> OnPostFollow(string author)
     {
         try
         {
-            _authorRepository.FollowAuthor(author, User.Identity?.Name!);
+            await _authorRepository.FollowAuthor(author, User.Identity?.Name!);
             return RedirectToPage();
         }
         catch 
