@@ -1,30 +1,50 @@
 using Microsoft.AspNetCore.Http;
 
 namespace Chirp.Infrastructure.Repositories;
-
+/// <summary>
+/// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
+/// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpContext _authorDb;
-
+    /// <summary>
+    /// Constructor for the AuthorRepository class
+    /// If seedDatabase is true, the database will be seeded with data
+    /// </summary>
+    /// <param name="authorDb"></param>
+    /// <param name="seedDatabase"></param>
     public AuthorRepository(ChirpContext authorDb, bool seedDatabase = true)
     {
         _authorDb = authorDb;
         _authorDb.InitializeDatabase(seedDatabase);
     }
-
+    /// <summary>
+    /// Gets the author from the database with the given name
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name) =>
          await _authorDb.Authors
              .Where(a => a.Name == name)
              .Select(a => a.ToDTO())
              .ToListAsync();
-
+    /// <summary>
+    /// Gets the author from the database with the given email
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email) =>
         await _authorDb.Authors
             .Where(a => a.Email == email)
             .Select(a => a.ToDTO())
             .ToListAsync();
-
-    public void CreateAuthor(string name, string email)
+    /// <summary>
+    /// Creates an author with the given name and email
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="email"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task<bool> CreateAuthor(string name, string email)
     {
         if (_authorDb.Authors.Any(a => a.Name == name))
             throw new ArgumentException($"Username {name} is already used");
@@ -42,27 +62,39 @@ public class AuthorRepository : IAuthorRepository
             Followers = new List<Author>()
         };
         _authorDb.Authors.Add(author);
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
-
-    public void FollowAuthor(string followName, string currentUserName)
+    /// <summary>
+    /// Follows the author with the given followName from the author with the given currentUserName
+    /// </summary>
+    /// <param name="followName"></param>
+    /// <param name="currentUserName"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task<bool> FollowAuthor(string followName, string currentUserName)
     {
-        var authorToFollow = _authorDb.Authors.SingleAsync(a => a.Name == followName);
+        var authorToFollow = await _authorDb.Authors.SingleAsync(a => a.Name == followName);
         if (authorToFollow == null)
         {
             throw new ArgumentException($"Author to follow does not exist");
         }
 
-        var signedInUser = _authorDb.Authors.Include(author => author.Following).FirstOrDefault(a => a.Name == currentUserName);
+        var signedInUser = await _authorDb.Authors.Include(author => author.Following).FirstOrDefaultAsync(a => a.Name == currentUserName);
         if (signedInUser == null)
         {
             throw new ArgumentException($"Current user does not exist");
         }
-        signedInUser.Following.Add(authorToFollow.Result);
-        authorToFollow.Result.Followers.Add(signedInUser);
-        _authorDb.SaveChanges();
+        signedInUser.Following.Add(authorToFollow);
+        authorToFollow.Followers.Add(signedInUser);
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
-
+    /// <summary>
+    /// Gets the authors from the database that are following the given pageUserName
+    /// </summary>
+    /// <param name="pageUser"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
         var user = await _authorDb.Authors.Include(author => author.Followers).FirstOrDefaultAsync(a => a.Name == pageUser);
@@ -81,7 +113,12 @@ public class AuthorRepository : IAuthorRepository
         }
         return followerListDto;
     }
-
+    /// <summary>
+    /// Gets the authors from the database that the given pageUserName is following
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
     {
         var user = await _authorDb.Authors.Include(author => author.Following).FirstOrDefaultAsync(a => a.Name == userName);
@@ -100,22 +137,35 @@ public class AuthorRepository : IAuthorRepository
         }
         return followingListDto;
     }
-
-    public void UnfollowAuthor(string followName, string currentUserName)
+    /// <summary>
+    /// Unfollows the author with the given followName from the author with the given currentUserName
+    /// </summary>
+    /// <param name="followName"></param>
+    /// <param name="currentUserName"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task<bool> UnfollowAuthor(string followName, string currentUserName)
     {
-        var followAuthor = _authorDb.Authors.FirstOrDefault(a => a.Name == followName);
-        var currentUser = _authorDb.Authors.Include(author => author.Following)
-            .FirstOrDefault(a => a.Name == currentUserName);
+        var followAuthor = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == followName);
+        var currentUser = await _authorDb.Authors.Include(author => author.Following)
+            .FirstOrDefaultAsync(a => a.Name == currentUserName);
         if (followAuthor == null || currentUser == null)
         {
             throw new ArgumentException($"Author {followName} does not exist");
         }
         currentUser.Following.Remove(followAuthor);
         followAuthor.Followers.Remove(currentUser);
-        _authorDb.SaveChanges();
-    }
 
-    public void ChangeEmail(string name, string newEmail){
+        await _authorDb.SaveChangesAsync();
+        return true;
+    }
+    /// <summary>
+    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="newEmail"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task<bool> ChangeEmail(string name, string newEmail)
+    {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
@@ -125,10 +175,15 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"{"email"} is already used!");
         }
         author.Email = newEmail;
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
-
-    public void deleteAuthor(string name){
+    /// <summary>
+    /// Deletes the author with the given name
+    /// </summary>
+    /// <param name="name"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public async Task<bool> DeleteAuthor(string name){
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
@@ -136,7 +191,8 @@ public class AuthorRepository : IAuthorRepository
         }
         Console.WriteLine("Deleting author: " + author.Name);
         _authorDb.Authors.Remove(author);
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
+        return true;
     }
     
     public async Task UploadProfilePicture(string name, IFormFile file)

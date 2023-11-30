@@ -49,7 +49,7 @@ public class Program
                 var author = await authorRepository.GetAuthorByName(authorName);
                 if (!author.Any())
                 {
-                    authorRepository.CreateAuthor(authorName, authorName);
+                    await authorRepository.CreateAuthor(authorName, authorName);
                 }
             };
         });
@@ -59,6 +59,16 @@ public class Program
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
+            if (!connectionString.Contains("Password")) {
+                string passwordFile = "connectionString.txt";
+                if (!File.Exists(passwordFile)) {
+                    Console.WriteLine("---- No password for sql server, create a file called connectionString.txt with the password in it. ----");
+                }
+                using var sr = new StreamReader(passwordFile);
+                // Read the stream as a string, and write the string to the console.
+                connectionString += $"Password={sr.ReadToEnd()};";
+            } 
+
             app.UseExceptionHandler("/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();

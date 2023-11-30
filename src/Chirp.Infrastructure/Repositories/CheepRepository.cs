@@ -6,13 +6,22 @@ public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
     private readonly ChirpContext _cheepDb;
-
+    /// <summary>
+    /// Constructor for the CheepRepository class
+    /// If seedDatabase is true, the database will be seeded with data
+    /// </summary>
+    /// <param name="cheepDb"></param>
+    /// <param name="seedDatabase"></param>
     public CheepRepository(ChirpContext cheepDb, bool seedDatabase = true)
     {
         _cheepDb = cheepDb;
         _cheepDb.InitializeDatabase(seedDatabase);
     }
-
+    /// <summary>
+    /// Gets a list of cheeps from the database according to the given page number
+    /// </summary>
+    /// <param name="page"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
@@ -22,6 +31,12 @@ public class CheepRepository : ICheepRepository
             .Select(c => c.ToDTO())
             .ToListAsync();
 
+    /// <summary>
+    /// Gets the cheep from the given author
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <param name="page"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
@@ -31,17 +46,29 @@ public class CheepRepository : ICheepRepository
             .Take(CheepsPerPage)
             .Select(c => c.ToDTO())
             .ToListAsync();
-
+    /// <summary>
+    /// Counts the number of cheeps
+    /// </summary>
+    /// <returns></returns>
     public async Task<int> CountCheeps() =>
         await _cheepDb.Cheeps
             .CountAsync();
-
+    /// <summary>
+    /// Counts the number of cheeps from the given author
+    /// </summary>
+    /// <param name="authorName"></param>
+    /// <returns></returns>
     public async Task<int> CountCheepsFromAuthor(string authorName) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
             .Where(c => c.Author.Name == authorName)
             .CountAsync();
-
+    /// <summary>
+    /// Creates a cheep with the given message and username
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="username"></param>
+    /// <exception cref="ValidationException"></exception>
     public void CreateCheep(string message, string username)
     {
         var cheepValidator = new CheepValidator();
@@ -79,12 +106,16 @@ public class CheepRepository : ICheepRepository
         _cheepDb.Cheeps.Add(cheep);
         _cheepDb.SaveChanges();
     }
-
+    /// <summary>
+    /// Class used to validate the cheep
+    /// </summary>
     public class NewCheep
     {
         public required string Message { get; set; }
     }
-
+    /// <summary>
+    /// Class used to validate the cheep to insure that the message is not empty and is less than 160 characters
+    /// </summary>
     public class CheepValidator : AbstractValidator<NewCheep>
     {
         public CheepValidator()
