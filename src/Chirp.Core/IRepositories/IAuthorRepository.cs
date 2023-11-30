@@ -34,28 +34,28 @@ public interface IAuthorRepository
     /// </summary>
     /// <param name="name"></param>
     /// <param name="email"></param>
-    public void CreateAuthor(string name, string email);
+    public Task<bool> CreateAuthor(string name, string email);
     /// <summary>
     /// Follows the author with the given followName from the author with the given currentUserName
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
-    public void FollowAuthor(string followName, string currentUserName);
+    public Task<bool> FollowAuthor(string followName, string currentUserName);
     /// <summary>
     /// Unfollows the author with the given followName from the author with the given currentUserName
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
-    public void UnfollowAuthor(string followName, string currentUserName);
+    public Task<bool> UnfollowAuthor(string followName, string currentUserName);
     /// <summary>
     /// Changes the email of the author with the given currentUserName to the given newEmail
     /// </summary>
     /// <param name="newEmail"></param>
     /// <param name="currentUserName"></param>
-    public void ChangeEmail(string newEmail, string currentUserName);
+     public Task<bool> ChangeEmail(string newEmail, string currentUserName);
     /// <summary>
     /// Deletes the author with the given name
     /// </summary>
     /// <param name="name"></param>
-    public void deleteAuthor(string name);
+    public Task<bool> DeleteAuthor(string name);
 }
