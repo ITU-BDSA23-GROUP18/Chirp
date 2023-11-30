@@ -12,11 +12,11 @@ public static class Extensions
         dt.ToString("HH:mm:ss dd/MM/yyyy");
 
     public static CheepDTO ToDTO(this Cheep c) =>
-        new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString(), c.Reactions.Select(r => r.ToDTO()).ToList());
+        new CheepDTO(c.CheepId.ToString(), c.Author.Name, c.Message, c.TimeStamp.ShowString(), c.Reactions.Select(r => r.ToDTO()).ToList());
 
     public static AuthorDTO ToDTO(this Author a) =>
         new AuthorDTO(a.Name, a.Email);
 
     public static ReactionDTO ToDTO(this Reaction r) =>
-        new ReactionDTO(r.CheepId.ToString(), r.AuthorId.ToString(), r.ReactionType.ToString());
+        new ReactionDTO(r.CheepId.ToString(), r.AuthorName, r.ReactionType.ToString());
 }

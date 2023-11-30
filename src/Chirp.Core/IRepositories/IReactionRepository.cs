@@ -6,8 +6,8 @@ public interface IReactionRepository
     public IEnumerable<string> GetAllReactionTypes();
 
     // Post methods
-    public void CreateReaction(string cheepId, string authorId, string reactionType);
+    public void CreateReaction(string cheepId, string authorName, string reactionType);
 
     // Delete methods
-    public void RemoveReaction(string cheepId, string authorId);
+    public void RemoveReaction(string cheepId, string authorName);
 }

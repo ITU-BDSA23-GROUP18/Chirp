@@ -5,14 +5,15 @@ namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly ICheepRepository _repository;
-    public List<CheepDTO> Cheeps { get; private set; }
+    private readonly ICheepRepository _cheepRepository;
+    private readonly IReactionRepository _reactionRepository;
+    public List<CheepDTO> Cheeps { get; private set; } = new();
     public PaginationModel? Pagination { get; private set; }
     
-    public PublicModel(ICheepRepository repository)
+    public PublicModel(ICheepRepository cheepRepository, IReactionRepository reactionRepository)
     {
-        Cheeps = new List<CheepDTO>();
-        _repository = repository;
+        _cheepRepository = cheepRepository;
+        _reactionRepository = reactionRepository;
     }
 
     public IActionResult OnGet([FromQuery] int page)
@@ -20,16 +21,29 @@ public class PublicModel : PageModel
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        var nCheeps = _repository.CountCheeps().Result;
+        var nCheeps = _cheepRepository.CountCheeps().Result;
         Pagination = new PaginationModel(nCheeps, page);
         
-        Cheeps = _repository.GetCheep(page).Result.ToList();
+        Cheeps = _cheepRepository.GetCheep(page).Result.ToList();
         return Page();
     }
     
     public IActionResult OnPostCheep(string message)
     {
-        _repository.CreateCheep(message, User.Identity?.Name!);
+        _cheepRepository.CreateCheep(message, User.Identity?.Name!);
+        return RedirectToPage("Public");
+    }
+
+    public IActionResult ChangeReaction(CheepDTO cheep, string reactionType)
+    {
+        var author = User.Identity?.Name!;
+        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return RedirectToPage("Public");
+        
+        if (cheep.Reactions.Any(r => r.Author == author))
+        {
+            _reactionRepository.RemoveReaction(cheep.CheepId, author);
+        }
+        _reactionRepository.CreateReaction(cheep.CheepId, author, reactionType);
         return RedirectToPage("Public");
     }
 }

@@ -54,9 +54,15 @@
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
                         <br>
-                        @{
-                            await Html.RenderPartialAsync("Shared/CheepBox", new CheepBoxModel(cheep));
-                        }
+                        
+                        <text onclick=@Model.ChangeReaction(cheep, "Good")>Good: </text>
+                        @cheep.Reactions.Count(r => r.ReactionType == "Good")
+                        <text>|</text>
+                        <text onclick=@Model.ChangeReaction(cheep, "Ish")>Ish: </text>
+                        @cheep.Reactions.Count(r => r.ReactionType == "Ish")
+                        <text>|</text>
+                        <text onclick=@Model.ChangeReaction(cheep, "Bad")>Bad: </text>
+                        @cheep.Reactions.Count(r => r.ReactionType == "Bad")
                     </p>
                 </li>
             }

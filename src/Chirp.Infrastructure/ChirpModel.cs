@@ -21,7 +21,7 @@ public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(op
         modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(300);
         modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
 
-        modelBuilder.Entity<Reaction>().HasIndex(r => new {r.CheepId, r.AuthorId}).IsUnique();
+        modelBuilder.Entity<Reaction>().HasIndex(r => new {r.CheepId, r.AuthorName}).IsUnique();
     }
 
     /*public class ChirpContextFactory : IDesignTimeDbContextFactory<ChirpContext>

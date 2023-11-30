@@ -714,38 +714,38 @@ public static class DbInitializer
         a12.Cheeps = new List<Cheep>() { c657 };
         
         // Reactions
-        var r1 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r2 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a2.AuthorId, ReactionType = ReactionType.Good};
-        var r3 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a3.AuthorId, ReactionType = ReactionType.Good};
-        var r4 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a4.AuthorId, ReactionType = ReactionType.Good};
-        var r5 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a5.AuthorId, ReactionType = ReactionType.Good};
-        var r6 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a6.AuthorId, ReactionType = ReactionType.Good};
-        var r7 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a7.AuthorId, ReactionType = ReactionType.Good};
-        var r8 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a8.AuthorId, ReactionType = ReactionType.Good};
-        var r9 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a9.AuthorId, ReactionType = ReactionType.Good};
-        var r10 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorId = a10.AuthorId, ReactionType = ReactionType.Ish};
+        var r1 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r2 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a2.Name, ReactionType = ReactionType.Good};
+        var r3 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a3.Name, ReactionType = ReactionType.Good};
+        var r4 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a4.Name, ReactionType = ReactionType.Good};
+        var r5 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a5.Name, ReactionType = ReactionType.Good};
+        var r6 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a6.Name, ReactionType = ReactionType.Good};
+        var r7 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a7.Name, ReactionType = ReactionType.Good};
+        var r8 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a8.Name, ReactionType = ReactionType.Good};
+        var r9 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a9.Name, ReactionType = ReactionType.Good};
+        var r10 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c1.CheepId, Cheep = c1, AuthorName = a10.Name, ReactionType = ReactionType.Ish};
         
-        var r11 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c10.CheepId, Cheep = c10, AuthorId = a10.AuthorId, ReactionType = ReactionType.Bad};
-        var r12 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c20.CheepId, Cheep = c20, AuthorId = a10.AuthorId, ReactionType = ReactionType.Ish};
-        var r13 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c30.CheepId, Cheep = c30, AuthorId = a10.AuthorId, ReactionType = ReactionType.Bad};
-        var r14 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c40.CheepId, Cheep = c40, AuthorId = a10.AuthorId, ReactionType = ReactionType.Ish};
-        var r15 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c50.CheepId, Cheep = c50, AuthorId = a10.AuthorId, ReactionType = ReactionType.Bad};
-        var r16 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c60.CheepId, Cheep = c60, AuthorId = a10.AuthorId, ReactionType = ReactionType.Ish};
-        var r17 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c70.CheepId, Cheep = c70, AuthorId = a10.AuthorId, ReactionType = ReactionType.Bad};
-        var r18 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c80.CheepId, Cheep = c80, AuthorId = a10.AuthorId, ReactionType = ReactionType.Ish};
-        var r19 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c90.CheepId, Cheep = c90, AuthorId = a10.AuthorId, ReactionType = ReactionType.Bad};
-        var r20 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c100.CheepId, Cheep = c100, AuthorId = a10.AuthorId, ReactionType = ReactionType.Ish};
+        var r11 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c10.CheepId, Cheep = c10, AuthorName = a10.Name, ReactionType = ReactionType.Bad};
+        var r12 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c20.CheepId, Cheep = c20, AuthorName = a10.Name, ReactionType = ReactionType.Ish};
+        var r13 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c30.CheepId, Cheep = c30, AuthorName = a10.Name, ReactionType = ReactionType.Bad};
+        var r14 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c40.CheepId, Cheep = c40, AuthorName = a10.Name, ReactionType = ReactionType.Ish};
+        var r15 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c50.CheepId, Cheep = c50, AuthorName = a10.Name, ReactionType = ReactionType.Bad};
+        var r16 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c60.CheepId, Cheep = c60, AuthorName = a10.Name, ReactionType = ReactionType.Ish};
+        var r17 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c70.CheepId, Cheep = c70, AuthorName = a10.Name, ReactionType = ReactionType.Bad};
+        var r18 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c80.CheepId, Cheep = c80, AuthorName = a10.Name, ReactionType = ReactionType.Ish};
+        var r19 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c90.CheepId, Cheep = c90, AuthorName = a10.Name, ReactionType = ReactionType.Bad};
+        var r20 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c100.CheepId, Cheep = c100, AuthorName = a10.Name, ReactionType = ReactionType.Ish};
         
-        var r21 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c600.CheepId, Cheep = c600, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r22 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c605.CheepId, Cheep = c605, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r23 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c610.CheepId, Cheep = c610, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r24 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c615.CheepId, Cheep = c615, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r25 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c620.CheepId, Cheep = c620, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r26 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c625.CheepId, Cheep = c625, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r27 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c630.CheepId, Cheep = c630, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r28 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c635.CheepId, Cheep = c635, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r29 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c640.CheepId, Cheep = c640, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
-        var r30 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c645.CheepId, Cheep = c645, AuthorId = a1.AuthorId, ReactionType = ReactionType.Good};
+        var r21 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c600.CheepId, Cheep = c600, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r22 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c605.CheepId, Cheep = c605, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r23 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c610.CheepId, Cheep = c610, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r24 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c615.CheepId, Cheep = c615, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r25 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c620.CheepId, Cheep = c620, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r26 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c625.CheepId, Cheep = c625, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r27 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c630.CheepId, Cheep = c630, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r28 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c635.CheepId, Cheep = c635, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r29 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c640.CheepId, Cheep = c640, AuthorName = a1.Name, ReactionType = ReactionType.Good};
+        var r30 = new Reaction() { ReactionId = Guid.NewGuid(), CheepId = c645.CheepId, Cheep = c645, AuthorName = a1.Name, ReactionType = ReactionType.Good};
         
         Reactions = new List<Reaction>() {r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27, r28, r29, r30};
         
