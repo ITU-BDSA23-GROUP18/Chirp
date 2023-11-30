@@ -111,6 +111,7 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"Author {followName} does not exist");
         }
         currentUser.Following.Remove(followAuthor);
+        followAuthor.Followers.Remove(currentUser);
         _authorDb.SaveChanges();
     }
 
@@ -217,12 +218,13 @@ public class AuthorRepository : IAuthorRepository
         }
         
         var profilePictureUrl = author.ProfilePictureUrl;
+        
+        Console.WriteLine(profilePictureUrl);
 
-        if (string.IsNullOrEmpty(profilePictureUrl))
+        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl =="")
         {
             return "images/defualt_user_pic.png";
         }
-        
         return profilePictureUrl;
     }
     

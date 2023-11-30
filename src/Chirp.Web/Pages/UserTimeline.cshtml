@@ -9,12 +9,39 @@
 }
 
 <div>
-    <h2> @user's Timeline </h2>
-    <ul>
-        <a href="/FollowView/@user/following">@($"Following: {Model.FollowingCount}")</a>
-        <a href="/FollowView/@user/follower">@($"Followers: {Model.FollowersCount}")</a>
+    <ul class="img_username_ul">
+        <li>
+            @if (user == User.Identity.Name)
+            {
+                <div class="profilePicture-container">
+                    <form method="post" asp-page-handler="UploadProfilePicture" class="UploadProfilePicture" enctype="multipart/form-data">
+                        <input type="file" id="fileInput" style="display:none" name="profilePicture"/>
+                        <label for="fileInput">
+                            <img alt="profilePicture" class="profilePicture_img" src="@Model.ProfilePictureUrl">
+                            <div class="change-text">Change</div>
+                            <button id="ChangeProfilePicture_btn" style="display: none"></button>
+                        </label>
+                    </form>
+                </div>
+            }else
+            {
+                <div class="profilePicture-container-others">
+                    <img style="cursor: default" class="profilePicture_img" src="@Model.ProfilePictureUrl" alt="profile picture">
+                </div>
+            }
+        </li>
+        <li>
+            <a href="/FollowView/@user/following">@($"Following: {Model.FollowingCount}")</a>
+        </li>
+        <li>
+            <a href="/FollowView/@user/follower">@($"Followers: {Model.FollowersCount}")</a>
+        </li>
     </ul>
-    
+    <ul>
+        
+    </ul>
+    <h5> @user's Timeline </h5>
+
     @if (User.Identity!.IsAuthenticated)
     {
         @if (user != User.Identity!.Name!)
@@ -54,8 +81,15 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    
+
     @{
         await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
     }
 </div>
+
+<script>
+    document.getElementById("fileInput").addEventListener("change", function () {
+        document.getElementById("ChangeProfilePicture_btn").click();
+    });
+
+</script>

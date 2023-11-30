@@ -14,11 +14,13 @@
         <div class="dropdown">
             <input type="button" onclick="dropdownFunction()" id="dropdown_btn" class="dropbtn">
             <label for="dropdown_btn">
-                <img alt="profilePicture" class="dropdown_img" src="images/defualt_user_pic.png">
+                <img alt="profilePicture" class="dropdown_img" src="">
             </label>
             <div id="dropdown" class="dropdown-content">
                 <a href="\@User.Identity.Name">My page</a>
+                <hr style="margin: 0"/>
                 <a href="\AboutMe">Settings</a>
+                <hr style="margin: 0"/>
                 <a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
             </div>
         </div>
