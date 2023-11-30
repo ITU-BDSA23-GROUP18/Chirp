@@ -48,7 +48,7 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public IActionResult OnPostChangeEmail(string newEmail)
+    public IActionResult OnPostChangeEmail(string newEmail)
     {
         try
         {
