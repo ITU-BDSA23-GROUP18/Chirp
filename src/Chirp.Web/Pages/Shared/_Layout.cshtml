@@ -22,9 +22,16 @@
                             <li>
                                 @if (User.Identity!.IsAuthenticated)
                                 {
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/FollowingTimeline">Following Timeline</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/FollowingTimeline">Following timeline</a>
+                                    
+                                    
                                 }
                             </li>
+                            <li>
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/AboutMe">About me</a>
+                                }
                         </ul>
                         <partial name="_LoginPartial" />
                     </div>

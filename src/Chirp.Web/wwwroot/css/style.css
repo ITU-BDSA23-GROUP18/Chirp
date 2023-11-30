@@ -97,6 +97,18 @@ div.page h2 {
   color: #571010;
   text-shadow: 0 1px 2px #ccc;
 }
+div.page  h4{
+    font-size: 1.4em;
+    margin: 0 0 15px;
+    color: #850000;
+    text-shadow: 0 1px 2px #ccc;
+}
+
+div.page h5 {
+  font-size: 1.1em;
+  color: #a71e1e;
+  text-shadow: 0 1px 2px #ccc;
+}
 
 div.page div.body {
   padding: 10px;
@@ -244,12 +256,35 @@ li.topic {
   min-height: 20px;
 }
 
-textarea{
+textarea.cheepbox{
     width: 99%;
     height: 5rem;
     resize: none;
     border-radius: 5px;
 }
+
+textarea.aboutme{
+    width: 11em;
+    height: 1.79em;
+    outline: none;
+    border: 0;
+    resize: none;
+    
+}
+
+
+
+button.changer{
+
+  margin-right: 2em;
+  background: none;
+	color: inherit;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
 
 div.cheep button.share{
     align-items: end;
