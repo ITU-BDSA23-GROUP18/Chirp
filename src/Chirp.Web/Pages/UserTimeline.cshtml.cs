@@ -50,7 +50,11 @@ public class UserTimelineModel : PageModel
         
         return Page();
     }
-
+    /// <summary>
+    /// Unfollows the author with the given author name
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
     public IActionResult OnPostUnfollow(string author)
     {
         try
@@ -63,7 +67,11 @@ public class UserTimelineModel : PageModel
             return RedirectToPage();
         }
     }
-    
+    /// <summary>
+    /// Follows the author with the given author name
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
     public IActionResult OnPostFollow(string author)
     {
         try

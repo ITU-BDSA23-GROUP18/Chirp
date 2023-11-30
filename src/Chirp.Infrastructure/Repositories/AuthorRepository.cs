@@ -1,28 +1,48 @@
 
 namespace Chirp.Infrastructure.Repositories;
-
+/// <summary>
+/// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
+/// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpContext _authorDb;
-
+    /// <summary>
+    /// Constructor for the AuthorRepository class
+    /// If seedDatabase is true, the database will be seeded with data
+    /// </summary>
+    /// <param name="authorDb"></param>
+    /// <param name="seedDatabase"></param>
     public AuthorRepository(ChirpContext authorDb, bool seedDatabase = true)
     {
         _authorDb = authorDb;
         _authorDb.InitializeDatabase(seedDatabase);
     }
-
+    /// <summary>
+    /// Gets the author from the database with the given name
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByName(string name) =>
          await _authorDb.Authors
              .Where(a => a.Name == name)
              .Select(a => a.ToDTO())
              .ToListAsync();
-
+    /// <summary>
+    /// Gets the author from the database with the given email
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<AuthorDTO>> GetAuthorByEmail(string email) =>
         await _authorDb.Authors
             .Where(a => a.Email == email)
             .Select(a => a.ToDTO())
             .ToListAsync();
-
+    /// <summary>
+    /// Creates an author with the given name and email
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="email"></param>
+    /// <exception cref="ArgumentException"></exception>
     public void CreateAuthor(string name, string email)
     {
         if (_authorDb.Authors.Any(a => a.Name == name))
@@ -43,7 +63,12 @@ public class AuthorRepository : IAuthorRepository
         _authorDb.Authors.Add(author);
         _authorDb.SaveChanges();
     }
-
+    /// <summary>
+    /// Follows the author with the given followName from the author with the given currentUserName
+    /// </summary>
+    /// <param name="followName"></param>
+    /// <param name="currentUserName"></param>
+    /// <exception cref="ArgumentException"></exception>
     public void FollowAuthor(string followName, string currentUserName)
     {
         var authorToFollow = _authorDb.Authors.SingleAsync(a => a.Name == followName);
@@ -61,7 +86,12 @@ public class AuthorRepository : IAuthorRepository
         authorToFollow.Result.Followers.Add(signedInUser);
         _authorDb.SaveChanges();
     }
-
+    /// <summary>
+    /// Gets the authors from the database that are following the given pageUserName
+    /// </summary>
+    /// <param name="pageUser"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
         var user = await _authorDb.Authors.Include(author => author.Followers).FirstOrDefaultAsync(a => a.Name == pageUser);
@@ -80,7 +110,12 @@ public class AuthorRepository : IAuthorRepository
         }
         return followerListDto;
     }
-
+    /// <summary>
+    /// Gets the authors from the database that the given pageUserName is following
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
     {
         var user = await _authorDb.Authors.Include(author => author.Following).FirstOrDefaultAsync(a => a.Name == userName);
@@ -99,7 +134,12 @@ public class AuthorRepository : IAuthorRepository
         }
         return followingListDto;
     }
-
+    /// <summary>
+    /// Unfollows the author with the given followName from the author with the given currentUserName
+    /// </summary>
+    /// <param name="followName"></param>
+    /// <param name="currentUserName"></param>
+    /// <exception cref="ArgumentException"></exception>
     public void UnfollowAuthor(string followName, string currentUserName)
     {
         var followAuthor = _authorDb.Authors.FirstOrDefault(a => a.Name == followName);
@@ -112,7 +152,12 @@ public class AuthorRepository : IAuthorRepository
         currentUser.Following.Remove(followAuthor);
         _authorDb.SaveChanges();
     }
-
+    /// <summary>
+    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="newEmail"></param>
+    /// <exception cref="ArgumentException"></exception>
     public void ChangeEmail(string name, string newEmail){
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
@@ -125,7 +170,11 @@ public class AuthorRepository : IAuthorRepository
         author.Email = newEmail;
         _authorDb.SaveChanges();
     }
-
+    /// <summary>
+    /// Deletes the author with the given name
+    /// </summary>
+    /// <param name="name"></param>
+    /// <exception cref="ArgumentException"></exception>
     public void deleteAuthor(string name){
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
