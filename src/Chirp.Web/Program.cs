@@ -75,6 +75,8 @@ public class Program
         app.MapRazorPages();
         app.MapControllers();
 
+        app.UseStaticFiles();
+
         app.Run();
     }
 }

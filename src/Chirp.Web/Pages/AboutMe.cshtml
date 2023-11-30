@@ -13,15 +13,19 @@
     @if (User.Identity?.IsAuthenticated ?? false)
     {
         <h2> About me </h2>
+        
         <div class="profilePicture-container">
-            <input type="file" id="fileInput" style="display:none" />
-            <input type="button" onclick="openFileExplorer()" id="profilePicture_btn" class="profilePicturebtn">
-            <label for="profilePicture_btn">
-                <img alt="profilePicture" class="profilePicture_img" src="@Model.ProfilePicture">
-                <div class="change-text">Change</div>
-            </label>
+            <form method="post" asp-page-handler="UploadProfilePicture" class="UploadProfilePicture" enctype="multipart/form-data">
+                <input type="file" id="fileInput" style="display:none" name="profilePicture"/>
+                <label for="fileInput">
+                    <img alt="profilePicture" class="profilePicture_img" src="@Model.ProfilePictureUrl">
+                    <div class="change-text">Change</div>
+                    <button id="ChangeProfilePicture_btn" style="display: none"></button>
+                </label>
+            </form>
         </div>
-        <br></br>
+       
+        <br>
         <h5>Username:</h5>
         <p>@User.Identity.Name</p>
 
@@ -91,8 +95,8 @@
 </div>
 
 <script>
-    function openFileExplorer() {
-        document.getElementById('fileInput').click();
-    }
+    document.getElementById("fileInput").addEventListener("change", function () {
+        document.getElementById("ChangeProfilePicture_btn").click();
+    });
 
 </script>

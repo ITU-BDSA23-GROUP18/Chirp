@@ -153,7 +153,7 @@ public class AuthorRepository : IAuthorRepository
             Console.WriteLine("File size exceeds the limit of 10MB.");
             return;
         }
-
+        
         // Check file type (jpeg, png, gif)
         var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".gif" };
         var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
@@ -164,22 +164,36 @@ public class AuthorRepository : IAuthorRepository
             return;
         }
 
-        // generate unique URL for the file and save it in the database
+        // Generate unique name for the file
         var fileName = $"{Guid.NewGuid()}{fileExtension}";
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
-        var fileUrl = $"/images/{fileName}";
+    
+        // Build the relative file path within the wwwroot/images directory
+        var relativeFilePath = Path.Combine("images", fileName);
+    
+        // Combine with the absolute path of the wwwroot folder
+        var absoluteFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeFilePath);
         
-        // delete old profile picture if it exists
-        if (user.ProfilePictureUrl != "")
+        // Remove/delete old profile picture if it exists
+        if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
         {
-            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfilePictureUrl);
+            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.ProfilePictureUrl.TrimStart('/'));
+
             if (File.Exists(oldFilePath))
             {
                 File.Delete(oldFilePath);
             }
         }
         
-        user.ProfilePictureUrl = fileUrl;
+        // Save the image on the server with the new file name
+        await using (var stream = new FileStream(absoluteFilePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+        
+
+        // Set the user's profile picture URL
+        user.ProfilePictureUrl = $"/{relativeFilePath}";
+        
         await _authorDb.SaveChangesAsync();
     }
     
@@ -204,7 +218,7 @@ public class AuthorRepository : IAuthorRepository
         
         var ProfilePictureUrl = author.ProfilePictureUrl;
 
-        if (ProfilePictureUrl == "")
+        if (string.IsNullOrEmpty(ProfilePictureUrl))
         {
             return "images/defualt_user_pic.png";
         }

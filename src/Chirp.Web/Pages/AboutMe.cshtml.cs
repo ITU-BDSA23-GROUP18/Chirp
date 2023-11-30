@@ -11,8 +11,7 @@ public class AboutMeModel : PageModel
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     public string Email { get; private set; }
-    
-    public string? ProfilePicture { get; private set; }
+    public string? ProfilePictureUrl { get; private set; }
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
@@ -48,7 +47,7 @@ public class AboutMeModel : PageModel
         var nCheeps = yourCheeps.Count;
         Pagination = new PaginationModel(nCheeps, page);
 
-        ProfilePicture = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
         
         return Page();
     }
@@ -83,11 +82,12 @@ public class AboutMeModel : PageModel
         }
     }
     
-    public async Task<ActionResult> OnPostChangeProfilePicture(IFormFile file)
+    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
     {
+        Console.WriteLine(profilePicture.FileName);
         try
         {
-            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, file);
+            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
             return RedirectToPage();
         }
         catch 
