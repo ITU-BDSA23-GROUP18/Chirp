@@ -7,7 +7,7 @@ public class PublicModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
     private readonly IReactionRepository _reactionRepository;
-    public List<CheepDTO> Cheeps { get; private set; } = new();
+    private static List<CheepDTO> Cheeps { get; set; } = new();
     public PaginationModel? Pagination { get; private set; }
     
     public PublicModel(ICheepRepository cheepRepository, IReactionRepository reactionRepository)
@@ -25,7 +25,13 @@ public class PublicModel : PageModel
         Pagination = new PaginationModel(nCheeps, page);
         
         Cheeps = _cheepRepository.GetCheep(page).Result.ToList();
+        
         return Page();
+    }
+
+    public List<CheepDTO> GetCheeps()
+    {
+        return Cheeps;
     }
     
     public IActionResult OnPostCheep(string message)
@@ -34,21 +40,25 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
-    public IActionResult OnPostChangeReaction(string cheepId, string reactionType)
+    public void OnPostChangeReaction(string cheepId, string author, string reactionType)
     {
-        
-        Console.WriteLine("Hello:" + cheepId + " - " + Cheeps.Count);
-        Cheeps.ForEach(c => Console.WriteLine(c));
-        var cheep = Cheeps.First(c => c.CheepId == cheepId);
-        
-        var author = User.Identity?.Name!;
-        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return RedirectToPage("Public");
-        
-        if (cheep.Reactions.Any(r => r.Author == author))
+        author = User.Identity?.Name!;
+        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return;
+
+        if (Cheeps.Any(r => r.Author == author))
         {
-            _reactionRepository.RemoveReaction(cheep.CheepId, author);
+            Console.WriteLine($"REMOVING {reactionType} by {author}");
+
+            _reactionRepository.RemoveReaction(cheepId, author);
         }
-        _reactionRepository.CreateReaction(cheep.CheepId, author, reactionType);
-        return RedirectToPage("Public");
+        else
+        {
+            Console.WriteLine($"POSTING {reactionType} by {author}");
+            _reactionRepository.CreateReaction(cheepId, author, reactionType);
+        }
+        
+        // author = User.Identity?.Name!;
+        // if (author == "") return;
+        // _reactionRepository.CreateReaction(cheepId, author, reactionType);
     }
 }

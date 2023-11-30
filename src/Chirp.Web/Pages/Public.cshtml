@@ -41,10 +41,10 @@
 
     <h2> Public Timeline </h2>
 
-    @if (Model.Cheeps.Any())
+    @if (Model.GetCheeps().Any())
     {
         <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
+            @foreach (var cheep in Model.GetCheeps())
             {
                 <li>
                     <p>
@@ -69,18 +69,33 @@
                         }
                         else
                         {
+                            
                             <form method="post">
                                 <input type="hidden" name="cheepId" value=@cheep.CheepId>
                                 <input type="hidden" name="reactionType" value="Good">
-                                <button asp-page-handler="ChangeReaction">Good:</button>
+                                <button asp-page-handler="ChangeReaction">
+                                    Good:
+                                    @cheep.Reactions.Count(r => r.ReactionType == "Good")
+                                </button>
                             </form>
-                            @cheep.Reactions.Count(r => r.ReactionType == "Good")
                             <text>|</text>
-                            @* <button onclick=@{ () => Model.OnPostChangeReaction(cheep, "Good"); }>Ish:</button> *@
-                            @cheep.Reactions.Count(r => r.ReactionType == "Ish")
+                            <form method="post">
+                                <input type="hidden" name="cheepId" value=@cheep.CheepId>
+                                <input type="hidden" name="reactionType" value="Ish">
+                                <button asp-page-handler="ChangeReaction">
+                                    Ish:
+                                    @cheep.Reactions.Count(r => r.ReactionType == "Ish")
+                                </button>
+                            </form>
                             <text>|</text>
-                            @* <button onclick=@Model.ChangeReaction(cheep, "Good")>Bad:</button> *@
-                            @cheep.Reactions.Count(r => r.ReactionType == "Bad")
+                            <form method="post">
+                                <input type="hidden" name="cheepId" value=@cheep.CheepId>
+                                <input type="hidden" name="reactionType" value="Bad">
+                                <button asp-page-handler="ChangeReaction">
+                                    Bad:
+                                    @cheep.Reactions.Count(r => r.ReactionType == "Bad")
+                                </button>
+                            </form>
                         }
                     </p>
                 </li>
@@ -93,7 +108,28 @@
     }
     
     @{
-        await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+        //await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+    }
+    
+    @functions
+    {
+        private bool React(CheepDTO cheep, string reactionType)
+        {
+            var author = User.Identity?.Name!;
+            if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return false;
+            if (cheep.Reactions.Any(r => r.Author == author)) return false;
+            try
+            {
+                Model.OnPostChangeReaction(cheep.CheepId, author, reactionType);
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.GetType());
+                //throw;
+            }
+            return false;
+        }
     }
 </div>
 
