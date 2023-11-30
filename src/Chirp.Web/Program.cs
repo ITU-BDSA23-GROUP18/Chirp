@@ -35,7 +35,7 @@ public class Program
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
-        builder.WebHost.UseUrls("https://localhost:7022");
+        //builder.WebHost.UseUrls("https://localhost:7022");
         // add user on signin if they do not exists
         builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
         {
