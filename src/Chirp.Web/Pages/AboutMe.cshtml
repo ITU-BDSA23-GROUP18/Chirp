@@ -11,7 +11,9 @@
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet"  href="css/style.css" />
-<div onclick=toggle()>
+<div onclick=toggleEmail()>
+    <div onclick=toggleName()>
+    
     @if (User.Identity?.IsAuthenticated ?? false)
     {
 
@@ -19,22 +21,42 @@
         <h2> About me </h2>
 
         <h5>Username:</h5>
-        <p>@User.Identity.Name</p>
+        <form method="post" asp-page-handler="changename" class="changename">
+                <textarea onclick =toggleName() class="aboutme" id="userName" value="" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
+
+            <button id = "changename" hidden class="changer"> Change</button>
+        </form>
 
         <h5>Email:</h5>
         <form method="post" asp-page-handler="changeemail" class="changeemail">
-            <textarea onclick =toggle() class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+            <textarea onclick =toggleEmail() class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
             <button id = "changeemail" hidden class="changer"> Change</button>
         </form>
         <br/>
 
     <script>
-        let toggle = () => {
+        let toggleEmail = () => {
 
             let element = document.getElementById("changeemail");
             
 
         var obj = document.getElementById("email");
+
+        if (document.activeElement === obj) {
+            element.removeAttribute("hidden");
+            
+        // focus is currently in my changeemailtextarea
+        } else {
+            element.setAttribute("hidden", "hidden");
+        // focus is currently not in my textarea
+        }
+    }
+    let toggleName = () => {
+
+            let element = document.getElementById("changename");
+            
+
+        var obj = document.getElementById("userName");
 
         if (document.activeElement === obj) {
             element.removeAttribute("hidden");
@@ -82,9 +104,10 @@
                         <p>
                             <strong>
                                 <a href="/@cheep.Author">@cheep.Author</a>
+                                <br />
                             </strong>
+                            <br />
                             @cheep.Message
-                            <small>&mdash; @cheep.Timestamp</small>
                         </p>
                     </li>
                 }
@@ -106,4 +129,5 @@
 
         }
     }
+    </div>
 </div>

@@ -11,6 +11,7 @@ public class AboutMeModel : PageModel
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     public string ?Email { get; private set; }
+    public string ?DisplayName { get; private set; }
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
@@ -26,14 +27,22 @@ public class AboutMeModel : PageModel
         page = page <= 1 ? 1 : page;
         
         var Author = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
+        if(Author.FirstOrDefault().DisplayName != null)
+            DisplayName = Author.FirstOrDefault().DisplayName;
+        else
+        {
+            DisplayName = "Display Name...";
+        }
         if (Author.FirstOrDefault().Email != User.Identity?.Name!)
         {
             Email = Author.FirstOrDefault().Email;
         }
         else 
         {
+
             Email = "Email...";
         }
+
         
         foreach (var author in Author)
         {
@@ -59,6 +68,20 @@ public class AboutMeModel : PageModel
         catch 
         {
             Console.WriteLine("Email: " + newEmail + " is already taken");
+            return RedirectToPage();
+        }
+    }
+
+    public IActionResult onPostChangeName(string newName){
+        try
+        {
+            Console.WriteLine(newName);
+            _authorRepository.ChangeName(User.Identity?.Name!,newName );
+            return RedirectToPage();
+        }
+        catch 
+        {
+            Console.WriteLine("Name: " + newName + " is already taken");
             return RedirectToPage();
         }
     }

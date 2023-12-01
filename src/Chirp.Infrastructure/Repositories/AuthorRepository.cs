@@ -33,7 +33,7 @@ public class AuthorRepository : IAuthorRepository
 
         var author = new Author
         {
-            AuthorId = Guid.NewGuid(),
+            AuthorId = Guid.NewGuid(),  
             Name = name,
             Email = email,
             Cheeps = new List<Cheep>(),
@@ -123,6 +123,19 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"{"email"} is already used!");
         }
         author.Email = newEmail;
+        _authorDb.SaveChanges();
+    }
+
+    public void ChangeName(string name, string newName){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException();
+        }
+        if (_authorDb.Authors.Any(a => a.Name == newName)){
+            throw new ArgumentException($"{"name"} is already used!");
+        }
+        author.Name = newName;
         _authorDb.SaveChanges();
     }
 

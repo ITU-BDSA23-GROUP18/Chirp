@@ -51,9 +51,10 @@
                         <img src="https://avatars.githubusercontent.com/@cheep.Author" width="30" alt="Avatar" class="avatar">
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
+                            <small>&mdash; @cheep.Timestamp</small>
                         </strong>
+                        <br/>
                         @cheep.Message
-                        <small>&mdash; @cheep.Timestamp</small>
                         <br>
                         @{
                             await Html.RenderPartialAsync("Shared/CheepBox", new CheepBoxModel(cheep));

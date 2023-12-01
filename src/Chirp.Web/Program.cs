@@ -17,6 +17,8 @@ public class Program
  
         var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
         builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+       
+
  
         // Try to get remote connection string
         /*string? connectionString = builder.Configuration.GetConnectionString("AzureSQLDBConnectionstring");
@@ -26,6 +28,7 @@ public class Program
             if (pass == null)  {
                 Console.WriteLine("Local sql password not set and was not overriden by remote!");
             } else {
+                Console.WriteLine(pass);
                 connectionString += $"Password={pass};";
             }
         }
