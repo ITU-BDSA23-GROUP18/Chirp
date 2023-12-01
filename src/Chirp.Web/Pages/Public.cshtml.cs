@@ -12,10 +12,13 @@ public class PublicModel : PageModel
     public PaginationModel? Pagination { get; private set; }
     
     public string? ProfilePictureUrl { get; private set; }
+
+    public bool IsDarkMode { get; private set; }
     
     public PublicModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
+        IsDarkMode = false;
         _repository = repository;
         _authorRepository = authorRepository;
     }
@@ -31,6 +34,7 @@ public class PublicModel : PageModel
         if (User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+            IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
         }
         
         Cheeps = _repository.GetCheep(page).Result.ToList();

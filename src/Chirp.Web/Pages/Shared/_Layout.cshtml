@@ -4,7 +4,14 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+    @if (Model.IsDarkMode)
+    {
+        <link href="/css/darkmode.css" rel="stylesheet" type="text/css"/>
+    }
+    else
+    {
+        <link href="/css/style.css" rel="stylesheet" type="text/css"/>    
+    }
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>

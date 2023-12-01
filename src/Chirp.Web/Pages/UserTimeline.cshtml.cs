@@ -20,12 +20,15 @@ public class UserTimelineModel : PageModel
     
     public string? AuthorProfilePictureUrl { get; private set; }
     
+    public bool IsDarkMode { get; private set; }
+    
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         FollowingCount = 0;
+        IsDarkMode = false;
     }
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int page)
@@ -56,6 +59,7 @@ public class UserTimelineModel : PageModel
         if (User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+            IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
         }
 
         return Page();

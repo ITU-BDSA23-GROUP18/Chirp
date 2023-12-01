@@ -7,7 +7,7 @@
 }
 
 <!-- Add icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 @if(Model.IsDarkMode)
 {
     <link rel="stylesheet"  href="css/darkmode.css" />
@@ -19,8 +19,8 @@ else
 
 @if (User.Identity?.IsAuthenticated ?? false)
 {
-    <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
-        <span style="font-size: 20px; background-color: #fff; padding: 0 10px;">
+    <div class="aboutme_lined_header">
+        <span class="aboutme_header_txt">
             About Me
         </span>
     </div>
@@ -56,7 +56,7 @@ else
         }
         else
         {
-            <header>You have no followers</header>
+            <p>You have no followers</p>
             <br />
         }
         <br/>
@@ -82,7 +82,7 @@ else
         }
         else
         {
-            <header>You have send no cheeps</header>
+            <p>You have send no cheeps</p>
             <br />
             
         }
@@ -91,8 +91,8 @@ else
     </form>
     </div>
     <br><br>
-    <div style="width: 100%; height: 20px; border-bottom: 1px solid black; text-align: center">
-        <span style="font-size: 20px; background-color: #fff; padding: 0 10px;">
+    <div class="aboutme_lined_header">
+        <span class="aboutme_header_txt">
             Appearance
         </span>
     </div>
