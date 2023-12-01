@@ -25,13 +25,14 @@ public class AboutMeModel : PageModel
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
-        
+
         var Author = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
-        if(Author.FirstOrDefault().DisplayName != null)
+        if(Author.FirstOrDefault().DisplayName != User.Identity?.Name!){
             DisplayName = Author.FirstOrDefault().DisplayName;
+        }
         else
         {
-            DisplayName = "Display Name...";
+            DisplayName = Author.FirstOrDefault().Name;
         }
         if (Author.FirstOrDefault().Email != User.Identity?.Name!)
         {
@@ -57,7 +58,7 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
-     public IActionResult OnPostChangeEmail(string newEmail)
+     public async Task<IActionResult> OnPostChangeEmail(string newEmail)
     {
         try
         {
@@ -71,8 +72,7 @@ public class AboutMeModel : PageModel
             return RedirectToPage();
         }
     }
-
-    public IActionResult onPostChangeName(string newName){
+    public async Task<IActionResult> OnPostChangeName(string newName){
         try
         {
             Console.WriteLine(newName);

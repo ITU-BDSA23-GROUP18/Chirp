@@ -23,7 +23,7 @@ public class AuthorRepository : IAuthorRepository
             .Select(a => a.ToDTO())
             .ToListAsync();
 
-    public void CreateAuthor(string name, string email)
+    public void CreateAuthor(string name, string email, string displayName)
     {
         if (_authorDb.Authors.Any(a => a.Name == name))
             throw new ArgumentException($"Username {name} is already used");
@@ -31,10 +31,14 @@ public class AuthorRepository : IAuthorRepository
         if (_authorDb.Authors.Any(a => a.Email == email))
             throw new ArgumentException($"{"email"} is already used!");
 
+        if (_authorDb.Authors.Any(a => a.DisplayName == displayName))
+            throw new ArgumentException($"{"name"} is already used!");
+
         var author = new Author
         {
             AuthorId = Guid.NewGuid(),  
             Name = name,
+            DisplayName = displayName,
             Email = email,
             Cheeps = new List<Cheep>(),
             Following = new List<Author>(),
@@ -75,7 +79,7 @@ public class AuthorRepository : IAuthorRepository
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName);
             followerListDto.Add(authorDto);
         }
         return followerListDto;
@@ -94,7 +98,7 @@ public class AuthorRepository : IAuthorRepository
         var followingListDto = new List<AuthorDTO>();
         foreach (var author in followingList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName);
             followingListDto.Add(authorDto);
         }
         return followingListDto;
@@ -132,10 +136,10 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException();
         }
-        if (_authorDb.Authors.Any(a => a.Name == newName)){
+        if (_authorDb.Authors.Any(a => a.DisplayName == newName)){
             throw new ArgumentException($"{"name"} is already used!");
         }
-        author.Name = newName;
+        author.DisplayName = newName;
         _authorDb.SaveChanges();
     }
 

@@ -52,7 +52,7 @@ public class Program
                 var author = await authorRepository.GetAuthorByName(authorName);
                 if (author == null || !author.Any())
                 {
-                    authorRepository.CreateAuthor(authorName, authorName);
+                    authorRepository.CreateAuthor(authorName, authorName, authorName);
                 }
             };
         });

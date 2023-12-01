@@ -11,8 +11,8 @@
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet"  href="css/style.css" />
-<div onclick=toggleEmail()>
-    <div onclick=toggleName()>
+<div onclick=toggleName()>
+    <div onclick=toggleEmail()>
     
     @if (User.Identity?.IsAuthenticated ?? false)
     {
@@ -21,16 +21,12 @@
         <h2> About me </h2>
 
         <h5>Username:</h5>
-        <form method="post" asp-page-handler="changename" class="changename">
-                <textarea onclick =toggleName() class="aboutme" id="userName" value="" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
-
-            <button id = "changename" hidden class="changer"> Change</button>
-        </form>
-
-        <h5>Email:</h5>
-        <form method="post" asp-page-handler="changeemail" class="changeemail">
-            <textarea onclick =toggleEmail() class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
-            <button id = "changeemail" hidden class="changer"> Change</button>
+        <form method="post">
+            <textarea onclick =toggleName() class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
+            <button id = "changename" hidden class="changer" asp-page-handler="ChangeName"> Change</button>
+            <h5>Email:</h5>
+            <textarea onclick =toggleEmail() class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+            <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
         </form>
         <br/>
 
@@ -45,7 +41,6 @@
         if (document.activeElement === obj) {
             element.removeAttribute("hidden");
             
-        // focus is currently in my changeemailtextarea
         } else {
             element.setAttribute("hidden", "hidden");
         // focus is currently not in my textarea
@@ -56,12 +51,11 @@
             let element = document.getElementById("changename");
             
 
-        var obj = document.getElementById("userName");
+        var obj = document.getElementById("username");
 
         if (document.activeElement === obj) {
             element.removeAttribute("hidden");
             
-        // focus is currently in my textarea
         } else {
             element.setAttribute("hidden", "hidden");
         // focus is currently not in my textarea
@@ -71,8 +65,6 @@
 
         <h4>Your Followers</h4>
         if (Model.Followers.Any()){
-
-
             <ul id="followerlist" class="followers">
                 @foreach (var follower in Model.Followers)
                 {
@@ -92,42 +84,9 @@
             <header>You have no followers</header>
             <br />
         }
-
-        <h4>Your Cheeps</h4>
-        
-        if (Model.yourCheeps.Any())
-        {
-            <ul id="messagelist" class="cheeps">
-                @foreach (var cheep in Model.yourCheeps)
-                {
-                    <li>
-                        <p>
-                            <strong>
-                                <a href="/@cheep.Author">@cheep.Author</a>
-                                <br />
-                            </strong>
-                            <br />
-                            @cheep.Message
-                        </p>
-                    </li>
-                }
-            </ul>
-            await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-        }
-        else
-        {
-            <header>You have send no cheeps</header>
-            <br />
-        }
-        <br/>
-        <br/>
+    }
         <form method="post">
             <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete" > Delete your account</button>
         </form>
-        
-        {
-
-        }
-    }
     </div>
 </div>

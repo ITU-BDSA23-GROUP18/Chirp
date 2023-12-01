@@ -11,7 +11,7 @@ public interface IAuthorRepository
     public Task<IEnumerable<AuthorDTO>> GetFollowing(string pageUserName);
 
     // Post methods
-    public void CreateAuthor(string name, string email);
+    public void CreateAuthor(string name, string email, string displayName);
 
     public void FollowAuthor(string followName, string currentUserName);
 
