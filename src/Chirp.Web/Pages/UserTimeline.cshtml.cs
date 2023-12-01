@@ -56,7 +56,7 @@ public class UserTimelineModel : PageModel
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
         
         AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
-        if (User.Identity.IsAuthenticated)
+        if(User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);

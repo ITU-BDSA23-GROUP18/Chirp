@@ -32,8 +32,10 @@ else
 
         <h5>Email:</h5>
         <form method="post" asp-page-handler="changeemail" class="changeemail">
-            <textarea class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
-            <button> Change</button>
+            <div style="display: inline-block">
+                <textarea class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+                <button> Change</button>
+            </div>
         </form>
         <br/>
 
