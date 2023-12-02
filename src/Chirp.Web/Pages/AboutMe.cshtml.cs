@@ -50,10 +50,15 @@ public class AboutMeModel : PageModel
             Email = "Email...";
         }
 
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
         
         foreach (var author in Authors)
         {
-            var Followers = _authorRepository.GetFollowing(author.Name).Result.ToList();
+            var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
             var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
             yourCheeps.AddRange(cheeps);
             this.Followers.AddRange(Followers);

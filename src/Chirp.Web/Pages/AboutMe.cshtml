@@ -17,7 +17,7 @@
     @if (User.Identity?.IsAuthenticated ?? false)
     {
 
-        <img src="https://avatars.githubusercontent.com/@User.Identity.Name" alt="Avatar" class="avatar" width = "200" >
+        <img src=@Model.ProfilePictureUrl alt="Avatar" class="avatar" width = "150" >
         <h2> About me </h2>
         
         <h5>Username:</h5>
@@ -70,7 +70,7 @@
                 {
                     <li>
                         <p>
-                            <img src="https://avatars.githubusercontent.com/@follower.Name" width="30" alt="Avatar" class="avatar">
+                            <img src=@follower.ProfilePictureUrl width="30" alt="Avatar" class="avatar">
                             <strong>
                                 <a href="/@follower.Name">@follower.Name</a>
                             </strong>
