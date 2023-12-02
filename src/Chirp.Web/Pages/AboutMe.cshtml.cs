@@ -124,4 +124,16 @@ public class AboutMeModel : PageModel
             return RedirectToPage();
         }
     }
+    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
+    {
+        try
+        {
+            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
+            return RedirectToPage();
+        }
+        catch 
+        {
+            return RedirectToPage();
+        }
+    }
 }
