@@ -3,16 +3,29 @@
 public class ReactionRepository : IReactionRepository
 {
     private readonly ChirpContext _reactionDb;
-
+    /// <summary>
+    /// Constructor for the ReactionRepository class
+    /// If seedDatabase is true, the database will be seeded with data
+    /// </summary>
+    /// <param name="reactionDb"></param>
     public ReactionRepository(ChirpContext reactionDb)
     {
         _reactionDb = reactionDb;
         _reactionDb.InitializeDatabase(true);
     }
-
+    /// <summary>
+    /// Gets all the reactions from the database
+    /// </summary>
+    /// <returns></returns>
     public IEnumerable<string> GetAllReactionTypes() =>
         Enum.GetValues<ReactionType>().Select(r => r.ToString());
-
+    /// <summary>
+    /// Creates a reaction with the given cheepId, authorName and reactionString
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="authorName"></param>
+    /// <param name="reactionString"></param>
+    /// <exception cref="ArgumentException"></exception>
     public void CreateReaction(string cheepId, string authorName, string reactionString)
     {
         Cheep? cheep = _reactionDb.Cheeps.FirstOrDefault(c => c.CheepId == new Guid(cheepId));
@@ -38,7 +51,11 @@ public class ReactionRepository : IReactionRepository
 
         _reactionDb.SaveChanges();
     }
-
+    /// <summary>
+    /// Removes the reaction with the given cheepId and authorId
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="authorId"></param>
     public void RemoveReaction(string cheepId, string authorId)
     {
         var reaction = _reactionDb.Reactions.FirstOrDefault(r =>

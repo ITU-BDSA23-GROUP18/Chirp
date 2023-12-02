@@ -14,16 +14,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "7.x"
-          include-prerelease: true
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
 
       - name: Build with dotnet
-        run: dotnet build src/Chirp.Web/ --configuration Release
+        run: dotnet build --no-restore
 
       - name: Ensure browsers are installed
         run: pwsh test/Chirp.Web.Ui.Tests/bin/Debug/net8.0/playwright.ps1 install --with-deps
