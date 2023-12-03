@@ -288,7 +288,7 @@ public class AuthorRepository : IAuthorRepository
         var author = GetAuthorByName(name).Result.FirstOrDefault();
         if (author == null)
         {
-            //throw new ArgumentException($"Author {name} does not exist");
+            throw new ArgumentException($"Author {name} does not exist");
         }
         
         var profilePictureUrl = author.ProfilePictureUrl;
