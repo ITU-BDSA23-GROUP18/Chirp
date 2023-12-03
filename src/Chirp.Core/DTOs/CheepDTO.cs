@@ -8,6 +8,7 @@ public record CheepDTO
     public string Message { get; private set; }
     public string Timestamp { get; private set; }
     public string DisplayName { get; private set; }
+    public string ProfilePictureUrl { get; private set; }
     public List<ReactionDTO> Reactions { get; private set; }
     /// <summary>
     /// Constructor for the CheepDTO,
@@ -18,7 +19,7 @@ public record CheepDTO
     /// <param name="timestamp"></param>
     /// <param name="reactions"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public CheepDTO(string author, string message, string timestamp, List<ReactionDTO> reactions, string displayName)
+    public CheepDTO(string author, string message, string timestamp, List<ReactionDTO> reactions, string displayName, string profilePictureUrl)
     {
         if (author == null || author.Equals("")) throw new ArgumentNullException(nameof(author), "Author is null or empty");
         if (message == null || message.Equals("")) throw new ArgumentNullException(nameof(message), "Message is null or empty");
@@ -28,5 +29,6 @@ public record CheepDTO
         Timestamp = timestamp;
         Reactions = reactions;
         DisplayName = displayName;
+        ProfilePictureUrl = profilePictureUrl;
     }
 }
