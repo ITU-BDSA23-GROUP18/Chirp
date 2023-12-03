@@ -297,6 +297,5 @@ public class AuthorRepository : IAuthorRepository
             return "images/defualt_user_pic.png";
         }
         return profilePictureUrl;
-    }
-    
+    }  
 }
