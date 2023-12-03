@@ -46,7 +46,6 @@ public class AboutMeModel : PageModel
         }
         else 
         {
-
             Email = "Email...";
         }
 

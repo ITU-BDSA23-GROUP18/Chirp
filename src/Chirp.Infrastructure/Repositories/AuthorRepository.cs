@@ -264,7 +264,6 @@ public class AuthorRepository : IAuthorRepository
         {
             await file.CopyToAsync(stream);
         }
-        
 
         // Set the user's profile picture URL
         user.ProfilePictureUrl = $"/{relativeFilePath}";

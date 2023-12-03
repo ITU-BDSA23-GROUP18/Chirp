@@ -11,8 +11,6 @@ public class TestAPI : IClassFixture<CusomWebApplicationFactory<Program>>
         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
     }
 
-    
-
     [Fact]
     public async void CanSeePublicTimeline()
     {
