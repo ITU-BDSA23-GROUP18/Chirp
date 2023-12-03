@@ -23,7 +23,14 @@
                         <p>
                             <img src="https://avatars.githubusercontent.com/@cheep.Author" alt="Avatar" class="avatar" width="30" >
                             <strong>
+                            @if (cheep.DisplayName != "")
+                            {
+                                <a href="/@cheep.Author">@cheep.DisplayName</a>
+                            }
+                            else
+                            {
                                 <a href="/@cheep.Author">@cheep.Author</a>
+                            }
                                 <small>&mdash; @cheep.Timestamp</small>
                             </strong>
                             <br />
