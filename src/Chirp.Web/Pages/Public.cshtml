@@ -6,29 +6,6 @@
     Layout = "Shared/_Layout";
 }
 
-<!-- Add icon library -->
-@if (Model.IsDarkMode)
-{ 
-    <link rel="stylesheet"  href="css/darkmode.css" />
-}
-else
-{
-    <link rel="stylesheet"  href="css/style.css" />
-}
-
-@if (Model.FontSizeScale == 1.5)
-{
-    <link rel="stylesheet"  href="css/fontSize1_5x.css" />
-}
-else if (Model.FontSizeScale == 2)
-{
-    <link rel="stylesheet"  href="css/fontSize2x.css" />
-}
-else
-{
-    <link rel="stylesheet"  href="css/fontSize1x.css" />
-}
-
 <div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
