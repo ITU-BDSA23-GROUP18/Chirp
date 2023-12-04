@@ -293,6 +293,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
     }
     
+
     public async Task<bool> IsDarkMode(string name)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -303,7 +304,7 @@ public class AuthorRepository : IAuthorRepository
         return author.IsDarkMode;
     }
     
-    public async Task SetFontSizeScale(string name, int fontSizeScale)
+    public async Task SetFontSizeScale(string name, float fontSizeScale)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
@@ -314,7 +315,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
     }
     
-    public async Task<int> GetFontSizeScale(string name)
+    public async Task<float> GetFontSizeScale(string name)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)

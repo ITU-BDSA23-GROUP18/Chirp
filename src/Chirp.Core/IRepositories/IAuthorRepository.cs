@@ -68,8 +68,8 @@ public interface IAuthorRepository
     
     /// <summary>
     /// The 4 methods below are for individual user/"Author" preferences:
-    public Task<int> GetFontSizeScale(string name);
-    public Task SetFontSizeScale(string name, int fontSizeScale);
+    public Task<float> GetFontSizeScale(string name);
+    public Task SetFontSizeScale(string name, float fontSizeScale);
     public Task<bool> IsDarkMode(string name);
     public Task SetDarkMode(string name, bool isDarkMode);
 }

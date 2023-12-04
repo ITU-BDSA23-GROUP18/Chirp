@@ -14,5 +14,5 @@ public class Author
     
     // for individual user/"Author" preferences:
     public bool IsDarkMode { get; set; }
-    public int FontSizeScale { get; set; }
+    public float FontSizeScale { get; set; }
 }

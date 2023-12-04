@@ -16,6 +16,19 @@ else
     <link rel="stylesheet" href="css/style.css" />
 }
 
+@if (Model.FontSizeScale == 1.5)
+{
+    <link rel="stylesheet"  href="css/fontSize1_5x.css" />
+}
+else if (Model.FontSizeScale == 2)
+{
+    <link rel="stylesheet"  href="css/fontSize2x.css" />
+}
+else
+{
+    <link rel="stylesheet"  href="css/fontSize1x.css" />
+}
+
 <div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
@@ -42,7 +55,7 @@ else
         {
             <em>You are not following anybody!.</em>
         }
-        
+        <br/>
         {
                 await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
         }

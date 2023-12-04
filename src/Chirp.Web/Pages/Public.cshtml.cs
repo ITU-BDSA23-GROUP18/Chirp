@@ -15,6 +15,8 @@ public class PublicModel : PageModel
 
     public bool IsDarkMode { get; private set; }
     
+    public float FontSizeScale { get; private set; }
+    
     public PublicModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -35,6 +37,7 @@ public class PublicModel : PageModel
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
+            FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
         }
         
         Cheeps = _repository.GetCheep(page).Result.ToList();

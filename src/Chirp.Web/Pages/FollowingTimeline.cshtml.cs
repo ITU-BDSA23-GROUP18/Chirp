@@ -13,6 +13,8 @@ public class FollowingTimelineModel : PageModel
     public string? ProfilePictureUrl { get; private set; }
     public bool IsDarkMode { get; private set; }
     
+    public float FontSizeScale { get; private set; }
+    
     public FollowingTimelineModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -37,6 +39,7 @@ public class FollowingTimelineModel : PageModel
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
+            FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
         }
         
         var nCheeps = Cheeps.Count;

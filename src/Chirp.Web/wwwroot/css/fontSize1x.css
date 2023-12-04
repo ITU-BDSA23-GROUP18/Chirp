@@ -1,0 +1,75 @@
+body {
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"] {
+    font-size: 14px;
+}
+
+input[type="submit"] {
+    font-size: 14px;
+}
+
+div.page h1 {
+    font-size: 80px;
+}
+
+div.page div.navigation {
+    font-size: 12px;
+}
+
+div.page  h4{
+    font-size: 1.4em;
+}
+
+div.page h5 {
+    font-size: 1.1em;
+}
+
+div.page div.footer {
+    font-size: 12px;
+}
+
+div.page div.followstatus {
+    font-size: 13px;
+}
+
+div.page ul.cheeps li small {
+    font-size: 0.9em;
+}
+
+div.page div.cheepbox h3 {
+    font-size: 1em;
+}
+
+div.message {
+    font-size: 13px;
+}
+
+ul.message li {
+    font-size: 13px;
+}
+
+div.error {
+    font-size: 13px;
+}
+
+.char-count {
+    font-size: 12px;
+}
+
+/* Style for the "change" text */
+.change-text {
+    font-size: 14px; /* Adjust font size as needed */
+}
+.aboutme_header_txt{
+    font-size: 20px;
+}
+
+#scale{
+    font-size: 14px;
+    width: 3.5rem;
+    height: 1.5rem;
+}
+

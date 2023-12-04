@@ -1,9 +1,9 @@
 ﻿@page "/FollowView/{author}/{followType}"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model FollowingModel
+@model FollowViewModel
 
 @{
-    ViewData["Title"] = "Chirp! - Following";
+    ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     var author = HttpContext.GetRouteValue("author")!.ToString();
     var followType = HttpContext.GetRouteValue("followType")!.ToString();
@@ -18,6 +18,20 @@ else
 {
     <link rel="stylesheet" href="css/style.css" />
 }
+
+@if (Model.FontSizeScale == 1.5)
+{
+    <link rel="stylesheet"  href="css/fontSize1_5x.css" />
+}
+else if (Model.FontSizeScale == 2)
+{
+    <link rel="stylesheet"  href="css/fontSize2x.css" />
+}
+else
+{
+    <link rel="stylesheet"  href="css/fontSize1x.css" />
+}
+
 <div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
@@ -40,7 +54,7 @@ else
             }
             else
             {
-                <em>You are not following anybody!.</em>
+                <em>You are not following anybody!</em>
             }
         }
         else
@@ -62,9 +76,10 @@ else
             }
             else
             {
-                <em>No followers here :(.</em>
+                <em>No followers here :(</em>
             }
         }
+        <br/>
         {
                 await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
         }

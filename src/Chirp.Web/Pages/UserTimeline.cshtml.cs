@@ -22,6 +22,8 @@ public class UserTimelineModel : PageModel
     
     public bool IsDarkMode { get; private set; }
     
+    public float FontSizeScale { get; private set; }
+    
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -60,6 +62,7 @@ public class UserTimelineModel : PageModel
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
+            FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
         }
 
         return Page();

@@ -12,6 +12,18 @@
     {
         <link href="/css/style.css" rel="stylesheet" type="text/css"/>    
     }
+    @if (Model.FontSizeScale == 1.5)
+    {
+        <link rel="stylesheet"  href="css/fontSize1_5x.css" />
+    }
+    else if (Model.FontSizeScale == 2)
+    {
+        <link rel="stylesheet"  href="css/fontSize2x.css" />
+    }
+    else
+    {
+        <link rel="stylesheet"  href="css/fontSize1x.css" />
+    }
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>

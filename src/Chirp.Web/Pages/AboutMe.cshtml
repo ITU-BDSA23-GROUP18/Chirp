@@ -7,7 +7,6 @@
 }
 
 <!-- Add icon library -->
-
 @if(Model.IsDarkMode)
 {
     <link rel="stylesheet"  href="css/darkmode.css" />
@@ -15,6 +14,19 @@
 else
 {
     <link rel="stylesheet"  href="css/style.css" />
+}
+
+@if (Model.FontSizeScale == 1.5)
+{
+    <link rel="stylesheet"  href="css/fontSize1_5x.css" />
+}
+else if (Model.FontSizeScale == 2)
+{
+    <link rel="stylesheet"  href="css/fontSize2x.css" />
+}
+else
+{
+    <link rel="stylesheet"  href="css/fontSize1x.css" />
 }
 
 @if (User.Identity?.IsAuthenticated ?? false)
@@ -80,6 +92,7 @@ else
                     </li>
                 }
             </ul>
+            <br/>
             await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
         }
         else
@@ -113,27 +126,70 @@ else
             }
         </li>
         
-            <li class="settings_li">
-                <label class="switch">
-                    <form method="post">
-                        @if(Model.IsDarkMode)
-                        {
-                            <input type="checkbox" name="darkmode" checked onclick="clickDarkMode()">
-                        }else
-                        {
-                            <input type="checkbox" name="darkmode" onclick="clickDarkMode()">
-                        }
-                        <span class="slider round"></span>
-                        <button id="darkmode_btn" style="display: none" asp-page-handler="SetDarkMode"></button>
-                    </form>
-                </label>
-            </li>
+        <li class="settings_li">
+            <label class="switch">
+                <form method="post">
+                    @if(Model.IsDarkMode)
+                    {
+                        <input type="checkbox" name="darkmode" checked onclick="clickDarkMode()">
+                    }else
+                    {
+                        <input type="checkbox" name="darkmode" onclick="clickDarkMode()">
+                    }
+                    <span class="slider round"></span>
+                    <button id="darkmode_btn" style="display: none" asp-page-handler="SetDarkMode"></button>
+                </form>
+            </label>
+        </li>
     </ul>
-    }
+    <br/>
+    <ul class="settings_ul">
+        <li class="settings_li">
+            <h5>Font size</h5>
+            <i>Scale font size</i>
+        </li>
+        
+        <li class="settings_li">
+                <form method="post" asp-page-handler="SetFontSizeScale" class="SetFontSizeScale">
+                    <select id="scale" name="scale" onchange="clickFontSize()">
+                        @if (Model.FontSizeScale == 1)
+                        {
+                            <option value="1" selected>1x</option>
+                        }
+                        else
+                        {
+                            <option value="1">1x</option>
+                        }
+                        @if(Model.FontSizeScale == 1.5)
+                        {
+                            <option value="1.5" selected>1.5x</option>
+                        }
+                        else
+                        {
+                            <option value="1.5">1.5x</option>
+                        }
+                        @if(Model.FontSizeScale == 2)
+                        {
+                            <option value="2" selected>2x</option>
+                        }
+                        else
+                        {
+                            <option value="2">2x</option>
+                        }
+                    </select>
+                    <input id="submit_btn" type="submit" style="display: none"/>
+                </form>
+        </li>
+    </ul>
+}
 
 <script>
     function clickDarkMode() {
         document.getElementById("darkmode_btn").click();
+    }
+    
+    function clickFontSize() {
+        document.getElementById("submit_btn").click();
     }
 </script>
 

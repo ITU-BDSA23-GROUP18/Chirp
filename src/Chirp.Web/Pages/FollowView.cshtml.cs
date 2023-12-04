@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
-public class FollowingModel : PageModel
+public class FollowViewModel : PageModel
 {
     private readonly IAuthorRepository _authorRepository;
     
@@ -15,8 +15,9 @@ public class FollowingModel : PageModel
     public string? ProfilePictureUrl { get; private set; }
     
     public bool IsDarkMode { get; private set; }
+    public float FontSizeScale { get; private set; }
     
-    public FollowingModel(ICheepRepository repository, IAuthorRepository authorRepository)
+    public FollowViewModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         FollowersList = new List<AuthorDTO>();
         FollowingList = new List<AuthorDTO>();
@@ -29,10 +30,11 @@ public class FollowingModel : PageModel
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity!.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
+            FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
         }
         
         var myFollowing = await _authorRepository.GetFollowing(author);
