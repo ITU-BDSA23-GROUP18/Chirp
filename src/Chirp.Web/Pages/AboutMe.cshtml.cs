@@ -34,7 +34,7 @@ public class AboutMeModel : PageModel
         var Authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
         var Author = Authors.FirstOrDefault();
         if (Author == null || User.Identity == null) {
-            return RedirectToPage("/");
+            return RedirectToPage("public");
         }
 
         if(Author.DisplayName != User.Identity?.Name!){
