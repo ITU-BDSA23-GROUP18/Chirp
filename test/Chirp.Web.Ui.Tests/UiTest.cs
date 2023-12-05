@@ -105,7 +105,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
             await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
         }
         //go to the user timeline
-        await Page.GetByText("TestUser's page").ClickAsync();
+        await Page.GotoAsync(_serverAddress + "TestUser");
         for (int i = 1; i < ListOfCheeps.Count; i++)
         {
             await Page.GetByText(new Regex(ListOfCheeps[i], RegexOptions.IgnoreCase)).ClickAsync();
