@@ -568,5 +568,9 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
+div.page h1 {
+    font-size: 80px;
+}
+
 
 

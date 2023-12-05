@@ -3,26 +3,28 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @if (Model.IsDarkMode)
     {
-        <link href="/css/darkmode.css" rel="stylesheet" type="text/css"/>
+        <link href="~/css/darkmode.css" rel="stylesheet" type="text/css"/>
     }
     else
     {
-        <link href="/css/style.css" rel="stylesheet" type="text/css"/>    
+        <link href="~/css/style.css" rel="stylesheet" type="text/css"/>    
     }
-    @if (Model.FontSizeScale == 1.5)
+    
+    @if (Model.FontSizeScale == 2)
     {
-        <link href="~/css/fontSize1_5x.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="~/css/fontSize2x.css" />
     }
-    else if (Model.FontSizeScale == 2)
+    else if (Model.FontSizeScale == 1.5)
     {
-        <link href="~/css/fontSize2x.css" rel="stylesheet" type="text/css/">
+        <link rel="stylesheet" type="text/css/" href="~/css/fontSize1_5x.css" >
     }
     else
     {
-        <link href="~/css/fontSize1x.css" rel="stylesheet" type="text/css/">
+        <link rel="stylesheet" type="text/css/" href="~/css/fontSize1x.css">
     }
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>

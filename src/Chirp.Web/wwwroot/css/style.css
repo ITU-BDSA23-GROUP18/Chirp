@@ -550,3 +550,7 @@ input:checked + .slider:before {
     font-weight: bold;
     cursor: pointer;
 }
+
+div.page h1 {
+    font-size: 80px;
+}

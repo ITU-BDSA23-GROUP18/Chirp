@@ -11,10 +11,6 @@ input[type="submit"] {
     font-size: 21px;
 }
 
-div.page h1 {
-    font-size: 80px;
-}
-
 div.page div.navigation {
     font-size: 18px;
 }
@@ -63,6 +59,7 @@ div.error {
 .change-text {
     font-size: 21px; /* Adjust font size as needed */
 }
+
 .aboutme_header_txt{
     font-size: 30px;
 }
