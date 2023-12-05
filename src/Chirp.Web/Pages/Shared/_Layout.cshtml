@@ -14,18 +14,23 @@
         <link href="~/css/style.css" rel="stylesheet" type="text/css"/>    
     }
     
+    @{
+        var cssLink = "";
+    }
+    
     @if (Model.FontSizeScale == 2)
     {
-        <link rel="stylesheet" type="text/css" href="~/css/fontSize2x.css" />
+        cssLink = "/css/fontSize2x.css";
     }
     else if (Model.FontSizeScale == 1.5)
     {
-        <link rel="stylesheet" type="text/css/" href="~/css/fontSize1_5x.css" >
+        cssLink = "/css/fontSize1_5x.css";
     }
     else
     {
-        <link rel="stylesheet" type="text/css/" href="~/css/fontSize1x.css">
+        cssLink = "/css/fontSize1x.css";
     }
+    <link href="@cssLink" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>

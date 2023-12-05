@@ -10,7 +10,6 @@
 {
     <div onclick=toggleName()>
         <div onclick=toggleEmail()>
-            <img src=@Model.ProfilePictureUrl alt="Avatar" class="avatar" width = "145" >
             <div class="aboutme_lined_header">
                 <span class="aboutme_header_txt">
                     About Me
@@ -20,13 +19,13 @@
             <br>
             <div style="margin-left: 1.5rem">
                 <h5>Username:</h5>
-                <p>@User.Identity.Name</p>
-
-                <h5>Email:</h5>
                 <form method="post">
                     <textarea onclick =toggleName() class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
                     <button id = "changename" hidden class="changer" asp-page-handler="ChangeName"> Change</button>
-                    <h5>Email:</h5>
+                </form>
+                <br/>
+                <h5>Email:</h5>
+                <form method="post">
                     <textarea onclick =toggleEmail() class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
                     <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
                 </form>
