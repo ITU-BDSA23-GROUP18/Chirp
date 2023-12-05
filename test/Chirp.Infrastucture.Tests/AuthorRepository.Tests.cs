@@ -54,7 +54,7 @@ public class AuthorRepositoryTests
     public async void TestCreateCheep()
     {
         // Act
-        _repository.CreateAuthor("John Doe", "John@doe.com");
+        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
 
         var authors = await _repository.GetAuthorByName("John Doe");
         var author = authors.FirstOrDefault();
@@ -65,8 +65,8 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestFollowAuthor()
     {
-        _repository.CreateAuthor("John Doe", "John@doe.com");
-        _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
+        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
         _repository.FollowAuthor("Jane Doe", "John Doe");
         var followerList = await _repository.GetFollowers("Jane Doe");
         var follower = followerList.First();
@@ -75,10 +75,10 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestGetFollowers()
     {
-        _repository.CreateAuthor("John Doe", "John@doe.com");
-        _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
-        _repository.CreateAuthor("Jack Doe", "Jack@doe.com");
-        _repository.CreateAuthor("jill Doe", "jill@doe.com");
+        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
+        _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
+        _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
         _repository.FollowAuthor("John Doe", "Jane Doe");
         _repository.FollowAuthor("John Doe", "Jack Doe");
         _repository.FollowAuthor("John Doe", "jill Doe");
@@ -93,10 +93,10 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestGetFollowing()
     {
-        _repository.CreateAuthor("John Doe", "John@doe.com");
-        _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
-        _repository.CreateAuthor("Jack Doe", "Jack@doe.com");
-        _repository.CreateAuthor("jill Doe", "jill@doe.com");
+        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
+        _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
+        _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
         _repository.FollowAuthor("Jane Doe", "John Doe");
         _repository.FollowAuthor("Jack Doe", "John Doe");
         _repository.FollowAuthor("jill Doe", "John Doe");

@@ -10,7 +10,8 @@ public class AboutMeModel : PageModel
     public List<CheepDTO> yourCheeps { get; private set; }
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
-    public string Email { get; private set; }
+    public string ?Email { get; private set; }
+    public string ?DisplayName { get; private set; }   
     public string? ProfilePictureUrl { get; private set; }
     
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
@@ -29,16 +30,29 @@ public class AboutMeModel : PageModel
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
-        
+
         var Authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
         var Author = Authors.FirstOrDefault();
-        if (Author != null && Author.Email != User.Identity?.Name!)
+        if(Author.DisplayName != User.Identity?.Name!){
+            DisplayName = Author.DisplayName;
+        }
+        else
+        {
+            DisplayName = Author.Name;
+        }
+        if (Author.Email != User.Identity?.Name!)
         {
             Email = Author.Email;
         }
         else 
         {
             Email = "Email...";
+        }
+
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
         }
         
         foreach (var author in Authors)
@@ -71,7 +85,20 @@ public class AboutMeModel : PageModel
         }
         catch 
         {
-            Console.WriteLine(newEmail + " is already taken");
+            Console.WriteLine("Email: " + newEmail + " is already taken");
+            return RedirectToPage();
+        }
+    }
+    public async Task<IActionResult> OnPostChangeName(string newName){
+        try
+        {
+            Console.WriteLine(newName);
+            _authorRepository.ChangeName(User.Identity?.Name!,newName );
+            return RedirectToPage();
+        }
+        catch 
+        {
+            Console.WriteLine("Name: " + newName + " is already taken");
             return RedirectToPage();
         }
     }
@@ -93,6 +120,18 @@ public class AboutMeModel : PageModel
         {
             Console.WriteLine("the author name is:"+authorName);
             Console.WriteLine("Author"+ authorName+"does not exist");
+            return RedirectToPage();
+        }
+    }
+    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
+    {
+        try
+        {
+            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
+            return RedirectToPage();
+        }
+        catch 
+        {
             return RedirectToPage();
         }
     }

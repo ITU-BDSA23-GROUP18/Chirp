@@ -1,3 +1,4 @@
+﻿using System.Reflection;
 ﻿using System.Net.Mime;
 
 namespace Chirp.Infrastructure.Types;
@@ -5,6 +6,7 @@ namespace Chirp.Infrastructure.Types;
 public class Author
 {
     public Guid AuthorId { get; set; } = Guid.NewGuid();
+    public string DisplayName { get; set; } = "";
     public required string Name { get; set; }
     public string Email { get; set; } = "";
     public List<Cheep> Cheeps { get; set; } = new List<Cheep>();
