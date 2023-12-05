@@ -15,7 +15,7 @@ public record AuthorDTO
     /// <param name="name"></param>
     /// <param name="email"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public AuthorDTO(string name, string email, string? profilePictureUrl, string displayName)
+    public AuthorDTO(string name, string email, string displayName, string? profilePictureUrl)
     {
         if (name == null || name.Equals("")) throw new ArgumentNullException(nameof(name), "name is null or empty");
         DisplayName = displayName;

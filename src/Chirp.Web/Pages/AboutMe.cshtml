@@ -86,7 +86,7 @@
         }
     }
         <form method="post">
-            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete" > Delete your account</button>
+            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity?.Name class="delete" > Delete your account</button>
         </form>
     </div>
 </div>
