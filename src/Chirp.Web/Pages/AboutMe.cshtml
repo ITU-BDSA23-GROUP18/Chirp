@@ -15,8 +15,7 @@
                     About Me
                 </span>
             </div>
-        
-            <br>
+            <br><br>
             <div style="margin-left: 1.5rem">
                 <h5>Username:</h5>
                 <form method="post">
@@ -80,21 +79,17 @@
                     <br/>
 
                 }
-                <form method="post">
-                    <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete"> Delete your account</button>
-                </form>
             </div>
         </div>
     </div>    
             
-    <br><br>
+    <br/>
     <div class="aboutme_lined_header">
         <span class="aboutme_header_txt">
             Appearance
         </span>
     </div>
-    <br>
-    
+    <br><br>
     <ul class="settings_ul">
         <li class="settings_li">
             <h5>Dark mode</h5>
@@ -132,37 +127,56 @@
         </li>
         
         <li class="settings_li">
-                <form method="post" asp-page-handler="SetFontSizeScale" class="SetFontSizeScale">
-                    <select id="scale" name="scale" onchange="clickFontSize()">
-                        @if (Model.FontSizeScale == 1)
-                        {
-                            <option value="1" selected>1x</option>
-                        }
-                        else
-                        {
-                            <option value="1">1x</option>
-                        }
-                        @if(Model.FontSizeScale == 1.5)
-                        {
-                            <option value="1.5" selected>1.5x</option>
-                        }
-                        else
-                        {
-                            <option value="1.5">1.5x</option>
-                        }
-                        @if(Model.FontSizeScale == 2)
-                        {
-                            <option value="2" selected>2x</option>
-                        }
-                        else
-                        {
-                            <option value="2">2x</option>
-                        }
-                    </select>
-                    <input id="submit_btn" type="submit" style="display: none"/>
-                </form>
+            <form method="post" asp-page-handler="SetFontSizeScale" class="SetFontSizeScale">
+                <select id="scale" name="scale" onchange="clickFontSize()">
+                    @if (Model.FontSizeScale == 1)
+                    {
+                        <option value="1" selected>1x</option>
+                    }
+                    else
+                    {
+                        <option value="1">1x</option>
+                    }
+                    @if(Model.FontSizeScale == 1.5)
+                    {
+                        <option value="1.5" selected>1.5x</option>
+                    }
+                    else
+                    {
+                        <option value="1.5">1.5x</option>
+                    }
+                    @if(Model.FontSizeScale == 2)
+                    {
+                        <option value="2" selected>2x</option>
+                    }
+                    else
+                    {
+                        <option value="2">2x</option>
+                    }
+                </select>
+                <input id="submit_btn" type="submit" style="display: none"/>
+            </form>
         </li>
     </ul>
+    
+    <br>
+    <div class="aboutme_lined_header">
+        <span class="aboutme_header_txt" style="color: red">
+            Danger Zone
+        </span>
+    </div>
+    <br><br>
+        <ul class="settings_ul">
+            <li class="settings_li">
+                <h5>Delete your account</h5>
+                <i>Warning: This action is irreversible!</i>
+            </li>
+            <li>
+                <form method="post">
+                    <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete">Delete your account</button>
+                </form>
+            </li>
+        </ul>
 }
 
         <script>

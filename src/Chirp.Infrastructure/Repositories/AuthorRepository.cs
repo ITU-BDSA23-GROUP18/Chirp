@@ -183,8 +183,8 @@ public class AuthorRepository : IAuthorRepository
         return true;
     }
 
-    public void ChangeName(string name, string newName){
-        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+    public async Task ChangeName(string name, string newName){
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -193,7 +193,7 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"{"name"} is already used!");
         }
         author.DisplayName = newName;
-        _authorDb.SaveChanges();
+        await _authorDb.SaveChangesAsync();
     }
 
     /// <summary>

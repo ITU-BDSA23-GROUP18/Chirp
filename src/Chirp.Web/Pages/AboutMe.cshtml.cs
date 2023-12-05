@@ -101,7 +101,7 @@ public class AboutMeModel : PageModel
         try
         {
             Console.WriteLine(newName);
-            _authorRepository.ChangeName(User.Identity?.Name!,newName );
+            await _authorRepository.ChangeName(User.Identity?.Name!,newName );
             return RedirectToPage();
         }
         catch 

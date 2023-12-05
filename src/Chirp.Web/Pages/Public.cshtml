@@ -47,13 +47,15 @@
             {
                 <li>
                     <p>
-                        @if (cheep.ProfilePictureUrl != ""){
-                            Console.WriteLine("Profile picture url: " + cheep.ProfilePictureUrl);
+                        @if (cheep.ProfilePictureUrl != "")
+                        {
                             <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
-                        } else {
+                        }
+                        else
+                        {
                             <img src="../images/defualt_user_pic.png" width="30" alt="Avatar" class="avatar">
                         }
-                        
+
                         <strong>
                             @if (cheep.DisplayName != "")
                             {

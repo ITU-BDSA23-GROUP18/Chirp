@@ -572,5 +572,13 @@ div.page h1 {
     font-size: 80px;
 }
 
-
+button.delete{
+    background: transparent;
+    border-radius: 34px;
+    border: 1px red solid;
+    color: red;
+    font: inherit;
+    cursor: pointer;
+    margin-right: 1.5rem;
+}
 
