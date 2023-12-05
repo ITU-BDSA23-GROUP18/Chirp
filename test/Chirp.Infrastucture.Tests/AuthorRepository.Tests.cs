@@ -54,7 +54,7 @@ public class AuthorRepositoryTests
     public async void TestCreateCheep()
     {
         // Act
-        await _repository.CreateAuthor("John Doe", "John@doe.com");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
 
         var authors = await _repository.GetAuthorByName("John Doe");
         var author = authors.FirstOrDefault();
@@ -65,8 +65,8 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestFollowAuthor()
     {
-        await _repository.CreateAuthor("John Doe", "John@doe.com");
-        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
         await _repository.FollowAuthor("Jane Doe", "John Doe");
         var followerList = await _repository.GetFollowers("Jane Doe");
         var follower = followerList.First();
@@ -75,10 +75,10 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestGetFollowers()
     {
-        await _repository.CreateAuthor("John Doe", "John@doe.com");
-        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
-        await _repository.CreateAuthor("Jack Doe", "Jack@doe.com");
-        await _repository.CreateAuthor("jill Doe", "jill@doe.com");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
+        await _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
+        await _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
         await _repository.FollowAuthor("John Doe", "Jane Doe");
         await _repository.FollowAuthor("John Doe", "Jack Doe");
         await _repository.FollowAuthor("John Doe", "jill Doe");
@@ -93,10 +93,10 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestGetFollowing()
     {
-        await _repository.CreateAuthor("John Doe", "John@doe.com");
-        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com");
-        await _repository.CreateAuthor("Jack Doe", "Jack@doe.com");
-        await _repository.CreateAuthor("jill Doe", "jill@doe.com");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
+        await _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
+        await _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
         await _repository.FollowAuthor("Jane Doe", "John Doe");
         await _repository.FollowAuthor("Jack Doe", "John Doe");
         await _repository.FollowAuthor("jill Doe", "John Doe");

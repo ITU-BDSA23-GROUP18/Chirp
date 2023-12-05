@@ -14,21 +14,21 @@
     {
         <h2> Write a cheep! </h2>
         <form method="post" asp-page-handler="cheep" class="cheep">
-            <textarea id="textarea" class="cheepbox" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
+            <textarea id="cheepbox" class="cheepbox" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
             <div class="char-count" id="charCount">0/160 characters</div>
             <button class="share"><i class="fa fa-send"></i> Cheep!</button>
         </form>
         
         <script>
             function countChars() {
-                  var textEntered = document.getElementById('textArea').value;
+                  var textEntered = document.getElementById('cheepbox').value;
                   var textLength = textEntered.length;
             
                   if (textLength <= 160) {
                     document.getElementById('charCount').innerHTML = textLength + '/160 characters';
                   } else {
                     
-                    document.getElementById('textArea').value = textEntered.substring(0, 160);
+                    document.getElementById('cheepbox').value = textEntered.substring(0, 160);
                     document.getElementById('charCount').innerHTML = '160/160 characters';
                   }
             }
@@ -48,11 +48,26 @@
             {
                 <li>
                     <p>
+                        @if (cheep.ProfilePictureUrl != ""){
+                            Console.WriteLine("Profile picture url: " + cheep.ProfilePictureUrl);
+                            <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                        } else {
+                            <img src="../images/defualt_user_pic.png" width="30" alt="Avatar" class="avatar">
+                        }
+                        
                         <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
+                            @if (cheep.DisplayName != "")
+                            {
+                                <a href="/@cheep.Author">@cheep.DisplayName</a>
+                            }
+                            else
+                            {
+                                <a href="/@cheep.Author">@cheep.Author</a>
+                            }
+                            <small>&mdash; @cheep.Timestamp</small>
                         </strong>
+                        <br/>
                         @cheep.Message
-                        <small>&mdash; @cheep.Timestamp</small>
                         <br>
                         @{
                             await Html.RenderPartialAsync("Shared/CheepBox", new CheepBoxModel(cheep));

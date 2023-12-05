@@ -11,6 +11,8 @@ public class FollowingTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
     
+    public string? ProfilePictureUrl { get; private set; }
+    
     public FollowingTimelineModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -28,6 +30,11 @@ public class FollowingTimelineModel : PageModel
         {
             var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
             Cheeps.AddRange(cheeps);
+        }
+        
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
         }
         
         var nCheeps = Cheeps.Count;

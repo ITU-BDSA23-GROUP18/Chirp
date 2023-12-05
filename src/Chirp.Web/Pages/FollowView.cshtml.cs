@@ -12,6 +12,8 @@ public class FollowingModel : PageModel
     public List<AuthorDTO> FollowingList { get; set; }
     public PaginationModel? Pagination { get; private set; }
     
+    public string? ProfilePictureUrl { get; private set; }
+    
     public FollowingModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         FollowersList = new List<AuthorDTO>();
@@ -23,6 +25,11 @@ public class FollowingModel : PageModel
     {
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
+        
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
         
         var myFollowing = await _authorRepository.GetFollowing(author);
         var followingDtos = myFollowing.ToList();

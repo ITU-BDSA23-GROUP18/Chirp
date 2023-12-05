@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore;
+
 namespace Chirp.Infrastructure;
 
 public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(options)
@@ -19,20 +22,10 @@ public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(op
         modelBuilder.Entity<Author>().Property(a => a.Name).HasMaxLength(32);
         modelBuilder.Entity<Author>().HasIndex(a => a.Name).IsUnique();
         modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(300);
-        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
+        modelBuilder.Entity<Author>().Property(a => a.DisplayName).HasMaxLength(32);
+        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique().HasFilter("[Email] <> ''");
 
         modelBuilder.Entity<Reaction>().HasIndex(r => r.CheepId).IsUnique();
     }
-
-    /*public class ChirpContextFactory : IDesignTimeDbContextFactory<ChirpContext>
-    {
-        public ChirpContext CreateContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<ChirpContext>();
-            var dbPath = Path.Combine(Path.GetTempPath(), "Chirp.db");
-            optionsBuilder.UseSqlite($"Data Source={dbPath}");
-
-            return new ChirpContext(optionsBuilder.Options);
-        }
-    }*/
+    
 }
