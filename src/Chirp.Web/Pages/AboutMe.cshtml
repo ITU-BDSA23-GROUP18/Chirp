@@ -8,80 +8,86 @@
 
 @if (User.Identity?.IsAuthenticated ?? false)
 {
-    <div class="aboutme_lined_header">
-        <span class="aboutme_header_txt">
-            About Me
-        </span>
-    </div>
-    
-    <br>
-    <div style="margin-left: 1.5rem">
-        <h5>Username:</h5>
-        <p>@User.Identity.Name</p>
-
-        <h5>Email:</h5>
-        <form method="post" asp-page-handler="changeemail" class="changeemail">
-            <div style="display: inline-block">
-                <textarea class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
-                <button> Change</button>
+    <div onclick=toggleName()>
+        <div onclick=toggleEmail()>
+            <img src=@Model.ProfilePictureUrl alt="Avatar" class="avatar" width = "145" >
+            <div class="aboutme_lined_header">
+                <span class="aboutme_header_txt">
+                    About Me
+                </span>
             </div>
-        </form>
-        <br/>
-
-        <h5>Your Followers</h5>
-        @if (Model.Followers.Any()){
-
-
-            <ul id="followerlist" class="followers">
-                @foreach (var follower in Model.Followers)
-                {
-                    <li>
-                        <p>
-                            <strong>
-                                <a href="/@follower.Name">@follower.Name</a>
-                            </strong>
-                        </p>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>You have no followers</p>
-            <br />
-        }
-        <br/>
-        <h5>Your Cheeps</h5>
         
-        @if (Model.yourCheeps.Any())
-        {
-            <ul id="messagelist" class="cheeps">
-                @foreach (var cheep in Model.yourCheeps)
+            <br>
+            <div style="margin-left: 1.5rem">
+                <h5>Username:</h5>
+                <p>@User.Identity.Name</p>
+
+                <h5>Email:</h5>
+                <form method="post">
+                    <textarea onclick =toggleName() class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
+                    <button id = "changename" hidden class="changer" asp-page-handler="ChangeName"> Change</button>
+                    <h5>Email:</h5>
+                    <textarea onclick =toggleEmail() class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+                    <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
+                </form>
+                <br/>
+
+                <h5>Your Followers</h5>
+                @if (Model.Followers.Any())
                 {
-                    <li>
-                        <p>
-                            <strong>
-                                <a href="/@cheep.Author">@cheep.Author</a>
-                            </strong>
-                            @cheep.Message
-                            <small>&mdash; @cheep.Timestamp</small>
-                        </p>
-                    </li>
+                    <ul id="followerlist" class="followers">
+                        @foreach (var follower in Model.Followers)
+                        {
+                            <li>
+                                <p>
+                                    <img src=@follower.ProfilePictureUrl width="30" alt="Avatar" class="avatar">
+                                    <strong>
+                                        <a href="/@follower.Name">@follower.Name</a>
+                                    </strong>
+                                </p>
+                            </li>
+                        }
+                    </ul>
                 }
-            </ul>
-            <br/>
-            await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-        }
-        else
-        {
-            <p>You have send no cheeps</p>
-            <br />
+                else
+                {
+                    <p>You have no followers</p>
+                }
+                <br/>
+                <h5>Your Cheeps</h5>
+
+                @if (Model.yourCheeps.Any())
+                {
+                    <ul id="messagelist" class="cheeps">
+                        @foreach (var cheep in Model.yourCheeps)
+                        {
+                            <li>
+                                <p>
+                                    <strong>
+                                        <a href="/@cheep.Author">@cheep.Author</a>
+                                    </strong>
+                                    @cheep.Message
+                                    <small>&mdash; @cheep.Timestamp</small>
+                                </p>
+                            </li>
+                        }
+                    </ul>
+                    <br/>
+                    await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+                }
+                else
+                {
+                    <p>You have send no cheeps</p>
+                    <br/>
+
+                }
+                <form method="post">
+                    <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete"> Delete your account</button>
+                </form>
+            </div>
+        </div>
+    </div>    
             
-        }
-    <form method="post">
-        <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name> Delete your account</button>
-    </form>
-    </div>
     <br><br>
     <div class="aboutme_lined_header">
         <span class="aboutme_header_txt">
@@ -160,7 +166,7 @@
     </ul>
 }
 
-<script>
+        <script>
     function clickDarkMode() {
         document.getElementById("darkmode_btn").click();
     }
@@ -169,5 +175,39 @@
         document.getElementById("submit_btn").click();
     }
 </script>
+
+<script>
+        let toggleEmail = () => {
+
+            let element = document.getElementById("changeemail");
+            
+
+        var obj = document.getElementById("email");
+
+        if (document.activeElement === obj) {
+            element.removeAttribute("hidden");
+            
+        } else {
+            element.setAttribute("hidden", "hidden");
+        // focus is currently not in my textarea
+        }
+    }
+    let toggleName = () => {
+
+            let element = document.getElementById("changename");
+            
+
+        var obj = document.getElementById("username");
+
+        if (document.activeElement === obj) {
+            element.removeAttribute("hidden");
+            
+        } else {
+            element.setAttribute("hidden", "hidden");
+        // focus is currently not in my textarea
+        }
+    }
+    </script>
+
 
 

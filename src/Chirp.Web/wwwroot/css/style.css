@@ -122,6 +122,17 @@ div.page div.followstatus {
   padding: 3px;
 }
 
+div.page ul.followers {
+  list-style: none;
+  padding: 0.3em;
+  left: 0;
+}
+div.page ul.followers li {
+  list-style: none;
+  padding: 0;
+  margin-bottom: -0.7em;
+}
+
 div.page ul.cheeps {
   list-style: none;
   margin: 0;
@@ -258,14 +269,21 @@ textarea.aboutme{
     
 }
 
-
+button.delete{
+    background: rgb(179, 89, 89);
+    border-radius: 100px;
+    color: inherit;
+    border-width: 1px;
+    font: inherit;
+    cursor: pointer;
+}
 
 button.changer{
 
   margin-right: 2em;
   background: none;
 	color: inherit;
-	border: none;
+	border: none;;
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;

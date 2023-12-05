@@ -10,7 +10,6 @@ public class PublicModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
-    
     public string? ProfilePictureUrl { get; private set; }
 
     public bool IsDarkMode { get; private set; }

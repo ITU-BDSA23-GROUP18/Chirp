@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Chirp.Core.IRepositories;
 /// <summary>
@@ -35,7 +35,7 @@ public interface IAuthorRepository
     /// </summary>
     /// <param name="name"></param>
     /// <param name="email"></param>
-    public Task<bool> CreateAuthor(string name, string email);
+    public Task<bool> CreateAuthor(string name, string email, string displayName);
     /// <summary>
     /// Follows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -54,6 +54,7 @@ public interface IAuthorRepository
     /// <param name="newEmail"></param>
     /// <param name="currentUserName"></param>
      public Task<bool> ChangeEmail(string newEmail, string currentUserName);
+     public void ChangeName(string newName, string currentUserName);
     /// <summary>
     /// Deletes the author with the given name
     /// </summary>

@@ -44,7 +44,7 @@ public class AuthorRepository : IAuthorRepository
     /// <param name="name"></param>
     /// <param name="email"></param>
     /// <exception cref="ArgumentException"></exception>
-    public async Task<bool> CreateAuthor(string name, string email)
+    public async Task<bool> CreateAuthor(string name, string email, string displayName)
     {
         if (_authorDb.Authors.Any(a => a.Name == name))
             throw new ArgumentException($"Username {name} is already used");
@@ -52,10 +52,14 @@ public class AuthorRepository : IAuthorRepository
         if (_authorDb.Authors.Any(a => a.Email == email))
             throw new ArgumentException($"{"email"} is already used!");
 
+        if (_authorDb.Authors.Any(a => a.DisplayName == displayName))
+            throw new ArgumentException($"{"name"} is already used!");
+
         var author = new Author
         {
-            AuthorId = Guid.NewGuid(),
+            AuthorId = Guid.NewGuid(),  
             Name = name,
+            DisplayName = displayName,
             Email = email,
             Cheeps = new List<Cheep>(),
             Following = new List<Author>(),
@@ -108,7 +112,7 @@ public class AuthorRepository : IAuthorRepository
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
             followerListDto.Add(authorDto);
         }
         return followerListDto;
@@ -132,7 +136,7 @@ public class AuthorRepository : IAuthorRepository
         var followingListDto = new List<AuthorDTO>();
         foreach (var author in followingList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
             followingListDto.Add(authorDto);
         }
         return followingListDto;
@@ -178,6 +182,20 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+
+    public void ChangeName(string name, string newName){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException();
+        }
+        if (_authorDb.Authors.Any(a => a.DisplayName == newName)){
+            throw new ArgumentException($"{"name"} is already used!");
+        }
+        author.DisplayName = newName;
+        _authorDb.SaveChanges();
+    }
+
     /// <summary>
     /// Deletes the author with the given name
     /// </summary>
@@ -325,4 +343,5 @@ public class AuthorRepository : IAuthorRepository
         return author.FontSizeScale;
     }
     
-}
+}  
+
