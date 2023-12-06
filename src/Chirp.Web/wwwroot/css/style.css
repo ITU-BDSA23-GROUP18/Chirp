@@ -285,11 +285,13 @@ textarea.aboutme{
 
 button.delete{
     background: rgb(179, 89, 89);
-    border-radius: 100px;
-    color: inherit;
+    border-radius: 50px;
+    color: white;
     border-width: 1px;
     font: inherit;
     cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    font-weight: 500;
 }
 
 button.changer{
