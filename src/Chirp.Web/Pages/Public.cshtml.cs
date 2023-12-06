@@ -9,7 +9,7 @@ public class PublicModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     private readonly IReactionRepository _reactionRepository;
     private static List<CheepDTO> Cheeps { get; set; } = new();
-    public PaginationModel Pagination { get; private set; } = new();
+    public PaginationModel Pagination { get; private set; } = new(1,1);
     public readonly IEnumerable<(string, string)> ReactionTypes;
     public string? ProfilePictureUrl { get; private set; }
     
@@ -51,23 +51,22 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
-    public IActionResult OnPostChangeReaction(string cheepId, string reactionType)
+    public void OnPostChangeReaction(string cheepId, string reactionType)
     {
         var author = User.Identity?.Name!;
-        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return Page();
+        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return;
 
         var cheepReactions = Cheeps.First(c => c.CheepId == cheepId).Reactions;
         if (cheepReactions.Any(r => r.Author == author))
         {
-            cheepReactions.Remove(cheepReactions.First(r => r.Author == author));
+            var prevReaction = cheepReactions.First(r => r.Author == author);
+            cheepReactions.Remove(prevReaction);
             _reactionRepository.RemoveReaction(cheepId, author);
-            if (cheepReactions.First(r => r.Author == author).ReactionType == reactionType) return Page();
+            if (prevReaction.ReactionType == reactionType) return;
         }
         
         cheepReactions.Add(new ReactionDTO(cheepId, author, reactionType));
         _reactionRepository.CreateReaction(cheepId, author, reactionType);
-
-        return Page();
     }
     
     public async Task<string?> GetProfilePicture(string name)
@@ -76,22 +75,16 @@ public class PublicModel : PageModel
     }
 }
 
-public class PaginationModel
-{
-    public readonly int CheepsPerPage = 32;
-    public readonly int NPages;
-    public readonly int CurrentPage;
-
-    public PaginationModel()
-    {
-        CurrentPage = 1;
-        NPages = 1;
-    }
-
-    public PaginationModel(int nCheeps, int currentPage)
-    {
-        CurrentPage = currentPage;
-        NPages = nCheeps / CheepsPerPage;
-        if (nCheeps % CheepsPerPage > 0) NPages++;
-    }
-}
+// public class PaginationModel
+// {
+//     public readonly int CheepsPerPage = 32;
+//     public readonly int NPages;
+//     public readonly int CurrentPage;
+//
+//     public PaginationModel(int nCheeps, int currentPage)
+//     {
+//         CurrentPage = currentPage;
+//         NPages = nCheeps / CheepsPerPage;
+//         if (nCheeps % CheepsPerPage > 0) NPages++;
+//     }
+// }

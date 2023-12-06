@@ -107,20 +107,23 @@
         <em>There are no cheeps so far.</em>
     }
     
+    @* @{ *@
+    @*     await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination); *@
+    @* } *@
     
     <!-- Pagination -->
     @{
         @if (Model.Pagination.CurrentPage == 1) {<text>Previous</text>}
         else {<a href="?page=@(Model.Pagination.CurrentPage - 1)">Previous</a>}
         <text>|</text>
-        
+    
         @for (var i = 1; i <= Model.Pagination.NPages; i++)
         {
             @if (i == Model.Pagination.CurrentPage) {<text>@i</text>}
             else {<a href="?page=@i">@i</a>}
             <text>|</text>
         }
-        
+    
         @if (Model.Pagination.CurrentPage == Model.Pagination.NPages) {<text>Next</text>}
         else {<a href="?page=@(Model.Pagination.CurrentPage+1)">Next</a>}
     }
