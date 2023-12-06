@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Net.Mime;
-
-namespace Chirp.Infrastructure.Types;
+﻿namespace Chirp.Infrastructure.Types;
 
 public class Author
 {

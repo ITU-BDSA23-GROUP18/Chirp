@@ -22,6 +22,6 @@ public interface IReactionRepository
     /// Removes the reaction with the given cheepId and authorId
     /// </summary>
     /// <param name="cheepId"></param>
-    /// <param name="authorId"></param>
-    public void RemoveReaction(string cheepId, string authorId);
+    /// <param name="authorName"></param>
+    public void RemoveReaction(string cheepId, string authorName);
 }
