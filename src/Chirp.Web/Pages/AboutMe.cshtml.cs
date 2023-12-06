@@ -33,6 +33,10 @@ public class AboutMeModel : PageModel
 
         var Authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
         var Author = Authors.FirstOrDefault();
+        if (Author == null || User.Identity == null) {
+            return RedirectToPage("public");
+        }
+
         if(Author.DisplayName != User.Identity?.Name!){
             DisplayName = Author.DisplayName;
         }
@@ -50,7 +54,7 @@ public class AboutMeModel : PageModel
         }
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
         }
@@ -79,7 +83,6 @@ public class AboutMeModel : PageModel
     {
         try
         {
-            Console.WriteLine(newEmail);
             await _authorRepository.ChangeEmail(User.Identity?.Name!,newEmail );
             return RedirectToPage();
         }
@@ -92,8 +95,7 @@ public class AboutMeModel : PageModel
     public async Task<IActionResult> OnPostChangeName(string newName){
         try
         {
-            Console.WriteLine(newName);
-            _authorRepository.ChangeName(User.Identity?.Name!,newName );
+            await _authorRepository.ChangeName(User.Identity?.Name!, newName);
             return RedirectToPage();
         }
         catch 

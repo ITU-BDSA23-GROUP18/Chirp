@@ -54,7 +54,7 @@ public class AuthorRepositoryTests
     public async void TestCreateCheep()
     {
         // Act
-        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
 
         var authors = await _repository.GetAuthorByName("John Doe");
         var author = authors.FirstOrDefault();
@@ -65,9 +65,9 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestFollowAuthor()
     {
-        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
-        _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
-        _repository.FollowAuthor("Jane Doe", "John Doe");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
+        await _repository.FollowAuthor("Jane Doe", "John Doe");
         var followerList = await _repository.GetFollowers("Jane Doe");
         var follower = followerList.First();
         Assert.Equal("John Doe", follower.Name);
@@ -75,13 +75,13 @@ public class AuthorRepositoryTests
     [Fact]
     public async void TestGetFollowers()
     {
-        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
-        _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
-        _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
-        _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
-        _repository.FollowAuthor("John Doe", "Jane Doe");
-        _repository.FollowAuthor("John Doe", "Jack Doe");
-        _repository.FollowAuthor("John Doe", "jill Doe");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
+        await _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
+        await _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
+        await _repository.FollowAuthor("John Doe", "Jane Doe");
+        await _repository.FollowAuthor("John Doe", "Jack Doe");
+        await _repository.FollowAuthor("John Doe", "jill Doe");
         var janeFolloweringList = await _repository.GetFollowing("Jane Doe");
         var jackFolloweringList = await _repository.GetFollowing("Jack Doe");
         var jillFolloweringList = await _repository.GetFollowing("jill Doe");
@@ -89,17 +89,17 @@ public class AuthorRepositoryTests
         Assert.Equal("John Doe", jackFolloweringList.First().Name);
         Assert.Equal("John Doe", jillFolloweringList.First().Name);
     }
-    
+
     [Fact]
     public async void TestGetFollowing()
     {
-        _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
-        _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
-        _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
-        _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
-        _repository.FollowAuthor("Jane Doe", "John Doe");
-        _repository.FollowAuthor("Jack Doe", "John Doe");
-        _repository.FollowAuthor("jill Doe", "John Doe");
+        await _repository.CreateAuthor("John Doe", "John@doe.com", "John Doe");
+        await _repository.CreateAuthor("Jane Doe", "Jane@doe.com", "Jane Doe");
+        await _repository.CreateAuthor("Jack Doe", "Jack@doe.com", "Jack Doe");
+        await _repository.CreateAuthor("jill Doe", "jill@doe.com", "jill Doe");
+        await _repository.FollowAuthor("Jane Doe", "John Doe");
+        await _repository.FollowAuthor("Jack Doe", "John Doe");
+        await _repository.FollowAuthor("jill Doe", "John Doe");
         var followerList = await _repository.GetFollowing("John Doe");
         foreach (var follower in followerList)
         {

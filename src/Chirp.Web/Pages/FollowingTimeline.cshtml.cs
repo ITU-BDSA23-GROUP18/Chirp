@@ -32,7 +32,7 @@ public class FollowingTimelineModel : PageModel
             Cheeps.AddRange(cheeps);
         }
         
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
         }
