@@ -48,26 +48,28 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
-    public void OnPostChangeReaction(string cheepId, string author, string reactionType)
+    public IActionResult OnPostChangeReaction(string cheepId, string reactionType)
     {
-        author = User.Identity?.Name!;
-        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return;
+        var author = User.Identity?.Name!;
+        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return Page();
 
-        if (Cheeps.Any(r => r.Author == author))
+        var cheepReactions = Cheeps.First(c => c.CheepId == cheepId).Reactions;
+
+        if (cheepReactions.Any(r => r.Author == author))
         {
             Console.WriteLine($"REMOVING {reactionType} by {author}");
-
             _reactionRepository.RemoveReaction(cheepId, author);
+            
+            if (cheepReactions.First(r => r.Author == author).ReactionType == reactionType) return Page();
         }
-        else
-        {
-            Console.WriteLine($"POSTING {reactionType} by {author}");
-            _reactionRepository.CreateReaction(cheepId, author, reactionType);
-        }
+
+        Console.WriteLine($"POSTING {reactionType} by {author}");
+        _reactionRepository.CreateReaction(cheepId, author, reactionType);
         
         // author = User.Identity?.Name!;
         // if (author == "") return;
         // _reactionRepository.CreateReaction(cheepId, author, reactionType);
+        return Page();
     }
     
     public async Task<string?> GetProfilePicture(string name)

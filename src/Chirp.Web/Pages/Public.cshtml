@@ -82,11 +82,13 @@
                         }
                         else
                         {
+                            var author = User.Identity?.Name!;
+                            var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
                             
                             <form method="post">
                                 <input type="hidden" name="cheepId" value=@cheep.CheepId>
                                 <input type="hidden" name="reactionType" value="Good">
-                                <button asp-page-handler="ChangeReaction">
+                                <button style="background-color:@(hasReacted == "Good" ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
                                     Good:
                                     @cheep.Reactions.Count(r => r.ReactionType == "Good")
                                 </button>
@@ -95,7 +97,7 @@
                             <form method="post">
                                 <input type="hidden" name="cheepId" value=@cheep.CheepId>
                                 <input type="hidden" name="reactionType" value="Ish">
-                                <button asp-page-handler="ChangeReaction">
+                                <button style="background-color:@(hasReacted == "Ish" ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
                                     Ish:
                                     @cheep.Reactions.Count(r => r.ReactionType == "Ish")
                                 </button>
@@ -104,7 +106,7 @@
                             <form method="post">
                                 <input type="hidden" name="cheepId" value=@cheep.CheepId>
                                 <input type="hidden" name="reactionType" value="Bad">
-                                <button asp-page-handler="ChangeReaction">
+                                <button style="background-color:@(hasReacted == "Bad" ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
                                     Bad:
                                     @cheep.Reactions.Count(r => r.ReactionType == "Bad")
                                 </button>
@@ -133,7 +135,7 @@
             if (cheep.Reactions.Any(r => r.Author == author)) return false;
             try
             {
-                Model.OnPostChangeReaction(cheep.CheepId, author, reactionType);
+                Model.OnPostChangeReaction(cheep.CheepId, reactionType);
                 
             }
             catch (Exception e)

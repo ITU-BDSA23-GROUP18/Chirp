@@ -494,3 +494,6 @@ textarea{
         display: block;
     }
 
+form {
+    display: inline;
+}
