@@ -29,56 +29,6 @@
                     <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
                 </form>
                 <br/>
-
-                <h5>Your Followers</h5>
-                @if (Model.Followers.Any())
-                {
-                    <ul id="followerlist" class="followers">
-                        @foreach (var follower in Model.Followers)
-                        {
-                            <li>
-                                <p>
-                                    <img src=@follower.ProfilePictureUrl width="30" alt="Avatar" class="avatar">
-                                    <strong>
-                                        <a href="/@follower.Name">@follower.Name</a>
-                                    </strong>
-                                </p>
-                            </li>
-                        }
-                    </ul>
-                }
-                else
-                {
-                    <p>You have no followers</p>
-                }
-                <br/>
-                <h5>Your Cheeps</h5>
-
-                @if (Model.yourCheeps.Any())
-                {
-                    <ul id="messagelist" class="cheeps">
-                        @foreach (var cheep in Model.yourCheeps)
-                        {
-                            <li>
-                                <p>
-                                    <strong>
-                                        <a href="/@cheep.Author">@cheep.Author</a>
-                                    </strong>
-                                    @cheep.Message
-                                    <small>&mdash; @cheep.Timestamp</small>
-                                </p>
-                            </li>
-                        }
-                    </ul>
-                    <br/>
-                    await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-                }
-                else
-                {
-                    <p>You have send no cheeps</p>
-                    <br/>
-
-                }
             </div>
         </div>
     </div>    
