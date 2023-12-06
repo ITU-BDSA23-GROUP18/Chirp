@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore;
-
 namespace Chirp.Infrastructure;
 
 public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(options)

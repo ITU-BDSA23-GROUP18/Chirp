@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.Identity.Client;
 
 namespace Chirp.Infrastructure.Repositories;
 /// <summary>
@@ -39,11 +38,13 @@ public class AuthorRepository : IAuthorRepository
             .Where(a => a.Email == email)
             .Select(a => a.ToDTO())
             .ToListAsync();
+
     /// <summary>
     /// Creates an author with the given name and email
     /// </summary>
     /// <param name="name"></param>
     /// <param name="email"></param>
+    /// <param name="displayName"></param>
     /// <exception cref="ArgumentException"></exception>
     public async Task<bool> CreateAuthor(string name, string email, string displayName)
     {

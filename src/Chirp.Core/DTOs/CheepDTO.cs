@@ -11,6 +11,7 @@ public record CheepDTO
     public string DisplayName { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
     public List<ReactionDTO> Reactions { get; private set; }
+
     /// <summary>
     /// Constructor for the CheepDTO,
     /// error will be thrown if any of the parameters are null or empty except for reactions
@@ -20,12 +21,14 @@ public record CheepDTO
     /// <param name="message"></param>
     /// <param name="timestamp"></param>
     /// <param name="reactions"></param>
+    /// <param name="displayName"></param>
+    /// <param name="profilePictureUrl"></param>
     /// <exception cref="ArgumentNullException"></exception>
     public CheepDTO(string cheepId, string author, string message, string timestamp, List<ReactionDTO> reactions, string displayName, string? profilePictureUrl = null)
     {
-        if (author == null || author.Equals("")) throw new ArgumentNullException(nameof(author), "Author is null or empty");
-        if (message == null || message.Equals("")) throw new ArgumentNullException(nameof(message), "Message is null or empty");
-        if (timestamp == null || timestamp.Equals("")) throw new ArgumentNullException(nameof(timestamp), "Timestamp is null or empty");
+        if (author is null or "") throw new ArgumentNullException(nameof(author), "Author is null or empty");
+        if (message is null or "") throw new ArgumentNullException(nameof(message), "Message is null or empty");
+        if (timestamp is null or "") throw new ArgumentNullException(nameof(timestamp), "Timestamp is null or empty");
         CheepId = cheepId;
         Author = author;
         Message = message;
