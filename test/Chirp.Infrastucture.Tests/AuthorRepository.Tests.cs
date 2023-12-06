@@ -31,8 +31,8 @@ public class AuthorRepositoryTests
         var author = authors.FirstOrDefault();
         // Assert
         Assert.Equal(name, author?.Name);
-
     }
+    
     [Fact]
     public async void TestFindAuthorByEmail()
     {
@@ -47,7 +47,6 @@ public class AuthorRepositoryTests
 
         //Assert
         Assert.Equal("Helge", author?.Name);
-
     }
 
     [Fact]
@@ -72,6 +71,7 @@ public class AuthorRepositoryTests
         var follower = followerList.First();
         Assert.Equal("John Doe", follower.Name);
     }
+    
     [Fact]
     public async void TestGetFollowers()
     {
