@@ -1,16 +1,28 @@
 namespace Chirp.Core.DTOs;
-
+/// <summary>
+/// The CheepDTO class is used to transfer data from the CheepRepository class to the UI
+/// </summary>
 public record CheepDTO
 {
     public string CheepId { get; private set; }
     public string Author { get; private set; }
     public string Message { get; private set; }
     public string Timestamp { get; private set; }
+    public string DisplayName { get; private set; }
+    public string? ProfilePictureUrl { get; private set; }
     public List<ReactionDTO> Reactions { get; private set; }
-
-    public CheepDTO(string cheepId, string author, string message, string timestamp, List<ReactionDTO> reactions)
-    {        
-        if (cheepId == null || cheepId.Equals("")) throw new ArgumentNullException(nameof(author), "CheepId is null or empty");
+    /// <summary>
+    /// Constructor for the CheepDTO,
+    /// error will be thrown if any of the parameters are null or empty except for reactions
+    /// </summary>
+    /// <param name="cheepId"></param>
+    /// <param name="author"></param>
+    /// <param name="message"></param>
+    /// <param name="timestamp"></param>
+    /// <param name="reactions"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public CheepDTO(string cheepId, string author, string message, string timestamp, List<ReactionDTO> reactions, string displayName, string? profilePictureUrl = null)
+    {
         if (author == null || author.Equals("")) throw new ArgumentNullException(nameof(author), "Author is null or empty");
         if (message == null || message.Equals("")) throw new ArgumentNullException(nameof(message), "Message is null or empty");
         if (timestamp == null || timestamp.Equals("")) throw new ArgumentNullException(nameof(timestamp), "Timestamp is null or empty");
@@ -19,5 +31,7 @@ public record CheepDTO
         Message = message;
         Timestamp = timestamp;
         Reactions = reactions;
+        DisplayName = displayName;
+        ProfilePictureUrl = profilePictureUrl;
     }
 }

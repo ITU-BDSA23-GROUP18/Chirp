@@ -47,7 +47,14 @@
                         <li>
                             <p>
                                 <strong>
-                                    <a href="/@user.Name">@user.Name</a>
+                            @if (user.DisplayName != "")
+                            {
+                                <a href="/@user.Name">@user.DisplayName</a>
+                            }
+                            else
+                            {
+                                <a href="/@user.Name">@user.Name</a>
+                            }
                                 </strong>
                             </p>
                         </li>

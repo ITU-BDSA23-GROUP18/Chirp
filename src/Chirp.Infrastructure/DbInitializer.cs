@@ -19,20 +19,19 @@ public static class DbInitializer
 
     public static void SetData()
     {
-        // Authors
-        var a1 = new Author() { Name = "Roger Histand", Email = "Roger+Histand@hotmail.com" };
-        var a2 = new Author() { Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk" };
-        var a3 = new Author() { Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com" };
-        var a4 = new Author() { Name = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk" };
-        var a5 = new Author() { Name = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk" };
-        var a6 = new Author() { Name = "Mellie Yost", Email = "Mellie+Yost@ku.dk" };
-        var a7 = new Author() { Name = "Malcolm Janski", Email = "Malcolm-Janski@gmail.com" };
-        var a8 = new Author() { Name = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk" };
-        var a9 = new Author() { Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk" };
-        var a10 = new Author() { Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com" };
-        var a11 = new Author() { Name = "Helge", Email = "ropf@itu.dk" };
-        var a12 = new Author() { Name = "Rasmus", Email = "rnie@itu.dk" };
-        var a13 = new Author() { Name = "TestUser", Email = "test@test.test"};
+        var a1 = new Author() { Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", ProfilePictureUrl = ""};
+        var a2 = new Author() { Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", ProfilePictureUrl = "" };
+        var a3 = new Author() { Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", ProfilePictureUrl = "" };
+        var a4 = new Author() { Name = "Nathan Sirmon", Email = "Nathan+Sirmon@dtu.dk", ProfilePictureUrl = "" };
+        var a5 = new Author() { Name = "Quintin Sitts", Email = "Quintin+Sitts@itu.dk", ProfilePictureUrl = "" };
+        var a6 = new Author() { Name = "Mellie Yost", Email = "Mellie+Yost@ku.dk", ProfilePictureUrl = "https://i.pngimg.me/thumb/f/720/m2i8H7m2d3H7i8A0.jpg" };
+        var a7 = new Author() { Name = "Malcolm Janski", Email = "Malcolm-Janski@gmail.com", ProfilePictureUrl = "" };
+        var a8 = new Author() { Name = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk", ProfilePictureUrl = "" };
+        var a9 = new Author() { Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", ProfilePictureUrl = "" };
+        var a10 = new Author() { Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", ProfilePictureUrl = "" };
+        var a11 = new Author() { Name = "Helge", Email = "ropf@itu.dk", ProfilePictureUrl = "" };
+        var a12 = new Author() { Name = "Rasmus", Email = "rnie@itu.dk", ProfilePictureUrl = "" };
+        var a13 = new Author() { Name = "TestUser", Email = "test@test.test", ProfilePictureUrl = ""};
         Authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 ,a13 };
 
         a3.Following.Add(a1);

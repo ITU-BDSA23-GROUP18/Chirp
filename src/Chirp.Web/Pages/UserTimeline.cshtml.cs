@@ -16,6 +16,10 @@ public class UserTimelineModel : PageModel
     
     public bool IsFollowingAuthor { get; set; }
     
+    public string? ProfilePictureUrl { get; private set; }
+    
+    public string? AuthorProfilePictureUrl { get; private set; }
+    
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -48,14 +52,41 @@ public class UserTimelineModel : PageModel
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
         
+        AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
+        if (User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+        }
+
         return Page();
     }
-
-    public IActionResult OnPostUnfollow(string author)
+    /// <summary>
+    /// Unfollows the author with the given author name
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
+    public async Task<ActionResult> OnPostUnfollow(string author)
     {
         try
         {
-            _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
+            await _authorRepository.UnfollowAuthor(author, User.Identity?.Name!);
+            return RedirectToPage();
+        }
+        catch 
+        {
+            return RedirectToPage();
+        }
+    }
+    /// <summary>
+    /// Follows the author with the given author name
+    /// </summary>
+    /// <param name="author"></param>
+    /// <returns></returns>
+    public async Task<ActionResult> OnPostFollow(string author)
+    {
+        try
+        {
+            await _authorRepository.FollowAuthor(author, User.Identity?.Name!);
             return RedirectToPage();
         }
         catch 
@@ -64,11 +95,11 @@ public class UserTimelineModel : PageModel
         }
     }
     
-    public IActionResult OnPostFollow(string author)
+    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
     {
         try
         {
-            _authorRepository.FollowAuthor(author, User.Identity?.Name!);
+            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
             return RedirectToPage();
         }
         catch 

@@ -1,3 +1,5 @@
+
+
 @page "/AboutMe"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model AboutMeModel
@@ -9,30 +11,66 @@
 <!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet"  href="css/style.css" />
-<div>
+<div onclick=toggleName()>
+    <div onclick=toggleEmail()>
+    
     @if (User.Identity?.IsAuthenticated ?? false)
     {
+
+        <img src=@Model.ProfilePictureUrl alt="Avatar" class="avatar" width = "145" >
         <h2> About me </h2>
-
+        
         <h5>Username:</h5>
-        <p>@User.Identity.Name</p>
-
-        <h5>Email:</h5>
-        <form method="post" asp-page-handler="changeemail" class="changeemail">
-            <textarea class="aboutme" id="email" value="" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
-            <button> Change</button>
+        <form method="post">
+            <textarea onclick =toggleName() class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
+            <button id = "changename" hidden class="changer" asp-page-handler="ChangeName"> Change</button>
+            <h5>Email:</h5>
+            <textarea onclick =toggleEmail() class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+            <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
         </form>
         <br/>
 
+    <script>
+        let toggleEmail = () => {
+
+            let element = document.getElementById("changeemail");
+            
+
+        var obj = document.getElementById("email");
+
+        if (document.activeElement === obj) {
+            element.removeAttribute("hidden");
+            
+        } else {
+            element.setAttribute("hidden", "hidden");
+        // focus is currently not in my textarea
+        }
+    }
+    let toggleName = () => {
+
+            let element = document.getElementById("changename");
+            
+
+        var obj = document.getElementById("username");
+
+        if (document.activeElement === obj) {
+            element.removeAttribute("hidden");
+            
+        } else {
+            element.setAttribute("hidden", "hidden");
+        // focus is currently not in my textarea
+        }
+    }
+    </script>
+
         <h4>Your Followers</h4>
         if (Model.Followers.Any()){
-
-
             <ul id="followerlist" class="followers">
                 @foreach (var follower in Model.Followers)
                 {
                     <li>
                         <p>
+                            <img src=@follower.ProfilePictureUrl width="30" alt="Avatar" class="avatar">
                             <strong>
                                 <a href="/@follower.Name">@follower.Name</a>
                             </strong>
@@ -46,38 +84,9 @@
             <header>You have no followers</header>
             <br />
         }
-        <br/>
-        <h4>Your Cheeps</h4>
-        
-        if (Model.yourCheeps.Any())
-        {
-            <ul id="messagelist" class="cheeps">
-                @foreach (var cheep in Model.yourCheeps)
-                {
-                    <li>
-                        <p>
-                            <strong>
-                                <a href="/@cheep.Author">@cheep.Author</a>
-                            </strong>
-                            @cheep.Message
-                            <small>&mdash; @cheep.Timestamp</small>
-                        </p>
-                    </li>
-                }
-            </ul>
-            await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-        }
-        else
-        {
-            <header>You have send no cheeps</header>
-            <br />
-        }
-        <form method="post">
-            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name> Delete your account</button>
-        </form>
-        
-        {
-
-        }
     }
+        <form method="post">
+            <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity?.Name class="delete" > Delete your account</button>
+        </form>
+    </div>
 </div>
