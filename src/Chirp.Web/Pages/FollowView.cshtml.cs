@@ -30,7 +30,7 @@ public class FollowViewModel : PageModel
         //If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
-        if (User.Identity!.IsAuthenticated)
+        if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);

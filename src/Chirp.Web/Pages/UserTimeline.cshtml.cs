@@ -104,7 +104,6 @@ public class UserTimelineModel : PageModel
     
     public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
     {
-        Console.WriteLine(profilePicture.FileName);
         try
         {
             await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);

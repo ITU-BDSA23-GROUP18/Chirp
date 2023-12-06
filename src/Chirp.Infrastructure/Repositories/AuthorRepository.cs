@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Identity.Client;
 
 namespace Chirp.Infrastructure.Repositories;
 /// <summary>
@@ -183,8 +184,8 @@ public class AuthorRepository : IAuthorRepository
         return true;
     }
 
-    public async Task ChangeName(string name, string newName){
-        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+    public async Task<bool> ChangeName(string name, string newName){
+        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -194,6 +195,7 @@ public class AuthorRepository : IAuthorRepository
         }
         author.DisplayName = newName;
         await _authorDb.SaveChangesAsync();
+        return true;
     }
 
     /// <summary>
@@ -285,7 +287,7 @@ public class AuthorRepository : IAuthorRepository
     
     public async Task<string?> GetProfilePicture(string name)
     {
-        var author = GetAuthorByName(name).Result.FirstOrDefault();
+        var author = (await GetAuthorByName(name)).FirstOrDefault();
         if (author == null)
         {
             throw new ArgumentException($"Author {name} does not exist");
@@ -343,5 +345,4 @@ public class AuthorRepository : IAuthorRepository
         return author.FontSizeScale;
     }
     
-}  
-
+}

@@ -15,7 +15,7 @@ public static class Extensions
         new CheepDTO(c.Author.Name, c.Message, c.TimeStamp.ShowString(), c.Reactions.Select(r => r.ToDTO()).ToList(), c.Author.DisplayName, c.Author.ProfilePictureUrl);
 
     public static AuthorDTO ToDTO(this Author a) =>
-        new AuthorDTO(a.Name, a.Email, a.ProfilePictureUrl, a.DisplayName);
+        new AuthorDTO(a.Name, a.Email, a.DisplayName, a.ProfilePictureUrl);
 
     public static ReactionDTO ToDTO(this Reaction r) =>
         new ReactionDTO(r.ReactionType.ToString(), r.ToString() ?? "");

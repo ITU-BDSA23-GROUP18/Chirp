@@ -47,8 +47,7 @@
             {
                 <li>
                     <p>
-                        @if (cheep.ProfilePictureUrl != "")
-                        {
+                        @if (cheep.ProfilePictureUrl != null && cheep.ProfilePictureUrl != ""){
                             <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
                         }
                         else

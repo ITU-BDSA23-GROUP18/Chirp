@@ -54,7 +54,7 @@ public interface IAuthorRepository
     /// <param name="newEmail"></param>
     /// <param name="currentUserName"></param>
      public Task<bool> ChangeEmail(string newEmail, string currentUserName);
-     public Task ChangeName(string newName, string currentUserName);
+     public Task<bool> ChangeName(string newName, string currentUserName);
     /// <summary>
     /// Deletes the author with the given name
     /// </summary>
