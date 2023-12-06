@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
@@ -10,6 +11,7 @@ public class PublicModel : PageModel
     private readonly IReactionRepository _reactionRepository;
     private static List<CheepDTO> Cheeps { get; set; } = new();
     public PaginationModel? Pagination { get; private set; }
+    public readonly IEnumerable<(string, string)> ReactionTypes;
     public string? ProfilePictureUrl { get; private set; }
     
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
@@ -17,6 +19,8 @@ public class PublicModel : PageModel
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         _reactionRepository = reactionRepository;
+
+        ReactionTypes = _reactionRepository.GetAllReactionTypes();
     }
 
     public async Task<IActionResult> OnGet([FromQuery] int page)

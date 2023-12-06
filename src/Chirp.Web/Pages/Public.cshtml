@@ -85,32 +85,17 @@
                             var author = User.Identity?.Name!;
                             var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
                             
-                            <form method="post">
-                                <input type="hidden" name="cheepId" value=@cheep.CheepId>
-                                <input type="hidden" name="reactionType" value="Good">
-                                <button style="background-color:@(hasReacted == "Good" ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
-                                    Good:
-                                    @cheep.Reactions.Count(r => r.ReactionType == "Good")
-                                </button>
-                            </form>
-                            <text>|</text>
-                            <form method="post">
-                                <input type="hidden" name="cheepId" value=@cheep.CheepId>
-                                <input type="hidden" name="reactionType" value="Ish">
-                                <button style="background-color:@(hasReacted == "Ish" ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
-                                    Ish:
-                                    @cheep.Reactions.Count(r => r.ReactionType == "Ish")
-                                </button>
-                            </form>
-                            <text>|</text>
-                            <form method="post">
-                                <input type="hidden" name="cheepId" value=@cheep.CheepId>
-                                <input type="hidden" name="reactionType" value="Bad">
-                                <button style="background-color:@(hasReacted == "Bad" ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
-                                    Bad:
-                                    @cheep.Reactions.Count(r => r.ReactionType == "Bad")
-                                </button>
-                            </form>
+                            @foreach (var (reactionType, displayString) in Model.ReactionTypes)
+                            {
+                                <form method="post">
+                                    <input type="hidden" name="cheepId" value=@cheep.CheepId>
+                                    <input type="hidden" name="reactionType" value=@reactionType>
+                                    <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
+                                        @displayString :
+                                        @cheep.Reactions.Count(r => r.ReactionType == reactionType)
+                                    </button>
+                                </form>
+                            }
                         }
                     </p>
                 </li>
@@ -124,27 +109,6 @@
     
     @{
         //await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-    }
-    
-    @functions
-    {
-        private bool React(CheepDTO cheep, string reactionType)
-        {
-            var author = User.Identity?.Name!;
-            if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return false;
-            if (cheep.Reactions.Any(r => r.Author == author)) return false;
-            try
-            {
-                Model.OnPostChangeReaction(cheep.CheepId, reactionType);
-                
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.GetType());
-                //throw;
-            }
-            return false;
-        }
     }
 </div>
 

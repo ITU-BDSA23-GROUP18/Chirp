@@ -1,4 +1,6 @@
-﻿namespace Chirp.Infrastructure.Repositories;
+﻿using Humanizer;
+
+namespace Chirp.Infrastructure.Repositories;
 
 public class ReactionRepository : IReactionRepository
 {
@@ -14,11 +16,11 @@ public class ReactionRepository : IReactionRepository
         _reactionDb.InitializeDatabase(true);
     }
     /// <summary>
-    /// Gets all the reactions from the database
+    /// Gets all possible reactions and how to show them from the database
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<string> GetAllReactionTypes() =>
-        Enum.GetValues<ReactionType>().Select(r => r.ToString());
+    public IEnumerable<(string, string)> GetAllReactionTypes() =>
+        Enum.GetValues<ReactionType>().Select(r => (r.ToString(), r.Humanize()));
     /// <summary>
     /// Creates a reaction with the given cheepId, authorName and reactionString
     /// </summary>

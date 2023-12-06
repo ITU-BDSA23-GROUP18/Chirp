@@ -3,12 +3,12 @@ using System.ComponentModel;
 
 public enum ReactionType
 {
-    [Description("Thumb Up")]
+    [Description("❤️")]
     Good,
 
-    [Description("Thumb Sideways")]
+    [Description("🕶️")]
     Ish,
 
-    [Description("Thumb Down")]
+    [Description("💩")]
     Bad
 }
