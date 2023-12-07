@@ -6,16 +6,15 @@
     Layout = "Shared/_Layout";
 }
 
-<!-- Add icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet"  href="css/style.css" />
+
 <div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
         <h2> Write a cheep! </h2>
         <form method="post" asp-page-handler="cheep" class="cheep">
             <textarea id="cheepbox" class="cheepbox" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
-            <div class="char-count" id="charCount">0/160 characters</div>
+            <div class="char-count" id="charCount"><p>0/160 characters<p></div>
             <button class="share"><i class="fa fa-send"></i> Cheep!</button>
         </form>
         
@@ -50,10 +49,12 @@
                     <p>
                         @if (cheep.ProfilePictureUrl != null && cheep.ProfilePictureUrl != ""){
                             <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
-                        } else {
+                        }
+                        else
+                        {
                             <img src="../images/defualt_user_pic.png" width="30" alt="Avatar" class="avatar">
                         }
-                        
+
                         <strong>
                             @if (cheep.DisplayName != "")
                             {
@@ -82,6 +83,9 @@
     {
         <em>There are no cheeps so far.</em>
     }
+
+    <br/>
+
     
     <partial name="Pagination" model="@Model.GetPagination()"/>
     

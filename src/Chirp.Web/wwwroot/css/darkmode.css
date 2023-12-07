@@ -1,5 +1,5 @@
 body {
-  background: #eccaca;
+  background: #393838;
   font-family: 'Trebuchet MS', sans-serif;
 }
 
@@ -8,19 +8,19 @@ body {
 }
 
 a {
-  color: #26776F;
+  color: #cc6e6e;
   text-decoration: none;
   cursor: pointer;  
 }
 
 a:hover {
-  color: #333;
+  color: #e59999;
 }
 
 input[type="text"],
 input[type="password"] {
-  background: white;
-  border: 1px solid #e6c0bf;
+  background: #504f4f;
+  border: 1px solid #857472;
   padding: 2px;
   font-family: 'Trebuchet MS', sans-serif;
   border-radius: 2px;
@@ -38,24 +38,23 @@ input[type="submit"] {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  color: white;
+  color: #4f4f4f;
 }
 
 div.page {
-  background: white;
-  border: 1px solid #cc6e6e;
+  background: #4f4f4f;
+  border: 1px solid black;
   width: 900px;
   margin: 30px auto;
   box-shadow: 0.1px 0.1px 10px rgba(0, 0, 0, 0.2);
 }
 
 div.page h1 {
-  background: #cc6e6e;
+  background: #262626;
   margin: 0;
   padding: 10px 14px;
   color: white;
   letter-spacing: 1px;
-  text-shadow: 0 0 3px #772424;
   font-weight: normal;
 }
 
@@ -64,43 +63,51 @@ div.page h1 img {
 }
 
 div.page div.navigation {
-  background: #eee;
+  background: #4f4f4f;
   letter-spacing: .5px;
   text-align: right;  
   padding: 5px 10px;  
 }
 
 div.page div.navigation a {
-  color: #888;
+  color: white !important; 
   font-weight: bold;
   text-decoration: none;
   padding-left: 10rem;
 }
 
 div.page div.navigation a:hover{
-   color: #fff; 
+   color: #fff !important; 
 }
 
  div.page div.navigation a.active{
      text-decoration: underline;
      text-underline-offset: 5px;
-     color: #fff;
+     color: #fff !important;
  }
 
 div.page h2 {
   margin: 0 0 15px;
-  color: #571010;
-  text-shadow: 0 1px 2px #ccc;
+  color: white;
 }
 div.page  h4{
     margin: 0 0 15px;
-    color: #850000;
-    text-shadow: 0 1px 2px #ccc;
+    color: white;
 }
 
 div.page h5 {
-  color: #a71e1e;
-  text-shadow: 0 1px 2px #ccc;
+  color: white;
+  text-shadow: none;  
+}
+
+div.page p, i {
+    color: #8d8d8d;
+    text-shadow: none;
+}
+
+div.page text{
+    color: #8d8d8d;
+    text-shadow: none;
 }
 
 div.page div.body {
@@ -108,29 +115,18 @@ div.page div.body {
 }
 
 div.page div.footer {
-  background: #eee;
+  background: #262626;
   color: #888;
   padding: 5px 10px;
 }
 
 div.page div.followstatus {
   border: 1px solid #ccc;
-  background: #E3EBEA;
+  background: #4f4f4f;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   padding: 3px;
-}
-
-div.page ul.followers {
-  list-style: none;
-  padding: 0.3em;
-  left: 0;
-}
-div.page ul.followers li {
-  list-style: none;
-  padding: 0;
-  margin-bottom: -0.7em;
 }
 
 div.page ul.cheeps {
@@ -142,8 +138,8 @@ div.page ul.cheeps {
 div.page ul.cheeps li {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #DBF3F1;
+  background: #252424;
+  border: 1px solid #1a1a1a;
   border-radius: 2px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -163,11 +159,16 @@ div.page ul.cheeps li small {
   color: #888;
 }
 
+div.page ul.cheeps li p {
+  color: #c9c4c4;
+  text-decoration: none;
+}
+
 div.page div.cheepbox {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #e29494;
+  background: #919090;
+  border: 1px solid #5b5a5a;
   border-radius: 2px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -175,7 +176,7 @@ div.page div.cheepbox {
 
 div.page div.cheepbox h3 {
   margin: 0;
-  color: #7e2c2c;
+  color: white;
 }
 
 div.page div.cheepbox p {
@@ -195,8 +196,8 @@ div.message {
   list-style: none;
   margin: 10px 10px 0;
 
-  background: #f3b9b9;
-  border: 1px solid #ce8181;
+  background: #9b9999;
+  border: 1px solid #919090;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -204,8 +205,8 @@ div.message {
 }
 
 ul.message li {
-  background: #f3b9b9;
-  border: 1px solid #ce8181;
+  background: #4f4f4f;
+  border: 1px solid #919090;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -214,8 +215,8 @@ ul.message li {
 
 div.error {
   margin: 10px 0;
-  background: #FAE4E4;
-  border: 1px solid #DD6F6F;
+  background: #4f4f4f;
+  border: 1px solid #919090;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -225,8 +226,8 @@ div.error {
 div.topics {
   width: 180px;
   height: 250px;
-  background: #ffffff;
-  border: 1px solid #e29494;
+  background: #4f4f4f;
+  border: 1px solid #919090;
   border-radius: 2px;
   position: fixed;
   top: 50%;
@@ -245,8 +246,8 @@ ul.topic {
 li.topic {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #DBF3F1;
+  background: #4f4f4f;
+  border: 1px solid #919090;
   border-radius: 2px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -258,6 +259,8 @@ textarea.cheepbox{
     height: 5rem;
     resize: none;
     border-radius: 5px;
+    color: white;
+    background-color: #656464;
 }
 
 textarea.aboutme{
@@ -266,25 +269,17 @@ textarea.aboutme{
     outline: none;
     border: 0;
     resize: none;
+    color: white;
+    background-color: #4e4e4e;
     
-}
-
-button.delete{
-    background: red;
-    border-radius: 34px;
-    border: none;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-    margin-right: 1.5rem;
 }
 
 button.changer{
 
   margin-right: 2em;
   background: none;
-	color: inherit;
-	border: none;;
+	color: white;
+	border: none;
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
@@ -299,17 +294,17 @@ div.cheep button.share{
 }
 
 div.cheep button.share:hover{
-    background: #DD6F6F;
+    background: #4e4e4e;
     color: white;
 }
 
 textarea{
     resize: none;
-    border: 1px solid #000000;
+    border: 1px solid #919090;
 }
 
 .char-count {
-    color: rgb(128, 128, 128);
+    color: white;
     float: right;
     margin-right: 0.7rem;
 }
@@ -336,7 +331,7 @@ textarea{
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
+    background-color: #4e4e4e;
     min-width: 160px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -344,7 +339,7 @@ textarea{
 }
 
 .dropdown-content a {
-    color: black;
+    color: white;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -360,7 +355,7 @@ textarea{
 }
 
 .dropdown_img:hover{
-    background-color: #DD6F6F;
+    background-color: white;
 }
 
 .dropdown a:hover {background-color: #ddd;}
@@ -457,7 +452,7 @@ textarea{
     .dropdown-content {
         display: none;
         position: absolute;
-        background-color: #f1f1f1;
+        background-color: #4e4e4e;
         min-width: 160px;
         overflow: auto;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -465,20 +460,19 @@ textarea{
     }
 
     .dropdown-content a {
-        color: black;
+        color: white;
         padding: 12px 16px;
         text-decoration: none;
         display: block;
     }
 
     .dropdown a:hover {
-        background-color: #ddd;
+        background-color: #cc6e6e;
     }
 
     .show {
         display: block;
     }
-
 
 .switch {
     position: relative;
@@ -518,11 +512,11 @@ textarea{
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #cc6e6e;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #cc6e6e;
 }
 
 input:checked + .slider:before {
@@ -553,20 +547,23 @@ input:checked + .slider:before {
 }
 
 .aboutme_lined_header{
-    width: 100%; 
-    height: 20px; 
-    border-bottom: 1px solid black; 
+    width: 100%;
+    height: 20px;
+    border-bottom: 1px solid white;
     text-align: center
 }
 
 .aboutme_header_txt{
-    background-color: #fff; 
+    color: white;
+    background-color: #4f4f4f;
     padding: 0 10px;
 }
 
 #scale{
+    background-color: #4f4f4f;
     border: none;
     border-radius: 34px;
+    color: white;
     font-weight: bold;
     cursor: pointer;
 }
@@ -575,7 +572,13 @@ div.page h1 {
     font-size: 80px;
 }
 
-form {
-    display: inline;
+button.delete{
+    background: transparent;
+    border-radius: 34px;
+    border: 1px red solid;
+    color: red;
+    font: inherit;
+    cursor: pointer;
+    margin-right: 1.5rem;
 }
 
