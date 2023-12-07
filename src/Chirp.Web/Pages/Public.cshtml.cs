@@ -9,8 +9,7 @@ public class PublicModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     private readonly IReactionRepository _reactionRepository;
     private static List<CheepDTO> Cheeps { get; set; } = new();
-    public PaginationModel Pagination { get; private set; } = new(1,1);
-    public readonly IEnumerable<(string, string)> ReactionTypes;
+    public static PaginationModel Pagination { get; private set; } = new (1, 1);
     public string? ProfilePictureUrl { get; private set; }
 
     public bool IsDarkMode { get; private set; }
@@ -19,12 +18,10 @@ public class PublicModel : PageModel
     
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
     {
-        Cheeps = new List<CheepDTO>();
         IsDarkMode = false;   
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         _reactionRepository = reactionRepository;
-        ReactionTypes = _reactionRepository.GetAllReactionTypes();
     }
 
     public async Task<IActionResult> OnGet([FromQuery] int page)
@@ -46,10 +43,15 @@ public class PublicModel : PageModel
         
         return Page();
     }
-
+    
     public List<CheepDTO> GetCheeps()
     {
         return Cheeps;
+    }
+
+    public PaginationModel GetPagination()
+    {
+        return Pagination;
     }
     
     public IActionResult OnPostCheep(string message)
@@ -81,17 +83,3 @@ public class PublicModel : PageModel
         return await _authorRepository.GetProfilePicture(name);
     }
 }
-
-// public class PaginationModel
-// {
-//     public readonly int CheepsPerPage = 32;
-//     public readonly int NPages;
-//     public readonly int CurrentPage;
-//
-//     public PaginationModel(int nCheeps, int currentPage)
-//     {
-//         CurrentPage = currentPage;
-//         NPages = nCheeps / CheepsPerPage;
-//         if (nCheeps % CheepsPerPage > 0) NPages++;
-//     }
-// }

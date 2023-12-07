@@ -1,0 +1,40 @@
+﻿@using Humanizer
+<div style="display: inline-block">
+
+@{
+    CheepDTO cheep;
+    if (ViewData["Cheep"] is CheepDTO c) cheep = c;
+    else throw new AggregateException("Cheep is not of type CheepDTO");
+    
+    var reactionTypes = Enum.GetValues<ReactionType>().Select(r => (r.ToString(), r.Humanize()));
+}
+
+@if (!User.Identity?.IsAuthenticated ?? false)
+{
+    <text>Good: </text>
+    @cheep.Reactions.Count(r => r.ReactionType == "Good")
+    <text>|</text>
+    <text>Ish: </text>                            
+    @cheep.Reactions.Count(r => r.ReactionType == "Ish")
+    <text>|</text>
+    <text>Bad: </text>                            
+    @cheep.Reactions.Count(r => r.ReactionType == "Bad")
+}
+else
+{
+    var author = User.Identity?.Name!;
+    var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
+
+    @foreach (var (reactionType, displayString) in reactionTypes)
+    {
+        <form method="post" style="display: inline-block">
+            <input type="hidden" name="cheepId" value=@cheep.CheepId>
+            <input type="hidden" name="reactionType" value=@reactionType>
+            <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
+                @displayString :
+                @cheep.Reactions.Count(r => r.ReactionType == reactionType)
+            </button>
+        </form>
+    }
+}
+</div>

@@ -298,9 +298,8 @@ public class AuthorRepository : IAuthorRepository
 
         if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl =="")
         {
-            return "~/images/default_user_pic.png";
+            profilePictureUrl = "../images/default_user_pic.png";
         }
-        
         return profilePictureUrl;
     }
     
@@ -314,7 +313,6 @@ public class AuthorRepository : IAuthorRepository
         author.IsDarkMode = isDarkMode;
         await _authorDb.SaveChangesAsync();
     }
-    
 
     public async Task<bool> IsDarkMode(string name)
     {

@@ -5,12 +5,6 @@ namespace Chirp.Core.IRepositories;
 public interface IReactionRepository
 {
     /// <summary>
-    /// Gets all possible reactions and how to show them from the database
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerable<(string, string)> GetAllReactionTypes();
-
-    /// <summary>
     /// Creates a reaction with the given cheepId, authorName and reactionType
     /// </summary>
     /// <param name="cheepId"></param>

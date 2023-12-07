@@ -8,11 +8,10 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
         <h2> Write a cheep! </h2>
-        <form method="post" asp-page-handler="cheep" class="cheep">
+        <form method="post" asp-page-handler="cheep" class="cheep" style="">
             <textarea id="cheepbox" class="cheepbox" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
             <div class="char-count" id="charCount"><p>0/160 characters<p></div>
             <button class="share"><i class="fa fa-send"></i> Cheep!</button>
@@ -47,7 +46,7 @@
             {
                 <li>
                     <p>
-                        @if (cheep.ProfilePictureUrl != null && cheep.ProfilePictureUrl != ""){
+                        @if (!string.IsNullOrEmpty(cheep.ProfilePictureUrl)){
                             <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
                         }
                         else
@@ -69,35 +68,11 @@
                         <br/>
                         @cheep.Message
                         <br>
-                            @if (!User.Identity?.IsAuthenticated ?? false)
-                            {
-                            
-                                <text>Good: </text>
-                                @cheep.Reactions.Count(r => r.ReactionType == "Good")
-                                <text>|</text>
-                                <text>Ish: </text>                            
-                                @cheep.Reactions.Count(r => r.ReactionType == "Ish")
-                                <text>|</text>
-                                <text>Bad: </text>                            
-                                @cheep.Reactions.Count(r => r.ReactionType == "Bad")
-                            }
-                            else
-                            {
-                                var author = User.Identity?.Name!;
-                                var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
-                            
-                                @foreach (var (reactionType, displayString) in Model.ReactionTypes)
-                                {
-                                    <form method="post" style="display: inline-block">
-                                        <input type="hidden" name="cheepId" value=@cheep.CheepId>
-                                        <input type="hidden" name="reactionType" value=@reactionType>
-                                        <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
-                                            @displayString :
-                                            @cheep.Reactions.Count(r => r.ReactionType == reactionType)
-                                        </button>
-                                    </form>
-                                }
-                            }
+
+                        @{
+                            ViewData["Cheep"] = cheep;
+                        }
+                        <partial name="ReactionBox" view-data="ViewData"/>
                     </p>
                 </li>
             }
@@ -111,50 +86,6 @@
     <br/>
 
     
-    @* @{ *@
-    @*     await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination); *@
-    @* } *@
-    
-    <!-- Pagination -->
-    @{
-        <ul id="pagination_ul">
-        @if (Model.Pagination.CurrentPage == 1)
-        {
-            <li><p>Previous</p></li>
-        }
-        else
-        {
-            <li><a href="?page=@(Model.Pagination.CurrentPage - 1)">Previous</a></li>
-        }
-        <li>
-            <p>|</p></li>
-        @for (var i = 1; i <= Model.Pagination.NPages; i++)
-        {
-            @if (i == Model.Pagination.CurrentPage)
-            {
-                <li>
-                    <p>@i</p></li>
-            }
-            else
-            {
-                <li><a href="?page=@i">@i</a></li>
-            }
-            <li>
-                <p>|</p></li>
-        }
-
-        @if (Model.Pagination.CurrentPage == Model.Pagination.NPages)
-        {
-            <li>
-                <p>Next</p></li>
-        }
-        else
-        {
-            <li><a href="?page=@(Model.Pagination.CurrentPage + 1)">Next</a></li>
-        }
-    </ul>
-    }
-
-</div>
+    <partial name="Pagination" model="@Model.GetPagination()"/>
 
 
