@@ -116,7 +116,7 @@ public class AboutMeModel : PageModel
             Console.WriteLine("the author name is:"+authorName);
             await _authorRepository.DeleteAuthor(authorName);
             //Need to signout the user
-            return RedirectToPage("Public");
+            return Redirect("MicrosoftIdentity/Account/SignOut");
         }
         catch 
         {
