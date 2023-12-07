@@ -13,7 +13,7 @@ public static class DbInitializer
         SetData();
         chirpContext.Authors.AddRange(Authors);
         chirpContext.Cheeps.AddRange(Cheeps);
-        chirpContext.Reactions.AddRange((Reactions));
+        chirpContext.Reactions.AddRange(Reactions);
         chirpContext.SaveChanges();
     }
 
@@ -38,7 +38,7 @@ public static class DbInitializer
         a3.Following.Add(a2);
         a3.Following.Add(a4);
 
-        //Cheeps
+        // Cheeps
         var c1 = new Cheep() { AuthorId = a10.AuthorId, Author = a10, Message = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
         var c2 = new Cheep() { AuthorId = a10.AuthorId, Author = a10, Message = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
         var c3 = new Cheep() { AuthorId = a10.AuthorId, Author = a10, Message = "In various enchanted attitudes, like the Sperm Whale.", TimeStamp = DateTime.Parse("2023-08-01 13:14:58") };

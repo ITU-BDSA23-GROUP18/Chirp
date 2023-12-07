@@ -95,6 +95,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Current user does not exist");
         }
+
         signedInUser.Following.Add(authorToFollow);
         authorToFollow.Followers.Add(signedInUser);
         await _authorDb.SaveChangesAsync();
@@ -122,7 +123,7 @@ public class AuthorRepository : IAuthorRepository
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followerListDto.Add(authorDto);
         }
 
@@ -185,7 +186,7 @@ public class AuthorRepository : IAuthorRepository
     /// </summary>
     /// <param name="name"></param>
     /// <param name="newEmail"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">If the author is not found, or the email is in use.</exception>
     public async Task<bool> ChangeEmail(string name, string newEmail)
     {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
@@ -193,10 +194,12 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException();
         }
+
         if (_authorDb.Authors.Any(a => a.Email == newEmail))
         {
             throw new ArgumentException($"{"email"} is already used!");
         }
+
         author.Email = newEmail;
         await _authorDb.SaveChangesAsync();
         return true;
@@ -209,10 +212,12 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException();
         }
+
         if (_authorDb.Authors.Any(a => a.DisplayName == newName))
         {
             throw new ArgumentException($"{"name"} is already used!");
         }
+
         author.DisplayName = newName;
         await _authorDb.SaveChangesAsync();
         return true;
@@ -222,7 +227,7 @@ public class AuthorRepository : IAuthorRepository
     /// Deletes the author with the given name.
     /// </summary>
     /// <param name="name"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">If the given author is not found.</exception>
     public async Task<bool> DeleteAuthor(string name)
     {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
@@ -230,6 +235,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         Console.WriteLine("Deleting author: " + author.Name);
         _authorDb.Authors.Remove(author);
         await _authorDb.SaveChangesAsync();
@@ -301,6 +307,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         author.ProfilePictureUrl = null;
         await _authorDb.SaveChangesAsync();
     }
@@ -319,6 +326,7 @@ public class AuthorRepository : IAuthorRepository
         {
             return "images/defualt_user_pic.png";
         }
+
         return profilePictureUrl;
     }
 
@@ -329,6 +337,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         author.IsDarkMode = isDarkMode;
         await _authorDb.SaveChangesAsync();
     }
@@ -340,6 +349,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         return author.IsDarkMode;
     }
 
@@ -350,6 +360,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         author.FontSizeScale = fontSizeScale;
         await _authorDb.SaveChangesAsync();
     }
@@ -361,7 +372,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         return author.FontSizeScale;
     }
-
 }

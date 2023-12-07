@@ -9,17 +9,12 @@ public class PublicModel : PageModel
     public PaginationModel Pagination { get; private set; } = new(1, 1);
     public IEnumerable<(string Key, string Value)> ReactionTypes { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
+    public bool IsDarkMode { get; private set; }
+    public float FontSizeScale { get; private set; }
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
     private readonly IReactionRepository _reactionRepository;
     private static List<CheepDTO> Cheeps { get; set; } = new();
-    public PaginationModel Pagination { get; private set; } = new(1, 1);
-    public readonly IEnumerable<(string, string)> ReactionTypes;
-    public string? ProfilePictureUrl { get; private set; }
-
-    public bool IsDarkMode { get; private set; }
-
-    public float FontSizeScale { get; private set; }
 
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
     {
