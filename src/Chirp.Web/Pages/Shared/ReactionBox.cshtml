@@ -1,14 +1,10 @@
 ﻿@using Humanizer
 @{
     CheepDTO cheep;
-    if (ViewData["Cheep"] is CheepDTO c)cheep = c;
-    else throw new Exception("Cheep is not of type CheepDTO");
+    if (ViewData["Cheep"] is CheepDTO c) cheep = c;
+    else throw new AggregateException("Cheep is not of type CheepDTO");
     
     var reactionTypes = Enum.GetValues<ReactionType>().Select(r => (r.ToString(), r.Humanize()));
-    
-    // IEnumerable<(string, string)> reactionTypes;
-    // if (ViewData["ReactionTypes"] is IEnumerable<(string, string)> rt) reactionTypes = rt;
-    // else throw new Exception("ReactionTypes is not of type IEnumerable<(string, string)>");
 }
 
 @if (!User.Identity?.IsAuthenticated ?? false)
