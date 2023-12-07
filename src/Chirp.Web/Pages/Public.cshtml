@@ -69,35 +69,11 @@
                         <br/>
                         @cheep.Message
                         <br>
-                        
-                        @if (!User.Identity?.IsAuthenticated ?? false)
-                        {
-                            <text>Good: </text>
-                            @cheep.Reactions.Count(r => r.ReactionType == "Good")
-                            <text>|</text>
-                            <text>Ish: </text>                            
-                            @cheep.Reactions.Count(r => r.ReactionType == "Ish")
-                            <text>|</text>
-                            <text>Bad: </text>                            
-                            @cheep.Reactions.Count(r => r.ReactionType == "Bad")
+
+                        @{
+                            ViewData["Cheep"] = cheep;
                         }
-                        else
-                        {
-                            var author = User.Identity?.Name!;
-                            var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
-                            
-                            @foreach (var (reactionType, displayString) in Model.ReactionTypes)
-                            {
-                                <form method="post">
-                                    <input type="hidden" name="cheepId" value=@cheep.CheepId>
-                                    <input type="hidden" name="reactionType" value=@reactionType>
-                                    <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
-                                        @displayString :
-                                        @cheep.Reactions.Count(r => r.ReactionType == reactionType)
-                                    </button>
-                                </form>
-                            }
-                        }
+                        <partial name="ReactionBox" view-data="ViewData"/>
                     </p>
                 </li>
             }
@@ -111,27 +87,8 @@
     <br/>
 
     
-    @* @{ *@
-    @*     await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination); *@
-    @* } *@
+    <partial name="Pagination" model="@Model.GetPagination()"/>
     
-    <!-- Pagination -->
-    @{
-        @if (Model.Pagination.CurrentPage == 1) {<text>Previous</text>}
-        else {<a href="?page=@(Model.Pagination.CurrentPage - 1)">Previous</a>}
-        <text>|</text>
-    
-        @for (var i = 1; i <= Model.Pagination.NPages; i++)
-        {
-            @if (i == Model.Pagination.CurrentPage) {<text>@i</text>}
-            else {<a href="?page=@i">@i</a>}
-            <text>|</text>
-        }
-    
-        @if (Model.Pagination.CurrentPage == Model.Pagination.NPages) {<text>Next</text>}
-        else {<a href="?page=@(Model.Pagination.CurrentPage+1)">Next</a>}
-    }
-
 </div>
 
 
