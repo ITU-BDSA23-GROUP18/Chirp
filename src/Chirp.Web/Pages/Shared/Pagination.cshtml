@@ -1,14 +1,3 @@
-@model PaginationModel
-@{
-    @if (Model.CurrentPage == 1) {<text>Previous</text>}
-    else {<a href="?page=@(Model.CurrentPage - 1)">Previous</a>}
-    <text>|</text>
-    
-    @for (var i = 1; i <= Model.NPages; i++)
-    {
-        @if (i == Model.CurrentPage) {<text>@i</text>}
-        else {<a href="?page=@i">@i</a>}
-        <text>|</text>
 @model Chirp.Web.Pages.Shared.PaginationModel
 
 <style>
