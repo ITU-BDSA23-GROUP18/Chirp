@@ -41,10 +41,10 @@
 
     <h2> Public Timeline </h2>
 
-    @if (Model.Cheeps.Any())
+    @if (Model.GetCheeps().Any())
     {
         <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
+            @foreach (var cheep in Model.GetCheeps())
             {
                 <li>
                     <p>
@@ -68,8 +68,34 @@
                         <br/>
                         @cheep.Message
                         <br>
-                        @{
-                            await Html.RenderPartialAsync("Shared/CheepBox", new CheepBoxModel(cheep));
+                        
+                        @if (!User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <text>Good: </text>
+                            @cheep.Reactions.Count(r => r.ReactionType == "Good")
+                            <text>|</text>
+                            <text>Ish: </text>                            
+                            @cheep.Reactions.Count(r => r.ReactionType == "Ish")
+                            <text>|</text>
+                            <text>Bad: </text>                            
+                            @cheep.Reactions.Count(r => r.ReactionType == "Bad")
+                        }
+                        else
+                        {
+                            var author = User.Identity?.Name!;
+                            var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
+                            
+                            @foreach (var (reactionType, displayString) in Model.ReactionTypes)
+                            {
+                                <form method="post">
+                                    <input type="hidden" name="cheepId" value=@cheep.CheepId>
+                                    <input type="hidden" name="reactionType" value=@reactionType>
+                                    <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
+                                        @displayString :
+                                        @cheep.Reactions.Count(r => r.ReactionType == reactionType)
+                                    </button>
+                                </form>
+                            }
                         }
                     </p>
                 </li>
@@ -81,7 +107,27 @@
         <em>There are no cheeps so far.</em>
     }
     
+    @* @{ *@
+    @*     await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination); *@
+    @* } *@
+    
+    <!-- Pagination -->
     @{
-        await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+        @if (Model.Pagination.CurrentPage == 1) {<text>Previous</text>}
+        else {<a href="?page=@(Model.Pagination.CurrentPage - 1)">Previous</a>}
+        <text>|</text>
+    
+        @for (var i = 1; i <= Model.Pagination.NPages; i++)
+        {
+            @if (i == Model.Pagination.CurrentPage) {<text>@i</text>}
+            else {<a href="?page=@i">@i</a>}
+            <text>|</text>
+        }
+    
+        @if (Model.Pagination.CurrentPage == Model.Pagination.NPages) {<text>Next</text>}
+        else {<a href="?page=@(Model.Pagination.CurrentPage+1)">Next</a>}
     }
+
 </div>
+
+

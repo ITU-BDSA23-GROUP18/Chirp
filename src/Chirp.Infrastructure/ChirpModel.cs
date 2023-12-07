@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore;
-
 namespace Chirp.Infrastructure;
 
 public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(options)
@@ -25,7 +22,7 @@ public class ChirpContext(DbContextOptions<ChirpContext> options) : DbContext(op
         modelBuilder.Entity<Author>().Property(a => a.DisplayName).HasMaxLength(32);
         modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique().HasFilter("[Email] <> ''");
 
-        modelBuilder.Entity<Reaction>().HasIndex(r => r.CheepId).IsUnique();
+        modelBuilder.Entity<Reaction>().HasIndex(r => new {r.CheepId, r.AuthorName}).IsUnique();
     }
     
 }

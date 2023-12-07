@@ -5,10 +5,10 @@ namespace Chirp.Core.IRepositories;
 public interface IReactionRepository
 {
     /// <summary>
-    /// Gets the reactions from the database
+    /// Gets all possible reactions and how to show them from the database
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<string> GetAllReactionTypes();
+    public IEnumerable<(string, string)> GetAllReactionTypes();
 
     /// <summary>
     /// Creates a reaction with the given cheepId, authorName and reactionType
@@ -22,6 +22,6 @@ public interface IReactionRepository
     /// Removes the reaction with the given cheepId and authorId
     /// </summary>
     /// <param name="cheepId"></param>
-    /// <param name="authorId"></param>
-    public void RemoveReaction(string cheepId, string authorId);
+    /// <param name="authorName"></param>
+    public void RemoveReaction(string cheepId, string authorName);
 }

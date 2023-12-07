@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Query;
 namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
@@ -21,6 +20,7 @@ public class AboutMeModel : PageModel
         _repository = repository;
         _authorRepository = authorRepository;
     }
+    
     /// <summary>
     /// Gets the cheeps from the author with the given currentUserName
     /// </summary>
@@ -37,21 +37,9 @@ public class AboutMeModel : PageModel
             return RedirectToPage("public");
         }
 
-        if(Author.DisplayName != User.Identity?.Name!){
-            DisplayName = Author.DisplayName;
-        }
-        else
-        {
-            DisplayName = Author.Name;
-        }
-        if (Author.Email != User.Identity?.Name!)
-        {
-            Email = Author.Email;
-        }
-        else 
-        {
-            Email = "Email...";
-        }
+        DisplayName = Author.DisplayName != User.Identity?.Name! ? Author.DisplayName : Author.Name;
+        
+        Email = Author.Email != User.Identity?.Name! ? Author.Email : "Email...";
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
         if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -74,6 +62,7 @@ public class AboutMeModel : PageModel
         
         return Page();
     }
+    
     /// <summary>
     /// Changes the email of the author with the given currentUserName to the given newEmail
     /// </summary>
@@ -115,6 +104,7 @@ public class AboutMeModel : PageModel
         {
             Console.WriteLine("the author name is:"+authorName);
             await _authorRepository.DeleteAuthor(authorName);
+
             //Need to signout the user
             return Redirect("MicrosoftIdentity/Account/SignOut");
         }
