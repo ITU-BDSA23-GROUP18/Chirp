@@ -13,6 +13,10 @@ public class AboutMeModel : PageModel
     public string ?DisplayName { get; private set; }   
     public string? ProfilePictureUrl { get; private set; }
     
+    // for individual user/"Author" preferences:
+    public bool IsDarkMode { get; private set; }
+    public float FontSizeScale { get; private set; }
+    
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         yourCheeps = new List<CheepDTO>();
@@ -59,6 +63,10 @@ public class AboutMeModel : PageModel
         Pagination = new PaginationModel(nCheeps, page);
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        
+        IsDarkMode = await _authorRepository.IsDarkMode(User.Identity?.Name!);
+        
+        FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity?.Name!);
         
         return Page();
     }
@@ -126,5 +134,28 @@ public class AboutMeModel : PageModel
         {
             return RedirectToPage();
         }
+    }
+    public async Task<IActionResult> OnPostSetDarkMode()
+    {
+        var isDarkMode = !await _authorRepository.IsDarkMode(User.Identity?.Name!);
+        
+        await _authorRepository.SetDarkMode(User.Identity?.Name!, isDarkMode);
+        return RedirectToPage();
+    }
+    
+    public async Task<IActionResult> OnPostSetFontSizeScale(float scale)
+    {
+        if (scale == 15)
+        {
+            scale = (float) 1.5;
+        }
+        if (scale < 1 || scale > 2)
+        {
+            Console.WriteLine($"Invalid scale: {scale}");
+            return RedirectToPage();
+        }
+        Console.WriteLine(scale);
+        await _authorRepository.SetFontSizeScale(User.Identity?.Name!, scale);
+        return RedirectToPage();
     }
 }

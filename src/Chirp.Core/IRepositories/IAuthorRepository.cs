@@ -68,4 +68,11 @@ public interface IAuthorRepository
     public Task DeleteProfilePicture(string name);
     
     public Task<string?> GetProfilePicture(string name);
+    
+    /// <summary>
+    /// The 4 methods below are for individual user/"Author" preferences:
+    public Task<float> GetFontSizeScale(string name);
+    public Task SetFontSizeScale(string name, float fontSizeScale);
+    public Task<bool> IsDarkMode(string name);
+    public Task SetDarkMode(string name, bool isDarkMode);
 }
