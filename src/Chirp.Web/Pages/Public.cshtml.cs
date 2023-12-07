@@ -9,7 +9,7 @@ public class PublicModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     private readonly IReactionRepository _reactionRepository;
     private static List<CheepDTO> Cheeps { get; set; } = new();
-    public PaginationModel Pagination { get; private set; } = new(1,1);
+    public static PaginationModel Pagination { get; private set; } = new (1, 1);
     public string? ProfilePictureUrl { get; private set; }
     
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
@@ -36,10 +36,15 @@ public class PublicModel : PageModel
         
         return Page();
     }
-
+    
     public List<CheepDTO> GetCheeps()
     {
         return Cheeps;
+    }
+
+    public PaginationModel GetPagination()
+    {
+        return Pagination;
     }
     
     public IActionResult OnPostCheep(string message)
