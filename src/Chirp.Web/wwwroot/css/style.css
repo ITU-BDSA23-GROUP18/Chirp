@@ -479,6 +479,7 @@ textarea{
         display: block;
     }
 
+
 .switch {
     position: relative;
     display: inline-block;
@@ -572,5 +573,9 @@ input:checked + .slider:before {
 
 div.page h1 {
     font-size: 80px;
+}
+
+form {
+    display: inline;
 }
 

@@ -9,7 +9,7 @@ public class CheepDTOTests
     public void CreateCheepDTOTest(string author, string message, string timestamp)
     {
         List<ReactionDTO> reactions = new List<ReactionDTO>();
-        var cheepDTO = new CheepDTO(author, message, timestamp, reactions, author);
+        var cheepDTO = new CheepDTO("", author, message, timestamp, reactions, author);
 
         Assert.Equal(cheepDTO.Author, cheepDTO.Author);
         Assert.Equal(cheepDTO.Message, cheepDTO.Message);
@@ -28,7 +28,7 @@ public class CheepDTOTests
 
         Assert.Throws(exceptionType, () =>
         {
-            var CheepDTO = new CheepDTO(author!, message!, timestamp!, reactions!, author!);
+            var CheepDTO = new CheepDTO("", author!, message!, timestamp!, reactions!, author!);
         });
     }
 }

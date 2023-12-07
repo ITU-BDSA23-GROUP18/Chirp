@@ -25,6 +25,7 @@ public class CheepRepository : ICheepRepository
     public async Task<IEnumerable<CheepDTO>> GetCheep(int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
+            .Include(c => c.Reactions)
             .OrderByDescending(c => c.TimeStamp)
             .Skip(CheepsPerPage * (page - 1))
             .Take(CheepsPerPage)
@@ -40,6 +41,7 @@ public class CheepRepository : ICheepRepository
     public async Task<IEnumerable<CheepDTO>> GetCheepFromAuthor(string authorName, int page = 1) =>
         await _cheepDb.Cheeps
             .Include(c => c.Author)
+            .Include(c => c.Reactions)
             .OrderByDescending(c => c.TimeStamp)
             .Where(c => c.Author.Name == authorName)
             .Skip(CheepsPerPage * (page - 1))
@@ -72,7 +74,7 @@ public class CheepRepository : ICheepRepository
     public void CreateCheep(string message, string username)
     {
         var cheepValidator = new CheepValidator();
-        var cheepValidationResult = cheepValidator.Validate(new NewCheep { Message = message });
+        var cheepValidationResult = cheepValidator.Validate(message);
         if (!cheepValidationResult.IsValid)
         {
             throw new ValidationException(cheepValidationResult.Errors);
@@ -106,21 +108,15 @@ public class CheepRepository : ICheepRepository
         _cheepDb.Cheeps.Add(cheep);
         _cheepDb.SaveChanges();
     }
-    /// <summary>
-    /// Class used to validate the cheep
-    /// </summary>
-    public class NewCheep
-    {
-        public required string Message { get; set; }
-    }
+
     /// <summary>
     /// Class used to validate the cheep to insure that the message is not empty and is less than 160 characters
     /// </summary>
-    public class CheepValidator : AbstractValidator<NewCheep>
+    private class CheepValidator : AbstractValidator<string>
     {
         public CheepValidator()
         {
-            RuleFor(c => c.Message).NotEmpty().MaximumLength(160);
+            RuleFor(s => s).NotEmpty().MaximumLength(160);
         }
     }
 }
