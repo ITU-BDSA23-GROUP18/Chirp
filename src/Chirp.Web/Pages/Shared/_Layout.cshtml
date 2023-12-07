@@ -3,8 +3,34 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"]</title>
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+    @if (Model.IsDarkMode)
+    {
+        <link href="~/css/darkmode.css" rel="stylesheet" type="text/css"/>
+    }
+    else
+    {
+        <link href="~/css/style.css" rel="stylesheet" type="text/css"/>    
+    }
+    
+    @{
+        var cssLink = "";
+    }
+    
+    @if (Model.FontSizeScale == 2)
+    {
+        cssLink = "/css/fontSize2x.css";
+    }
+    else if (Model.FontSizeScale == 1.5)
+    {
+        cssLink = "/css/fontSize1_5x.css";
+    }
+    else
+    {
+        cssLink = "/css/fontSize1x.css";
+    }
+    <link href="@cssLink" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>
@@ -12,17 +38,17 @@
     <div class="header">
         <h1><img src="/images/icon1.png" alt="Icon1"/>Chirp!</h1>
         <div id="sticky_nav">    
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
                 <div class="container">
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Public">Home</a>
+                                <a style="margin-right: 1rem" asp-area="" asp-page="/Public">Home</a>
                             </li>
                             <li>
                                 @if (User.Identity!.IsAuthenticated)
                                 {
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/FollowingTimeline">Following timeline</a>
+                                    <a  asp-area="" asp-page="/FollowingTimeline">Following timeline</a>
                                     
                                     
                                 }

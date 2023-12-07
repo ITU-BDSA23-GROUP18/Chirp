@@ -11,14 +11,17 @@ public class FollowingTimelineModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     public List<CheepDTO> Cheeps { get; private set; }
     public PaginationModel? Pagination { get; private set; }
-
     public string? ProfilePictureUrl { get; private set; }
+    public bool IsDarkMode { get; private set; }
+
+    public float FontSizeScale { get; private set; }
 
     public FollowingTimelineModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
         _repository = repository;
         _authorRepository = authorRepository;
+        IsDarkMode = false;
     }
 
     public async Task<ActionResult> OnGet([FromQuery] int page)
@@ -36,6 +39,8 @@ public class FollowingTimelineModel : PageModel
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+            IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
+            FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
         }
 
         var nCheeps = Cheeps.Count;

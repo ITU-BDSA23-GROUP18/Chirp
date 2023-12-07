@@ -122,7 +122,7 @@ public class AuthorRepository : IAuthorRepository
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
             followerListDto.Add(authorDto);
         }
 
@@ -321,4 +321,47 @@ public class AuthorRepository : IAuthorRepository
         }
         return profilePictureUrl;
     }
+
+    public async Task SetDarkMode(string name, bool isDarkMode)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        author.IsDarkMode = isDarkMode;
+        await _authorDb.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsDarkMode(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        return author.IsDarkMode;
+    }
+
+    public async Task SetFontSizeScale(string name, float fontSizeScale)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        author.FontSizeScale = fontSizeScale;
+        await _authorDb.SaveChangesAsync();
+    }
+
+    public async Task<float> GetFontSizeScale(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+        return author.FontSizeScale;
+    }
+
 }
