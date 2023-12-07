@@ -1,4 +1,5 @@
 namespace Chirp.Core.IRepositories;
+
 /// <summary>
 /// The IReactionRepository interface is used to define the methods that the ReactionRepository class must implement
 /// </summary>

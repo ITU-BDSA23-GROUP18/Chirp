@@ -29,7 +29,7 @@ public class CheepDTOTests
 
         Assert.Throws(exceptionType, () =>
         {
-            var CheepDTO = new CheepDTO("", author!, message!, timestamp!, reactions!, author!);
+            var cheepDTO = new CheepDTO("", author!, message!, timestamp!, reactions!, author!);
         });
     }
 }

@@ -1,68 +1,67 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Chirp.Web.Pages;
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileNameMustMatchTypeName", Justification = "Razor Page")]
 
 public class AboutMeModel : PageModel
 {
+    private readonly IAuthorRepository _authorRepository;
     private readonly ICheepRepository _repository;
-    public readonly IAuthorRepository _authorRepository;
-    public List<CheepDTO> yourCheeps { get; private set; }
+    public List<CheepDTO> Cheeps { get; private set; }
     public List<AuthorDTO> Followers { get; private set; }
     public PaginationModel? Pagination { get; private set; }
-    public string ?Email { get; private set; }
-    public string ?DisplayName { get; private set; }   
+    public string? Email { get; private set; }
+    public string? DisplayName { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
-    
+
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
-        yourCheeps = new List<CheepDTO>();
+        Cheeps = new List<CheepDTO>();
         Followers = new List<AuthorDTO>();
         _repository = repository;
         _authorRepository = authorRepository;
     }
-    
+
     /// <summary>
-    /// Gets the cheeps from the author with the given currentUserName
+    /// Gets the cheeps from the author with the given currentUserName.
     /// </summary>
     /// <param name="page"></param>
     /// <returns></returns>
     public async Task<ActionResult> OnGet([FromQuery] int page)
     {
-        //If a page query is not given in the url set the page=1
+        // If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
 
-        var Authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
-        var Author = Authors.FirstOrDefault();
-        if (Author == null || User.Identity == null) {
+        var author = (await _authorRepository.GetAuthorByName(User.Identity?.Name!)).FirstOrDefault();
+        if (author == null || User.Identity == null)
+        {
             return RedirectToPage("public");
         }
 
-        DisplayName = Author.DisplayName != User.Identity?.Name! ? Author.DisplayName : Author.Name;
-        
-        Email = Author.Email != User.Identity?.Name! ? Author.Email : "Email...";
+        DisplayName = author.DisplayName != User.Identity?.Name! ? author.DisplayName : author.Name;
+
+        Email = author.Email != User.Identity?.Name! ? author.Email : "Email...";
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
         }
-        
-        foreach (var author in Authors)
-        {
-            var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
-            var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
-            yourCheeps.AddRange(cheeps);
-            this.Followers.AddRange(Followers);
-        }
-        
-        var nCheeps = yourCheeps.Count;
+
+        var followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
+        var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
+        Cheeps.AddRange(cheeps);
+        Followers.AddRange(followers);
+
+        var nCheeps = Cheeps.Count;
         Pagination = new PaginationModel(nCheeps, page);
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
-        
+
         return Page();
     }
-    
+
     /// <summary>
     /// Changes the email of the author with the given currentUserName to the given newEmail
     /// </summary>
@@ -72,27 +71,30 @@ public class AboutMeModel : PageModel
     {
         try
         {
-            await _authorRepository.ChangeEmail(User.Identity?.Name!,newEmail );
+            await _authorRepository.ChangeEmail(User.Identity?.Name!, newEmail);
             return RedirectToPage();
         }
-        catch 
+        catch
         {
             Console.WriteLine("Email: " + newEmail + " is already taken");
             return RedirectToPage();
         }
     }
-    public async Task<IActionResult> OnPostChangeName(string newName){
+
+    public async Task<IActionResult> OnPostChangeName(string newName)
+    {
         try
         {
             await _authorRepository.ChangeName(User.Identity?.Name!, newName);
             return RedirectToPage();
         }
-        catch 
+        catch
         {
             Console.WriteLine("Name: " + newName + " is already taken");
             return RedirectToPage();
         }
     }
+
     /// <summary>
     /// Follows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -102,19 +104,20 @@ public class AboutMeModel : PageModel
     {
         try
         {
-            Console.WriteLine("the author name is:"+authorName);
+            Console.WriteLine("the author name is:" + authorName);
             await _authorRepository.DeleteAuthor(authorName);
 
-            //Need to signout the user
+            // Need to signout the user
             return Redirect("MicrosoftIdentity/Account/SignOut");
         }
-        catch 
+        catch
         {
-            Console.WriteLine("the author name is:"+authorName);
-            Console.WriteLine("Author"+ authorName+"does not exist");
+            Console.WriteLine("the author name is:" + authorName);
+            Console.WriteLine("Author" + authorName + "does not exist");
             return RedirectToPage();
         }
     }
+
     public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
     {
         try
@@ -122,7 +125,7 @@ public class AboutMeModel : PageModel
             await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
             return RedirectToPage();
         }
-        catch 
+        catch
         {
             return RedirectToPage();
         }

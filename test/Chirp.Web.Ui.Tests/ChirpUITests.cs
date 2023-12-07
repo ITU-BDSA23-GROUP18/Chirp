@@ -100,7 +100,7 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
         }
 
         // Go to the user timeline
-        await page.GetByText("TestUser's page").ClickAsync();
+        await page.GotoAsync(_serverAddress + "TestUser");
         for (int i = 1; i < listOfCheeps.Count; i++)
         {
             await page.GetByText(new Regex(listOfCheeps[i], RegexOptions.IgnoreCase)).ClickAsync();
@@ -123,6 +123,72 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
         GC.SuppressFinalize(this);
     }
 
+    [Fact]
+    public async Task SeeFollowerTimeLineTest()
+    {
+        var page = await _context!.NewPageAsync();
+
+        await page.GotoAsync(_serverAddress );
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
+
+        await page.GetByRole(AriaRole.Heading, new() { Name = "Following Timeline" }).ClickAsync();
+
+        await page.GetByText("You are not following anybody!.").ClickAsync();
+    }
+
+    [Fact]
+    public async Task FollowUsersTest()
+    {
+        var page = await _context!.NewPageAsync();
+
+        await page.GotoAsync(_serverAddress);
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
+
+        await page.GetByText("You are not following anybody!.").ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
+
+        await page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
+
+        // Following number does not update in the UI so we have to go to the following page
+        await page.GetByRole(AriaRole.Link, new() { Name = "Followers: 1" }).WaitForAsync();
+
+        await page.GotoAsync(_serverAddress + "Helge");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
+
+        // This is still wrong and shoud be fixed
+        await page.GetByRole(AriaRole.Link, new() { Name = "Followers: 1" }).WaitForAsync();
+
+        // Unfollow the users so that the test can be run again
+        await page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
+
+        await page.GotoAsync(_serverAddress + "Helge");
+
+        await page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
+    }
+
+    /// <summary>
+    /// This test is used to see if the number of followers is correct.
+    /// We know that the user "Wendell Ballan" follows 3 users by default
+    /// </summary>
+    [Fact]
+    public async Task SeeAUserThatFollowsOtherUsersTest()
+    {
+        // Wendell Ballan follows 3 users by default if this is changed this test will fail
+        var page = await _context!.NewPageAsync();
+
+        await page.GotoAsync(_serverAddress + "Wendell Ballan");
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "Following: 3" }).ClickAsync();
+    }
+
     /// <summary>
     /// Initializes the browser and context for the tests.
     /// </summary>
@@ -132,143 +198,10 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             // Disable for debugging, and optionally use slowMo.
-            //SlowMo = 400,
-            Headless = true //false if you want to see the browser
+            // SlowMo = 400,
+            Headless = true, // false if you want to see the browser
         });
         _context = await CreateBrowserContextAsync(_browser);
-    }
-
-    [Fact]
-    public async Task OpenPageTest()
-    {
-        var page = await _context!.NewPageAsync();
-
-        await page.GotoAsync(_serverAddress);
-    }
-    [Fact]
-    public async Task CreateCheepTest()
-    {
-        var Page = await _context!.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress);
-        //the current time is used such that we avoid duplicate cheeps 
-        //and make a uniq finger pirnt for this cheep
-        for (int i = 0; i < 10; i++)
-        {
-            var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
-            //await page.GetByText(" Chirp!").ClickAsync();
-            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
-            await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
-            //see the cheep in the timeline
-            await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
-        }
-    }
-    [Fact]
-    public async Task GoToNextPageTest()
-    {
-        var Page = await _context!.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress);
-        for (int i = 2; i < 10; i++)
-        {
-            await Page.GetByRole(AriaRole.Link, new() { Name = i.ToString(), Exact = true }).ClickAsync();
-            CheckUrl(Page.Url, _serverAddress + "?page=" + i);
-        }
-    }
-    [Fact]
-    public async Task Create_Cheeps_and_see_userTimeLine()
-    {
-        var Page = await _context!.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress);
-
-        var ListOfCheeps = new List<string>();
-        //33 is used because one page can only hold 32 cheeps
-        for (int i = 0; i < 33; i++)
-        {
-            var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
-            ListOfCheeps.Add(currentTime);
-            //await page.GetByText(" Chirp!").ClickAsync();
-            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
-            await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
-            //see the cheep in the timeline
-            await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
-        }
-        //go to the user timeline
-        await Page.GotoAsync(_serverAddress + "TestUser");
-        for (int i = 1; i < ListOfCheeps.Count; i++)
-        {
-            await Page.GetByText(new Regex(ListOfCheeps[i], RegexOptions.IgnoreCase)).ClickAsync();
-        }
-        //the first should be on the 2nd page
-        await Page.GetByRole(AriaRole.Link, new() { Name = "2", Exact = true }).ClickAsync();
-
-        await Page.GetByText(new Regex(ListOfCheeps[0], RegexOptions.IgnoreCase)).ClickAsync();
-    }
-    [Fact]
-    public async Task SeeFollowerTimeLineTest()
-    {
-        var Page = await _context!.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress );
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
-
-        await Page.GetByRole(AriaRole.Heading, new() { Name = "Following Timeline" }).ClickAsync();
-
-        await Page.GetByText("You are not following anybody!.").ClickAsync();
-    }
-
-    [Fact]
-    public async Task FollowUsersTest()
-    {
-        var Page = await _context!.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress);
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following Timeline" }).ClickAsync();
-
-        await Page.GetByText("You are not following anybody!.").ClickAsync();
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
-
-        await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
-
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
-
-        //following number does not update in the UI so we have to go to the following page
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Followers: 1" }).WaitForAsync();
-
-        await Page.GotoAsync(_serverAddress + "Helge");
-
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
-        //this is still wrong and shoud be fixed
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Followers: 1" }).WaitForAsync();
-
-        //unfollow the users so that the test can be run again
-        await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
-
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
-
-        await Page.GotoAsync(_serverAddress + "Helge");
-
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
-    }
-    
-    /// <summary>
-    /// This test is used to see if the number of followers is correct.
-    /// We know that the user "Wendell Ballan" follows 3 users by default
-    /// </summary>
-    [Fact]
-    public async Task seeAUserThatFollowsOtherUsersTest()
-    {
-        //Wendell Ballan follows 3 users by default if this is changed this test will fail
-
-        var Page = await _context!.NewPageAsync();
-
-        await Page.GotoAsync(_serverAddress + "Wendell Ballan");
-
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 3" }).ClickAsync();
     }
 
     /// <summary>
@@ -299,15 +232,5 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
         var context = await browser.NewContextAsync(contextOptions);
 
         return context;
-    }
-    
-    /// <summary>
-    /// Disposes the browser and context after each test
-    /// </summary>
-    public void Dispose()
-    {
-        // Dispose browser and context here
-        _context?.DisposeAsync().GetAwaiter().GetResult();
-        _browser?.DisposeAsync().GetAwaiter().GetResult();
     }
 }

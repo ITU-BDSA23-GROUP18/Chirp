@@ -1,4 +1,5 @@
 namespace Chirp.Core.DTOs;
+
 /// <summary>
 /// The CheepDTO class is used to transfer data from the CheepRepository class to the UI
 /// </summary>
@@ -13,8 +14,7 @@ public record CheepDTO
     public List<ReactionDTO> Reactions { get; private set; }
 
     /// <summary>
-    /// Constructor for the CheepDTO,
-    /// error will be thrown if any of the parameters are null or empty except for reactions
+    /// Initializes a new instance of the <see cref="CheepDTO"/> class.
     /// </summary>
     /// <param name="cheepId"></param>
     /// <param name="author"></param>
@@ -23,7 +23,7 @@ public record CheepDTO
     /// <param name="reactions"></param>
     /// <param name="displayName"></param>
     /// <param name="profilePictureUrl"></param>
-    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="ArgumentNullException">Error will be thrown if any of the parameters are null or empty except for reactions.</exception>
     public CheepDTO(string cheepId, string author, string message, string timestamp, List<ReactionDTO> reactions, string displayName, string? profilePictureUrl = null)
     {
         if (author is null or "") throw new ArgumentNullException(nameof(author), "Author is null or empty");

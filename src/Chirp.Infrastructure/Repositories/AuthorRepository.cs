@@ -1,15 +1,14 @@
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Http;
 
-=======
->>>>>>> 77392f1 (Add stylecop and fix all warnings)
 namespace Chirp.Infrastructure.Repositories;
+
 /// <summary>
 /// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
 /// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpContext _authorDb;
+
     /// <summary>
     /// Constructor for the AuthorRepository class
     /// If seedDatabase is true, the database will be seeded with data
@@ -21,6 +20,7 @@ public class AuthorRepository : IAuthorRepository
         _authorDb = authorDb;
         _authorDb.InitializeDatabase(seedDatabase);
     }
+
     /// <summary>
     /// Gets the author from the database with the given name
     /// </summary>
@@ -31,6 +31,7 @@ public class AuthorRepository : IAuthorRepository
              .Where(a => a.Name == name)
              .Select(a => a.ToDTO())
              .ToListAsync();
+
     /// <summary>
     /// Gets the author from the database with the given email
     /// </summary>
@@ -62,7 +63,7 @@ public class AuthorRepository : IAuthorRepository
 
         var author = new Author
         {
-            AuthorId = Guid.NewGuid(),  
+            AuthorId = Guid.NewGuid(),
             Name = name,
             DisplayName = displayName,
             Email = email,
@@ -74,6 +75,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+
     /// <summary>
     /// Follows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -98,6 +100,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+
     /// <summary>
     /// Gets the authors from the database that are following the given pageUserName
     /// </summary>
@@ -125,6 +128,7 @@ public class AuthorRepository : IAuthorRepository
 
         return followerListDto;
     }
+
     /// <summary>
     /// Gets the authors from the database that the given pageUserName is following
     /// </summary>
@@ -146,12 +150,13 @@ public class AuthorRepository : IAuthorRepository
         var followingListDto = new List<AuthorDTO>();
         foreach (var author in followingList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email,author.DisplayName, author.ProfilePictureUrl);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followingListDto.Add(authorDto);
         }
 
         return followingListDto;
     }
+
     /// <summary>
     /// Unfollows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -174,6 +179,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+
     /// <summary>
     /// Changes the email of the author with the given currentUserName to the given newEmail
     /// </summary>
@@ -187,7 +193,8 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException();
         }
-        if (_authorDb.Authors.Any(a => a.Email == newEmail)){
+        if (_authorDb.Authors.Any(a => a.Email == newEmail))
+        {
             throw new ArgumentException($"{"email"} is already used!");
         }
         author.Email = newEmail;
@@ -195,13 +202,15 @@ public class AuthorRepository : IAuthorRepository
         return true;
     }
 
-    public async Task<bool> ChangeName(string name, string newName){
+    public async Task<bool> ChangeName(string name, string newName)
+    {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
         }
-        if (_authorDb.Authors.Any(a => a.DisplayName == newName)){
+        if (_authorDb.Authors.Any(a => a.DisplayName == newName))
+        {
             throw new ArgumentException($"{"name"} is already used!");
         }
         author.DisplayName = newName;
@@ -210,11 +219,12 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Deletes the author with the given name
+    /// Deletes the author with the given name.
     /// </summary>
     /// <param name="name"></param>
     /// <exception cref="ArgumentException"></exception>
-    public async Task<bool> DeleteAuthor(string name){
+    public async Task<bool> DeleteAuthor(string name)
+    {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
@@ -225,7 +235,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
-    
+
     public async Task UploadProfilePicture(string name, IFormFile file)
     {
         var user = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -241,7 +251,7 @@ public class AuthorRepository : IAuthorRepository
             Console.WriteLine("File size exceeds the limit of 10MB.");
             return;
         }
-        
+
         // Check file type (jpeg, png, gif)
         var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".gif" };
         var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
@@ -254,13 +264,13 @@ public class AuthorRepository : IAuthorRepository
 
         // Generate unique name for the file
         var fileName = $"{Guid.NewGuid()}{fileExtension}";
-    
+
         // Build the relative file path within the wwwroot/images directory
         var relativeFilePath = Path.Combine("images", fileName);
-    
+
         // Combine with the absolute path of the wwwroot folder
         var absoluteFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeFilePath);
-        
+
         // Remove/delete old profile picture if it exists
         if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
         {
@@ -271,7 +281,7 @@ public class AuthorRepository : IAuthorRepository
                 File.Delete(oldFilePath);
             }
         }
-        
+
         // Save the image on the server with the new file name
         await using (var stream = new FileStream(absoluteFilePath, FileMode.Create))
         {
@@ -280,10 +290,10 @@ public class AuthorRepository : IAuthorRepository
 
         // Set the user's profile picture URL
         user.ProfilePictureUrl = $"/{relativeFilePath}";
-        
+
         await _authorDb.SaveChangesAsync();
     }
-    
+
     public async Task DeleteProfilePicture(string name)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -294,7 +304,7 @@ public class AuthorRepository : IAuthorRepository
         author.ProfilePictureUrl = null;
         await _authorDb.SaveChangesAsync();
     }
-    
+
     public async Task<string?> GetProfilePicture(string name)
     {
         var author = (await GetAuthorByName(name)).FirstOrDefault();
@@ -302,13 +312,13 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
-        
+
         var profilePictureUrl = author.ProfilePictureUrl;
 
-        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl =="")
+        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "")
         {
             return "images/defualt_user_pic.png";
         }
         return profilePictureUrl;
-    }  
+    }
 }

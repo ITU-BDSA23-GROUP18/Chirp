@@ -205,9 +205,9 @@
     parameters -->
     <Rule Id="SA1613" Action="Warning" />          <!-- Element parameter documentation should declare
     parameter name -->
-    <Rule Id="SA1614" Action="Warning" />          <!-- Element parameter documentation should have text -->
+    <Rule Id="SA1614" Action="None" />          <!-- Element parameter documentation should have text -->
     <Rule Id="SA1615" Action="Warning" />          <!-- Element return value should be documented -->
-    <Rule Id="SA1616" Action="Warning" />          <!-- Element return value documentation should have text -->
+    <Rule Id="SA1616" Action="None" />          <!-- Element return value documentation should have text -->
     <Rule Id="SA1617" Action="Warning" />          <!-- Void return value should not be documented -->
     <Rule Id="SA1618" Action="Warning" />          <!-- Generic type parameters should be documented -->
     <Rule Id="SA1619" Action="Warning" />          <!-- Generic type parameters should be documented partial

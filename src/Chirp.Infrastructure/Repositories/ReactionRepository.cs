@@ -5,9 +5,9 @@ namespace Chirp.Infrastructure.Repositories;
 public class ReactionRepository : IReactionRepository
 {
     private readonly ChirpContext _reactionDb;
+
     /// <summary>
-    /// Constructor for the ReactionRepository class
-    /// If seedDatabase is true, the database will be seeded with data
+    /// Initializes a new instance of the <see cref="ReactionRepository"/> class.
     /// </summary>
     /// <param name="reactionDb"></param>
     public ReactionRepository(ChirpContext reactionDb)
@@ -15,19 +15,21 @@ public class ReactionRepository : IReactionRepository
         _reactionDb = reactionDb;
         _reactionDb.InitializeDatabase(true);
     }
+
     /// <summary>
     /// Gets all possible reactions and how to show them from the database
     /// </summary>
     /// <returns></returns>
     public IEnumerable<(string, string)> GetAllReactionTypes() =>
         Enum.GetValues<ReactionType>().Select(r => (r.ToString(), r.Humanize()));
+
     /// <summary>
-    /// Creates a reaction with the given cheepId, authorName and reactionString
+    /// Creates a reaction with the given cheepId, authorName and reactionString.
     /// </summary>
     /// <param name="cheepId"></param>
     /// <param name="authorName"></param>
     /// <param name="reactionString"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">If the cheep or author is not found.</exception>
     public void CreateReaction(string cheepId, string authorName, string reactionString)
     {
         var cheep = _reactionDb.Cheeps.FirstOrDefault(c => c.CheepId == new Guid(cheepId));
@@ -44,8 +46,9 @@ public class ReactionRepository : IReactionRepository
             CheepId = cheep.CheepId,
             Cheep = cheep,
             AuthorName = authorName,
+
             // Author = author,
-            ReactionType = reactionType
+            ReactionType = reactionType,
         };
 
         _reactionDb.Reactions.Add(reaction);
@@ -53,8 +56,9 @@ public class ReactionRepository : IReactionRepository
 
         _reactionDb.SaveChanges();
     }
+
     /// <summary>
-    /// Removes the reaction with the given cheepId and authorId
+    /// Removes the reaction with the given cheepId and authorId.
     /// </summary>
     /// <param name="cheepId"></param>
     /// <param name="authorName"></param>
@@ -62,14 +66,15 @@ public class ReactionRepository : IReactionRepository
     {
         var reaction = _reactionDb.Reactions
             .Include(r => r.Cheep)
-            .FirstOrDefault(r => 
-                r.Cheep.CheepId == new Guid(cheepId) && 
+            .FirstOrDefault(r =>
+                r.Cheep.CheepId == new Guid(cheepId) &&
                 r.AuthorName == authorName);
         if (reaction != null)
         {
             reaction.Cheep.Reactions.Remove(reaction);
             _reactionDb.Reactions.Remove(reaction);
         }
+
         _reactionDb.SaveChanges();
     }
 }

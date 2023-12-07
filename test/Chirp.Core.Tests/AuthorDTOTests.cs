@@ -22,7 +22,7 @@ public class AuthorDTOTests
 
         Assert.Throws(exceptionType, () =>
         {
-            var AuthorDTO = new AuthorDTO(name!, email!, profilePictureUrl!, displayName);
+            var authorDTO = new AuthorDTO(name!, email!, profilePictureUrl!, displayName);
         });
     }
 }

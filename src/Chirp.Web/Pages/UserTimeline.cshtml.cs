@@ -12,15 +12,15 @@ public class UserTimelineModel : PageModel
     public PaginationModel? Pagination { get; private set; }
 
     public int FollowingCount { get; set; }
-    
+
     public int FollowersCount { get; set; }
-    
+
     public bool IsFollowingAuthor { get; set; }
-    
+
     public string? ProfilePictureUrl { get; private set; }
-    
+
     public string? AuthorProfilePictureUrl { get; private set; }
-    
+
     public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -41,18 +41,19 @@ public class UserTimelineModel : PageModel
 
         var following = await _authorRepository.GetFollowing(author);
         FollowingCount = following.Count();
-            
+
         var followers = await _authorRepository.GetFollowers(author);
         FollowersCount = followers.Count();
-        
-        if (User.Identity == null || User.Identity.Name == null) {
+
+        if (User.Identity == null || User.Identity.Name == null)
+        {
             return Page();
         }
-        
+
         var myFollowing = await _authorRepository.GetFollowing(User.Identity.Name);
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
-        
+
         AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
         if (User.Identity.IsAuthenticated)
         {
@@ -61,8 +62,9 @@ public class UserTimelineModel : PageModel
 
         return Page();
     }
+
     /// <summary>
-    /// Unfollows the author with the given author name
+    /// Unfollows the author with the given author name.
     /// </summary>
     /// <param name="author"></param>
     /// <returns></returns>
@@ -78,8 +80,9 @@ public class UserTimelineModel : PageModel
             return RedirectToPage();
         }
     }
+
     /// <summary>
-    /// Follows the author with the given author name
+    /// Follows the author with the given author name.
     /// </summary>
     /// <param name="author"></param>
     /// <returns></returns>
@@ -90,12 +93,12 @@ public class UserTimelineModel : PageModel
             await _authorRepository.FollowAuthor(author, User.Identity?.Name!);
             return RedirectToPage();
         }
-        catch 
+        catch
         {
             return RedirectToPage();
         }
     }
-    
+
     public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
     {
         try
