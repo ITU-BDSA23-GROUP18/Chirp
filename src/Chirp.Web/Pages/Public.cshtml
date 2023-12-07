@@ -52,7 +52,7 @@
                         }
                         else
                         {
-                            <img src="../images/defualt_user_pic.png" width="30" alt="Avatar" class="avatar">
+                            <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
                         }
 
                         <strong>
@@ -69,35 +69,35 @@
                         <br/>
                         @cheep.Message
                         <br>
-                        
-                        @if (!User.Identity?.IsAuthenticated ?? false)
-                        {
-                            <text>Good: </text>
-                            @cheep.Reactions.Count(r => r.ReactionType == "Good")
-                            <text>|</text>
-                            <text>Ish: </text>                            
-                            @cheep.Reactions.Count(r => r.ReactionType == "Ish")
-                            <text>|</text>
-                            <text>Bad: </text>                            
-                            @cheep.Reactions.Count(r => r.ReactionType == "Bad")
-                        }
-                        else
-                        {
-                            var author = User.Identity?.Name!;
-                            var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
-                            
-                            @foreach (var (reactionType, displayString) in Model.ReactionTypes)
+                            @if (!User.Identity?.IsAuthenticated ?? false)
                             {
-                                <form method="post">
-                                    <input type="hidden" name="cheepId" value=@cheep.CheepId>
-                                    <input type="hidden" name="reactionType" value=@reactionType>
-                                    <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
-                                        @displayString :
-                                        @cheep.Reactions.Count(r => r.ReactionType == reactionType)
-                                    </button>
-                                </form>
+                            
+                                <text>Good: </text>
+                                @cheep.Reactions.Count(r => r.ReactionType == "Good")
+                                <text>|</text>
+                                <text>Ish: </text>                            
+                                @cheep.Reactions.Count(r => r.ReactionType == "Ish")
+                                <text>|</text>
+                                <text>Bad: </text>                            
+                                @cheep.Reactions.Count(r => r.ReactionType == "Bad")
                             }
-                        }
+                            else
+                            {
+                                var author = User.Identity?.Name!;
+                                var hasReacted = cheep.Reactions.FirstOrDefault(r => r.Author == author)?.ReactionType;
+                            
+                                @foreach (var (reactionType, displayString) in Model.ReactionTypes)
+                                {
+                                    <form method="post" style="display: inline-block">
+                                        <input type="hidden" name="cheepId" value=@cheep.CheepId>
+                                        <input type="hidden" name="reactionType" value=@reactionType>
+                                        <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
+                                            @displayString :
+                                            @cheep.Reactions.Count(r => r.ReactionType == reactionType)
+                                        </button>
+                                    </form>
+                                }
+                            }
                     </p>
                 </li>
             }
@@ -117,19 +117,42 @@
     
     <!-- Pagination -->
     @{
-        @if (Model.Pagination.CurrentPage == 1) {<text>Previous</text>}
-        else {<a href="?page=@(Model.Pagination.CurrentPage - 1)">Previous</a>}
-        <text>|</text>
-    
+        <ul id="pagination_ul">
+        @if (Model.Pagination.CurrentPage == 1)
+        {
+            <li><p>Previous</p></li>
+        }
+        else
+        {
+            <li><a href="?page=@(Model.Pagination.CurrentPage - 1)">Previous</a></li>
+        }
+        <li>
+            <p>|</p></li>
         @for (var i = 1; i <= Model.Pagination.NPages; i++)
         {
-            @if (i == Model.Pagination.CurrentPage) {<text>@i</text>}
-            else {<a href="?page=@i">@i</a>}
-            <text>|</text>
+            @if (i == Model.Pagination.CurrentPage)
+            {
+                <li>
+                    <p>@i</p></li>
+            }
+            else
+            {
+                <li><a href="?page=@i">@i</a></li>
+            }
+            <li>
+                <p>|</p></li>
         }
-    
-        @if (Model.Pagination.CurrentPage == Model.Pagination.NPages) {<text>Next</text>}
-        else {<a href="?page=@(Model.Pagination.CurrentPage+1)">Next</a>}
+
+        @if (Model.Pagination.CurrentPage == Model.Pagination.NPages)
+        {
+            <li>
+                <p>Next</p></li>
+        }
+        else
+        {
+            <li><a href="?page=@(Model.Pagination.CurrentPage + 1)">Next</a></li>
+        }
+    </ul>
     }
 
 </div>
