@@ -9,14 +9,13 @@
 
 @if (!User.Identity?.IsAuthenticated ?? false)
 {
-    <text>Good: </text>
-    @cheep.Reactions.Count(r => r.ReactionType == "Good")
     <text>|</text>
-    <text>Ish: </text>                            
-    @cheep.Reactions.Count(r => r.ReactionType == "Ish")
-    <text>|</text>
-    <text>Bad: </text>                            
-    @cheep.Reactions.Count(r => r.ReactionType == "Bad")
+    @foreach (var (reactionType, displayString) in reactionTypes)
+    {
+        <text>@displayString : </text>
+        @cheep.Reactions.Count(r => r.ReactionType == reactionType)
+        <text>|</text>
+    }
 }
 else
 {
