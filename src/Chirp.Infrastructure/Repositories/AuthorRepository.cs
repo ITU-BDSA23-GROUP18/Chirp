@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 
 namespace Chirp.Infrastructure.Repositories;
+
 /// <summary>
 /// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
 /// </summary>
@@ -18,6 +19,7 @@ public class AuthorRepository : IAuthorRepository
         _authorDb = authorDb;
         _authorDb.InitializeDatabase(seedDatabase);
     }
+    
     /// <summary>
     /// Gets the author from the database with the given name
     /// </summary>
@@ -28,6 +30,7 @@ public class AuthorRepository : IAuthorRepository
              .Where(a => a.Name == name)
              .Select(a => a.ToDTO())
              .ToListAsync();
+    
     /// <summary>
     /// Gets the author from the database with the given email
     /// </summary>
@@ -71,6 +74,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+    
     /// <summary>
     /// Follows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -95,6 +99,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+    
     /// <summary>
     /// Gets the authors from the database that are following the given pageUserName
     /// </summary>
@@ -119,6 +124,7 @@ public class AuthorRepository : IAuthorRepository
         }
         return followerListDto;
     }
+    
     /// <summary>
     /// Gets the authors from the database that the given pageUserName is following
     /// </summary>
@@ -143,6 +149,7 @@ public class AuthorRepository : IAuthorRepository
         }
         return followingListDto;
     }
+    
     /// <summary>
     /// Unfollows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -164,6 +171,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+    
     /// <summary>
     /// Changes the email of the author with the given currentUserName to the given newEmail
     /// </summary>
@@ -268,7 +276,6 @@ public class AuthorRepository : IAuthorRepository
             await file.CopyToAsync(stream);
         }
         
-
         // Set the user's profile picture URL
         user.ProfilePictureUrl = $"/{relativeFilePath}";
         
@@ -313,7 +320,6 @@ public class AuthorRepository : IAuthorRepository
         author.IsDarkMode = isDarkMode;
         await _authorDb.SaveChangesAsync();
     }
-    
 
     public async Task<bool> IsDarkMode(string name)
     {
@@ -345,5 +351,4 @@ public class AuthorRepository : IAuthorRepository
         }
         return author.FontSizeScale;
     }
-    
 }
