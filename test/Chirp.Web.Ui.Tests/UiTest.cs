@@ -232,6 +232,39 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.Locator("body").ClickAsync();
     }
+    [Fact]
+    public async Task Test2TextSize(){
+
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        await Page.Locator("#scale").SelectOptionAsync(new[] { "2" });
+
+         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "Helge");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "FollowingTimeline");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "?page=2");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "TestUser");
+
+        await Page.Locator("body").ClickAsync();
+    }
 
     /// <summary>
     /// This test is used to see if the number of followers is correct.
