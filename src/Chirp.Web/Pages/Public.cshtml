@@ -8,11 +8,10 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
         <h2> Write a cheep! </h2>
-        <form method="post" asp-page-handler="cheep" class="cheep">
+        <form method="post" asp-page-handler="cheep" class="cheep" style="">
             <textarea id="cheepbox" class="cheepbox" rows="4" maxlength="160" name="message" oninput="countChars()"  placeholder= "What's on your heart, @(User.Identity.Name)?"></textarea>
             <div class="char-count" id="charCount"><p>0/160 characters<p></div>
             <button class="share"><i class="fa fa-send"></i> Cheep!</button>
@@ -46,35 +45,10 @@
             @foreach (var cheep in Model.GetCheeps())
             {
                 <li>
-                    <p>
-                        @if (cheep.ProfilePictureUrl != null && cheep.ProfilePictureUrl != ""){
-                            <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
-                        }
-                        else
-                        {
-                            <img src="../images/defualt_user_pic.png" width="30" alt="Avatar" class="avatar">
-                        }
-
-                        <strong>
-                            @if (cheep.DisplayName != "")
-                            {
-                                <a href="/@cheep.Author">@cheep.DisplayName</a>
-                            }
-                            else
-                            {
-                                <a href="/@cheep.Author">@cheep.Author</a>
-                            }
-                            <small>&mdash; @cheep.Timestamp</small>
-                        </strong>
-                        <br/>
-                        @cheep.Message
-                        <br>
-
-                        @{
-                            ViewData["Cheep"] = cheep;
-                        }
-                        <partial name="ReactionBox" view-data="ViewData"/>
-                    </p>
+                    @{
+                        ViewData["Cheep"] = cheep;
+                    }
+                    <partial name="CheepBox" view-data="ViewData"/>
                 </li>
             }
         </ul>
@@ -85,10 +59,7 @@
     }
 
     <br/>
-
     
     <partial name="Pagination" model="@Model.GetPagination()"/>
-    
-</div>
 
 

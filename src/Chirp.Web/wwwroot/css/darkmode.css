@@ -271,11 +271,9 @@ textarea.aboutme{
     resize: none;
     color: white;
     background-color: #4e4e4e;
-    
 }
 
 button.changer{
-
   margin-right: 2em;
   background: none;
 	color: white;
@@ -580,5 +578,16 @@ button.delete{
     font: inherit;
     cursor: pointer;
     margin-right: 1.5rem;
+}
+
+#pagination_ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#pagination_ul li {
+    display: inline-block;
 }
 

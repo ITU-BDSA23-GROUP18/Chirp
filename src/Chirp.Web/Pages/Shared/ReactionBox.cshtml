@@ -1,4 +1,6 @@
 ﻿@using Humanizer
+<div style="display: inline-block">
+
 @{
     CheepDTO cheep;
     if (ViewData["Cheep"] is CheepDTO c) cheep = c;
@@ -9,14 +11,13 @@
 
 @if (!User.Identity?.IsAuthenticated ?? false)
 {
-    <text>Good: </text>
-    @cheep.Reactions.Count(r => r.ReactionType == "Good")
     <text>|</text>
-    <text>Ish: </text>                            
-    @cheep.Reactions.Count(r => r.ReactionType == "Ish")
-    <text>|</text>
-    <text>Bad: </text>                            
-    @cheep.Reactions.Count(r => r.ReactionType == "Bad")
+    @foreach (var (reactionType, displayString) in reactionTypes)
+    {
+        <text>@displayString : </text>
+        @cheep.Reactions.Count(r => r.ReactionType == reactionType)
+        <text>|</text>
+    }
 }
 else
 {
@@ -25,7 +26,7 @@ else
 
     @foreach (var (reactionType, displayString) in reactionTypes)
     {
-        <form method="post">
+        <form method="post" style="display: inline-block">
             <input type="hidden" name="cheepId" value=@cheep.CheepId>
             <input type="hidden" name="reactionType" value=@reactionType>
             <button style="background-color:@(hasReacted == reactionType ? "#cc6e6e" : "")" asp-page-handler="ChangeReaction">
@@ -35,3 +36,4 @@ else
         </form>
     }
 }
+</div>

@@ -9,7 +9,7 @@ public class PublicModel : PageModel
     private readonly IAuthorRepository _authorRepository;
     private readonly IReactionRepository _reactionRepository;
     private static List<CheepDTO> Cheeps { get; set; } = new();
-    public static PaginationModel Pagination { get; private set; } = new (1, 1);
+    public static PaginationModel Pagination { get; private set; } = new(1, 1);
     public string? ProfilePictureUrl { get; private set; }
 
     public bool IsDarkMode { get; private set; }
@@ -18,7 +18,6 @@ public class PublicModel : PageModel
     
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
     {
-        Cheeps = new List<CheepDTO>();
         IsDarkMode = false;   
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
@@ -46,14 +45,10 @@ public class PublicModel : PageModel
     }
     
     public List<CheepDTO> GetCheeps()
-    {
-        return Cheeps;
-    }
+        => Cheeps;
 
     public PaginationModel GetPagination()
-    {
-        return Pagination;
-    }
+        => Pagination;
     
     public IActionResult OnPostCheep(string message)
     {
