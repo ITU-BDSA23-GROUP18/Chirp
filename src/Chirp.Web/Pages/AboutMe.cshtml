@@ -1,35 +1,142 @@
-
-
 @page "/AboutMe"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model AboutMeModel
 @{
     ViewData["Title"] = "Chirp! - About Me";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
 }
 
-<!-- Add icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="css/style.css" />
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <div onclick=toggleName()>
+        <div onclick=toggleEmail()>
+            <div class="aboutme_lined_header">
+                <span class="aboutme_header_txt">
+                    About Me
+                </span>
+            </div>
+            <br><br>
+            <div style="margin-left: 1.5rem">
+                <h5>Username:</h5>
+                <form method="post">
+                    <textarea onfocus=show('username') class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
+                    <button id="changeusername" hidden class="changer" asp-page-handler="ChangeName">Change</button>
+                </form>
+                <br/>
+                <h5>Email:</h5>
+                <form method="post">
+                    <textarea onfocus=show('email') class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+                    <button id="changeemail" hidden class="changer" asp-page-handler="changeemail">Change</button>
+                </form>
+                <br/>
+            </div>
+        </div>
+    </div>    
+            
+    <br/>
+    <div class="aboutme_lined_header">
+        <span class="aboutme_header_txt">
+            Appearance
+        </span>
+    </div>
+    <br><br>
+    <ul class="settings_ul">
+        <li class="settings_li">
+            <h5>Dark mode</h5>
+            @if (Model.IsDarkMode)
+            {
+                <i>Disable dark mode</i>
+            }
+            else
+            {
+                <i>Enable dark mode</i>
+            }
+        </li>
+        
+        <li class="settings_li">
+            <label class="switch">
+                <form method="post">
+                    @if(Model.IsDarkMode)
+                    {
+                        <input type="checkbox" name="darkmode" checked onclick="clickDarkMode()">
+                    }else
+                    {
+                        <input type="checkbox" name="darkmode" onclick="clickDarkMode()">
+                    }
+                    <span class="slider round"></span>
+                    <button id="darkmode_btn" style="display: none" asp-page-handler="SetDarkMode"></button>
+                </form>
+            </label>
+        </li>
+    </ul>
+    <br/>
+    <ul class="settings_ul">
+        <li class="settings_li">
+            <h5>Font size</h5>
+            <i>Scale font size</i>
+        </li>
+        
+        <li class="settings_li">
+            <form method="post" asp-page-handler="SetFontSizeScale" class="SetFontSizeScale">
+                <select id="scale" name="scale" onchange="clickFontSize()">
+                    @if (Model.FontSizeScale == 1)
+                    {
+                        <option value="1" selected>1x</option>
+                    }
+                    else
+                    {
+                        <option value="1">1x</option>
+                    }
+                    @if(Model.FontSizeScale == 1.5)
+                    {
+                        <option value="1.5" selected>1.5x</option>
+                    }
+                    else
+                    {
+                        <option value="1.5">1.5x</option>
+                    }
+                    @if(Model.FontSizeScale == 2)
+                    {
+                        <option value="2" selected>2x</option>
+                    }
+                    else
+                    {
+                        <option value="2">2x</option>
+                    }
+                </select>
+                <input id="submit_btn" type="submit" style="display: none"/>
+            </form>
+        </li>
+    </ul>
     
-<img src=@Model.ProfilePictureUrl alt="Avatar" class="avatar" width = "145" >
-<h2> About me </h2>
-
-<h5>Username:</h5>
-<form method="post">
-    <div class="d-flex">
-        <textarea onfocus=show('username')  class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder="@Model.DisplayName"></textarea>
-        <button id="changeusername" hidden class="changer" asp-page-handler="ChangeName"> Change</button>
+    <br>
+    <div class="aboutme_lined_header">
+        <span class="aboutme_header_txt" style="color: red">
+            Danger Zone
+        </span>
     </div>
-    <h5 class="mt-4">Email:</h5>
-    <div class="d-flex">
-        <textarea onfocus=show('email') class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder="@Model.Email"></textarea>
-        <button id="changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
-    </div>
-</form>
-<br/>
+    <br><br>
+        <ul class="settings_ul">
+            <li class="settings_li">
+                <h5>Delete your account</h5>
+                <i>Warning: This action is irreversible!</i>
+            </li>
+            <li>
+                <form method="post">
+                    <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity.Name class="delete">Delete your account</button>
+                </form>
+            </li>
+        </ul>
+}
 
 <script>
+    function clickDarkMode() {
+        document.getElementById("darkmode_btn").click();
+    }
+    
+    function clickFontSize() {
+        document.getElementById("submit_btn").click();
+    }
     let show = (objectID) => {
         let buttonid = "change" + objectID
         document.getElementById(buttonid).removeAttribute("hidden");
@@ -46,30 +153,3 @@
     }
 </script>
 
-<h4>Your Followers</h4>
-@{
-    if (Model.Followers.Any()){
-    <ul id="followerlist" class="followers">
-        @foreach (var follower in Model.Followers)
-        {
-            <li>
-                <p>
-                    <img src=@follower.ProfilePictureUrl width="30" alt="Avatar" class="avatar">
-                    <strong>
-                        <a href="/@follower.Name">@follower.Name</a>
-                    </strong>
-                </p>
-            </li>
-        }
-    </ul>
-    }
-    else
-    {
-        <header>You have no followers</header>
-        <br />
-    }
-}
-
-<form method="post">
-    <button asp-page-handler="DeleteAccount" name=authorName value=@User.Identity?.Name class="delete" > Delete your account</button>
-</form>

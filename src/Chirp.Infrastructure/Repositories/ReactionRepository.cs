@@ -13,12 +13,7 @@ public class ReactionRepository : IReactionRepository
         _reactionDb = reactionDb;
         _reactionDb.InitializeDatabase(true);
     }
-    /// <summary>
-    /// Gets all the reactions from the database
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerable<string> GetAllReactionTypes() =>
-        Enum.GetValues<ReactionType>().Select(r => r.ToString());
+    
     /// <summary>
     /// Creates a reaction with the given cheepId, authorName and reactionString
     /// </summary>
@@ -28,7 +23,7 @@ public class ReactionRepository : IReactionRepository
     /// <exception cref="ArgumentException"></exception>
     public void CreateReaction(string cheepId, string authorName, string reactionString)
     {
-        Cheep? cheep = _reactionDb.Cheeps.FirstOrDefault(c => c.CheepId == new Guid(cheepId));
+        var cheep = _reactionDb.Cheeps.FirstOrDefault(c => c.CheepId == new Guid(cheepId));
         var author = _reactionDb.Authors.FirstOrDefault(a => a.Name == authorName);
 
         if (cheep == null) throw new ArgumentException($"The given cheepId '{cheepId}' does not exist");
@@ -41,8 +36,8 @@ public class ReactionRepository : IReactionRepository
         {
             CheepId = cheep.CheepId,
             Cheep = cheep,
+            AuthorName = authorName,
             // Author = author,
-            // AuthorId = author.AuthorId,
             ReactionType = reactionType
         };
 
@@ -51,16 +46,24 @@ public class ReactionRepository : IReactionRepository
 
         _reactionDb.SaveChanges();
     }
+    
     /// <summary>
     /// Removes the reaction with the given cheepId and authorId
     /// </summary>
     /// <param name="cheepId"></param>
-    /// <param name="authorId"></param>
-    public void RemoveReaction(string cheepId, string authorId)
+    /// <param name="authorName"></param>
+    public void RemoveReaction(string cheepId, string authorName)
     {
-        var reaction = _reactionDb.Reactions.FirstOrDefault(r =>
-            r.Cheep.CheepId == new Guid(cheepId));
-        if (reaction != null) _reactionDb.Reactions.Remove(reaction);
+        var reaction = _reactionDb.Reactions
+            .Include(r => r.Cheep)
+            .FirstOrDefault(r => 
+                r.Cheep.CheepId == new Guid(cheepId) && 
+                r.AuthorName == authorName);
+        if (reaction != null)
+        {
+            reaction.Cheep.Reactions.Remove(reaction);
+            _reactionDb.Reactions.Remove(reaction);
+        }
         _reactionDb.SaveChanges();
     }
 }

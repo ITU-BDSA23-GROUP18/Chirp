@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Query;
 namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
@@ -14,6 +13,10 @@ public class AboutMeModel : PageModel
     public string? DisplayName { get; private set; }   
     public string? ProfilePictureUrl { get; private set; }
     
+    // for individual user/"Author" preferences:
+    public bool IsDarkMode { get; private set; }
+    public float FontSizeScale { get; private set; }
+    
     public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
     {
         Cheeps = new List<CheepDTO>();
@@ -21,6 +24,7 @@ public class AboutMeModel : PageModel
         _repository = repository;
         _authorRepository = authorRepository;
     }
+    
     /// <summary>
     /// Gets the cheeps from the author with the given currentUserName
     /// </summary>
@@ -39,8 +43,6 @@ public class AboutMeModel : PageModel
         DisplayName = author.DisplayName;
         Email = author.Email != author.Name ? author.Email : "Email...";
 
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(author.Name);
-        
         var followersList = (await _authorRepository.GetFollowers(author.Name)).ToList();
         var cheepsList = (await _repository.GetCheepFromAuthor(author.Name, page)).ToList();
         Cheeps.AddRange(cheepsList);
@@ -48,9 +50,14 @@ public class AboutMeModel : PageModel
         
         var nCheeps = Cheeps.Count;
         Pagination = new PaginationModel(nCheeps, page);
+
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(author.Name);
+        IsDarkMode = await _authorRepository.IsDarkMode(User.Identity?.Name!);
+        FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity?.Name!);
         
         return Page();
     }
+    
     /// <summary>
     /// Changes the email of the author with the given currentUserName to the given newEmail
     /// </summary>
@@ -92,8 +99,9 @@ public class AboutMeModel : PageModel
         {
             Console.WriteLine("the author name is:"+authorName);
             await _authorRepository.DeleteAuthor(authorName);
+
             //Need to signout the user
-            return RedirectToPage("Public");
+            return Redirect("MicrosoftIdentity/Account/SignOut");
         }
         catch 
         {
@@ -113,5 +121,26 @@ public class AboutMeModel : PageModel
         {
             return RedirectToPage();
         }
+    }
+    public async Task<IActionResult> OnPostSetDarkMode()
+    {
+        var isDarkMode = !await _authorRepository.IsDarkMode(User.Identity?.Name!);
+        
+        await _authorRepository.SetDarkMode(User.Identity?.Name!, isDarkMode);
+        return RedirectToPage();
+    }
+    
+    public async Task<IActionResult> OnPostSetFontSizeScale(float scale)
+    {
+        if (scale == 15)
+        {
+            scale = (float) 1.5;
+        }
+        if (scale < 1 || scale > 2)
+        {
+            return RedirectToPage();
+        }
+        await _authorRepository.SetFontSizeScale(User.Identity?.Name!, scale);
+        return RedirectToPage();
     }
 }

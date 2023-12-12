@@ -30,11 +30,13 @@ public interface IAuthorRepository
     /// <param name="pageUserName"></param>
     /// <returns></returns>
     public Task<IEnumerable<AuthorDTO>> GetFollowing(string pageUserName);
+
     /// <summary>
     /// Creates an author with the given name and email
     /// </summary>
     /// <param name="name"></param>
     /// <param name="email"></param>
+    /// <param name="displayName"></param>
     public Task<bool> CreateAuthor(string name, string email, string displayName);
     /// <summary>
     /// Follows the author with the given followName from the author with the given currentUserName
@@ -65,5 +67,12 @@ public interface IAuthorRepository
     
     public Task DeleteProfilePicture(string name);
     
-    public Task<string?> GetProfilePicture(string name);
+    public Task<string> GetProfilePicture(string name);
+    
+    /// <summary>
+    /// The 4 methods below are for individual user/"Author" preferences:
+    public Task<float> GetFontSizeScale(string name);
+    public Task SetFontSizeScale(string name, float fontSizeScale);
+    public Task<bool> IsDarkMode(string name);
+    public Task SetDarkMode(string name, bool isDarkMode);
 }

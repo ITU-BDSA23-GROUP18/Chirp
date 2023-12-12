@@ -1,16 +1,39 @@
-﻿@model Chirp.Web.Pages.Shared.PaginationModel
+@model Chirp.Web.Pages.Shared.PaginationModel
 @{
-    @if (Model.CurrentPage == 1) {<text>Previous</text>}
-    else {<a href="?page=@(Model.CurrentPage - 1)">Previous</a>}
-    <text>|</text>
-    
-    @for (var i = 1; i <= Model.NPages; i++)
-    {
-        @if (i == Model.CurrentPage) {<text>@i</text>}
-        else {<a href="?page=@i">@i</a>}
-        <text>|</text>
-    }
-    
-    @if (Model.CurrentPage == Model.NPages) {<text>Next</text>}
-    else {<a href="?page=@(Model.CurrentPage+1)">Next</a>}
+    <ul id="pagination_ul">
+        @if (Model.CurrentPage == 1)
+        {
+            <li><p>Previous</p></li>
+        }
+        else
+        {
+            <li><a href="?page=@(Model.CurrentPage - 1)">Previous</a></li>
+        }
+        <li>
+            <p>|</p></li>
+        @for (var i = 1; i <= Model.NPages; i++)
+        {
+            @if (i == Model.CurrentPage)
+            {
+                <li>
+                    <p>@i</p></li>
+            }
+            else
+            {
+                <li><a href="?page=@i">@i</a></li>
+            }
+            <li>
+                <p>|</p></li>
+        }
+
+        @if (Model.CurrentPage == Model.NPages)
+        {
+            <li>
+                <p>Next</p></li>
+        }
+        else
+        {
+            <li><a href="?page=@(Model.CurrentPage + 1)">Next</a></li>
+        }
+    </ul>
 }

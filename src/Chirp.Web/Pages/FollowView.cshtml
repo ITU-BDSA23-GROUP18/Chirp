@@ -1,17 +1,14 @@
 ﻿@page "/FollowView/{author}/{followType}"
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model FollowingModel
+@model FollowViewModel
 
 @{
-    ViewData["Title"] = "Chirp! - Following";
-    Layout = "Shared/_Layout";
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_StandardLayout";
     var author = HttpContext.GetRouteValue("author")!.ToString();
     var followType = HttpContext.GetRouteValue("followType")!.ToString();
 }
 
-<!-- Add icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet"  href="css/style.css" />
 <div>
     @if (User.Identity?.IsAuthenticated ?? false)
     {
@@ -24,8 +21,23 @@
                     {
                         <li>
                             <p>
+                                 @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
+                                     <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                                 }
+                                 else
+                                 {
+                                     <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
+                                     
+                                 }
                                 <strong>
-                                    <a href="/@user.Name">@user.Name</a>
+                                    @if (string.IsNullOrEmpty(user.DisplayName))
+                                    {
+                                        <a href="/@user.Name">@user.Name</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/@user.Name">@user.DisplayName</a>
+                                    }
                                 </strong>
                             </p>
                         </li>
@@ -34,7 +46,7 @@
             }
             else
             {
-                <em>You are not following anybody!.</em>
+                <em>You are not following anybody!</em>
             }
         }
         else
@@ -46,15 +58,25 @@
                     {
                         <li>
                             <p>
+                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
+                                    <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                                }
+                                else
+                                {
+                                    <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
+                                    
+                                }
                                 <strong>
-                            @if (user.DisplayName != "")
-                            {
-                                <a href="/@user.Name">@user.DisplayName</a>
-                            }
-                            else
-                            {
-                                <a href="/@user.Name">@user.Name</a>
-                            }
+                                    @if (string.IsNullOrEmpty(user.DisplayName))
+                                    {
+                                        <a href="/@user.Name">@user.Name</a>
+
+                                    }
+                                    else
+                                    {
+                                        <a href="/@user.Name">@user.DisplayName</a>
+
+                                    }
                                 </strong>
                             </p>
                         </li>
@@ -63,11 +85,12 @@
             }
             else
             {
-                <em>No followers here :(.</em>
+                <em>No followers here :(</em>
             }
         }
+        <br/>
         {
-                await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+            await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
         }
     }
 </div>

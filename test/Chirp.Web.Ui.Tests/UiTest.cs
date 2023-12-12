@@ -118,7 +118,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     [Fact]
     public async Task SeeFollowerTimeLineTest()
     {
-
         var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress );
