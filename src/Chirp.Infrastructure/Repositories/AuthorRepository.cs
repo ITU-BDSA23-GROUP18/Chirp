@@ -114,7 +114,7 @@ public class AuthorRepository : IAuthorRepository
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followerListDto.Add(authorDto);
         }
         return followerListDto;
@@ -138,7 +138,7 @@ public class AuthorRepository : IAuthorRepository
         var followingListDto = new List<AuthorDTO>();
         foreach (var author in followingList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followingListDto.Add(authorDto);
         }
         return followingListDto;
@@ -172,7 +172,7 @@ public class AuthorRepository : IAuthorRepository
     /// <exception cref="ArgumentException"></exception>
     public async Task<bool> ChangeEmail(string name, string newEmail)
     {
-        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -186,7 +186,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     public async Task<bool> ChangeName(string name, string newName){
-        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -286,7 +286,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
     }
     
-    public async Task<string?> GetProfilePicture(string name)
+    public async Task<string> GetProfilePicture(string name)
     {
         var author = (await GetAuthorByName(name)).FirstOrDefault();
         if (author == null)
@@ -298,7 +298,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl =="")
         {
-            return "images/defualt_user_pic.png";
+            profilePictureUrl = "../images/default_user_pic.png";
         }
         return profilePictureUrl;
     }
@@ -313,7 +313,6 @@ public class AuthorRepository : IAuthorRepository
         author.IsDarkMode = isDarkMode;
         await _authorDb.SaveChangesAsync();
     }
-    
 
     public async Task<bool> IsDarkMode(string name)
     {

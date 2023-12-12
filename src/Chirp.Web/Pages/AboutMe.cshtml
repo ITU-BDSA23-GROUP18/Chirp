@@ -20,13 +20,13 @@
                 <h5>Username:</h5>
                 <form method="post">
                     <textarea onclick =toggleName() class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
-                    <button id = "changename" hidden class="changer" asp-page-handler="ChangeName"> Change</button>
+                    <button id = "changename" hidden class="changer" asp-page-handler="ChangeName">Change</button>
                 </form>
                 <br/>
                 <h5>Email:</h5>
                 <form method="post">
                     <textarea onclick =toggleEmail() class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
-                    <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
+                    <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail">Change</button>
                 </form>
                 <br/>
             </div>

@@ -18,7 +18,6 @@ public class PublicModel : PageModel
     
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
     {
-        Cheeps = new List<CheepDTO>();
         IsDarkMode = false;   
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
