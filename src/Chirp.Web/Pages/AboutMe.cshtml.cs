@@ -42,10 +42,9 @@ public class AboutMeModel : PageModel
         }
 
         DisplayName = Author.DisplayName != User.Identity?.Name! ? Author.DisplayName : Author.Name;
-        
         Email = Author.Email != User.Identity?.Name! ? Author.Email : "Email...";
-
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
@@ -63,9 +62,7 @@ public class AboutMeModel : PageModel
         Pagination = new PaginationModel(nCheeps, page);
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
-        
         IsDarkMode = await _authorRepository.IsDarkMode(User.Identity?.Name!);
-        
         FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity?.Name!);
         
         return Page();
@@ -151,10 +148,8 @@ public class AboutMeModel : PageModel
         }
         if (scale < 1 || scale > 2)
         {
-            Console.WriteLine($"Invalid scale: {scale}");
             return RedirectToPage();
         }
-        Console.WriteLine(scale);
         await _authorRepository.SetFontSizeScale(User.Identity?.Name!, scale);
         return RedirectToPage();
     }

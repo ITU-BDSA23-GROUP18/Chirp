@@ -7,31 +7,31 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
     private readonly IAuthorRepository _authorRepository;
-    public List<CheepDTO> Cheeps { get; set; }
-    public PaginationModel? Pagination { get; private set; }
-
+    private readonly IReactionRepository _reactionRepository;
+    public static List<CheepDTO> Cheeps { get; set; } = new();
+    public static PaginationModel Pagination { get; private set; } = new(1, 1);
     public int FollowingCount { get; set; }
-    
     public int FollowersCount { get; set; }
-    
     public bool IsFollowingAuthor { get; set; }
-    
     public string? ProfilePictureUrl { get; private set; }
-    
     public string? AuthorProfilePictureUrl { get; private set; }
-    
     public bool IsDarkMode { get; private set; }
-    
     public float FontSizeScale { get; private set; }
     
-    public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository)
+    public UserTimelineModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
     {
-        Cheeps = new List<CheepDTO>();
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
+        _reactionRepository = reactionRepository;
         FollowingCount = 0;
         IsDarkMode = false;
     }
+    
+    public List<CheepDTO> GetCheeps()
+        => Cheeps;
+
+    public PaginationModel GetPagination()
+        => Pagination;
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int page)
     {
@@ -67,6 +67,7 @@ public class UserTimelineModel : PageModel
 
         return Page();
     }
+    
     /// <summary>
     /// Unfollows the author with the given author name
     /// </summary>
@@ -84,6 +85,7 @@ public class UserTimelineModel : PageModel
             return RedirectToPage();
         }
     }
+    
     /// <summary>
     /// Follows the author with the given author name
     /// </summary>
@@ -113,5 +115,23 @@ public class UserTimelineModel : PageModel
         {
             return RedirectToPage();
         }
+    }
+    
+    public void OnPostChangeReaction(string cheepId, string reactionType)
+    {
+        var author = User.Identity?.Name!;
+        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return;
+
+        var cheepReactions = Cheeps.First(c => c.CheepId == cheepId).Reactions;
+        if (cheepReactions.Any(r => r.Author == author))
+        {
+            var prevReaction = cheepReactions.First(r => r.Author == author);
+            cheepReactions.Remove(prevReaction);
+            _reactionRepository.RemoveReaction(cheepId, author);
+            if (prevReaction.ReactionType == reactionType) return;
+        }
+        
+        cheepReactions.Add(new ReactionDTO(cheepId, author, reactionType));
+        _reactionRepository.CreateReaction(cheepId, author, reactionType);
     }
 }

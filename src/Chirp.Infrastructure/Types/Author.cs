@@ -3,8 +3,8 @@
 public class Author
 {
     public Guid AuthorId { get; set; } = Guid.NewGuid();
-    public string DisplayName { get; set; } = "";
     public required string Name { get; set; }
+    public string DisplayName { get; set; } = "";
     public string Email { get; set; } = "";
     public List<Cheep> Cheeps { get; set; } = new List<Cheep>();
     public List<Author> Following { get; set; } = new List<Author>();

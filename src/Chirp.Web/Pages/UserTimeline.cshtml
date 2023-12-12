@@ -60,21 +60,16 @@
             }
         }
     }
-    @if (Model.Cheeps.Any())
+    @if (Model.GetCheeps().Any())
     {
         <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
+            @foreach (var cheep in Model.GetCheeps())
             {
                 <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                            <small>&mdash; @cheep.Timestamp</small>
-                        </strong>
-                        <br />
-                        @cheep.Message
-
-                    </p>
+                    @{
+                        ViewData["Cheep"] = cheep;
+                    }
+                    <partial name="CheepBox" view-data="ViewData"/>
                 </li>
             }
         </ul>
@@ -83,10 +78,9 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    <br />
-    @{
-        await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-    }
+    <br/>
+    
+    <partial name="Pagination" model="@Model.GetPagination()"/>
 </div>
 
 <script>

@@ -6,6 +6,7 @@ public class CheepRepository : ICheepRepository
 {
     private const int CheepsPerPage = 32;
     private readonly ChirpContext _cheepDb;
+    
     /// <summary>
     /// Constructor for the CheepRepository class
     /// If seedDatabase is true, the database will be seeded with data
@@ -17,6 +18,7 @@ public class CheepRepository : ICheepRepository
         _cheepDb = cheepDb;
         _cheepDb.InitializeDatabase(seedDatabase);
     }
+    
     /// <summary>
     /// Gets a list of cheeps from the database according to the given page number
     /// </summary>
@@ -48,6 +50,7 @@ public class CheepRepository : ICheepRepository
             .Take(CheepsPerPage)
             .Select(c => c.ToDTO())
             .ToListAsync();
+    
     /// <summary>
     /// Counts the number of cheeps
     /// </summary>
@@ -55,6 +58,7 @@ public class CheepRepository : ICheepRepository
     public async Task<int> CountCheeps() =>
         await _cheepDb.Cheeps
             .CountAsync();
+    
     /// <summary>
     /// Counts the number of cheeps from the given author
     /// </summary>
@@ -65,6 +69,7 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Where(c => c.Author.Name == authorName)
             .CountAsync();
+    
     /// <summary>
     /// Creates a cheep with the given message and username
     /// </summary>
@@ -90,7 +95,6 @@ public class CheepRepository : ICheepRepository
                 AuthorId = Guid.NewGuid(),
                 Name = username,
                 Email = Guid.NewGuid().ToString()
-
             };
         }
         else
@@ -120,4 +124,3 @@ public class CheepRepository : ICheepRepository
         }
     }
 }
-

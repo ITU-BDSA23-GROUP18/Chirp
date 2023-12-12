@@ -10,9 +10,7 @@ public class FollowViewModel : PageModel
     public List<AuthorDTO> FollowersList { get; set; }
     public List<AuthorDTO> FollowingList { get; set; }
     public PaginationModel? Pagination { get; private set; }
-    
     public string? ProfilePictureUrl { get; private set; }
-    
     public bool IsDarkMode { get; private set; }
     public float FontSizeScale { get; private set; }
     
