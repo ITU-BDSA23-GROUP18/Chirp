@@ -5,6 +5,7 @@
     <title>@ViewData["Title"]</title>
     
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/font-awesome.min.css" />
     @if (Model.IsDarkMode)
     {
         <link href="~/css/darkmode.css" rel="stylesheet" type="text/css"/>
@@ -49,7 +50,6 @@
                                 @if (User.Identity!.IsAuthenticated)
                                 {
                                     <a  asp-area="" asp-page="/FollowingTimeline">Following timeline</a>
-                                    
                                     
                                 }
                             </li>
