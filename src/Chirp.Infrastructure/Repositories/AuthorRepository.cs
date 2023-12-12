@@ -189,7 +189,7 @@ public class AuthorRepository : IAuthorRepository
     /// <exception cref="ArgumentException">If the author is not found, or the email is in use.</exception>
     public async Task<bool> ChangeEmail(string name, string newEmail)
     {
-        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -207,7 +207,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<bool> ChangeName(string name, string newName)
     {
-        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -312,7 +312,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
     }
 
-    public async Task<string?> GetProfilePicture(string name)
+    public async Task<string> GetProfilePicture(string name)
     {
         var author = (await GetAuthorByName(name)).FirstOrDefault();
         if (author == null)
@@ -324,7 +324,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "")
         {
-            return "images/defualt_user_pic.png";
+            profilePictureUrl = "../images/default_user_pic.png";
         }
 
         return profilePictureUrl;

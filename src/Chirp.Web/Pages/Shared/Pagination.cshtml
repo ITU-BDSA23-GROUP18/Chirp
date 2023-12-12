@@ -1,18 +1,4 @@
-﻿@model Chirp.Web.Pages.Shared.PaginationModel
-
-<style>
-    #pagination_ul{
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
-
-    #pagination_ul li {
-        display: inline-block;
-    }
-</style>
-
+@model Chirp.Web.Pages.Shared.PaginationModel
 @{
     <ul id="pagination_ul">
         @if (Model.CurrentPage == 1)

@@ -9,20 +9,27 @@ public class FollowingTimelineModel : PageModel
 {
     private readonly ICheepRepository _repository;
     private readonly IAuthorRepository _authorRepository;
-    public List<CheepDTO> Cheeps { get; private set; }
-    public PaginationModel? Pagination { get; private set; }
+    private readonly IReactionRepository _reactionRepository;
+    public static List<CheepDTO> Cheeps { get; private set; } = new();
+    public static PaginationModel Pagination { get; private set; } = new(1, 1);
     public string? ProfilePictureUrl { get; private set; }
     public bool IsDarkMode { get; private set; }
 
     public float FontSizeScale { get; private set; }
 
-    public FollowingTimelineModel(ICheepRepository repository, IAuthorRepository authorRepository)
+    public FollowingTimelineModel(ICheepRepository repository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
     {
-        Cheeps = new List<CheepDTO>();
         _repository = repository;
         _authorRepository = authorRepository;
+        _reactionRepository = reactionRepository;
         IsDarkMode = false;
     }
+
+    public List<CheepDTO> GetCheeps()
+        => Cheeps;
+
+    public PaginationModel GetPagination()
+        => Pagination;
 
     public async Task<ActionResult> OnGet([FromQuery] int page)
     {
@@ -47,5 +54,23 @@ public class FollowingTimelineModel : PageModel
         Pagination = new PaginationModel(nCheeps, page);
 
         return Page();
+    }
+
+    public void OnPostChangeReaction(string cheepId, string reactionType)
+    {
+        var author = User.Identity?.Name!;
+        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return;
+
+        var cheepReactions = Cheeps.First(c => c.CheepId == cheepId).Reactions;
+        if (cheepReactions.Any(r => r.Author == author))
+        {
+            var prevReaction = cheepReactions.First(r => r.Author == author);
+            cheepReactions.Remove(prevReaction);
+            _reactionRepository.RemoveReaction(cheepId, author);
+            if (prevReaction.ReactionType == reactionType) return;
+        }
+
+        cheepReactions.Add(new ReactionDTO(cheepId, author, reactionType));
+        _reactionRepository.CreateReaction(cheepId, author, reactionType);
     }
 }

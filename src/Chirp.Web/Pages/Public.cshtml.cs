@@ -6,7 +6,7 @@ namespace Chirp.Web.Pages;
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileNameMustMatchTypeName", Justification = "Razor Page")]
 public class PublicModel : PageModel
 {
-    public PaginationModel Pagination { get; private set; } = new(1, 1);
+    public static PaginationModel Pagination { get; private set; } = new(1, 1);
     public IEnumerable<(string Key, string Value)> ReactionTypes { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
     public bool IsDarkMode { get; private set; }
@@ -18,12 +18,10 @@ public class PublicModel : PageModel
 
     public PublicModel(ICheepRepository cheepRepository, IAuthorRepository authorRepository, IReactionRepository reactionRepository)
     {
-        Cheeps = new List<CheepDTO>();
         IsDarkMode = false;
         _cheepRepository = cheepRepository;
         _authorRepository = authorRepository;
         _reactionRepository = reactionRepository;
-        ReactionTypes = _reactionRepository.GetAllReactionTypes();
     }
 
     public async Task<IActionResult> OnGet([FromQuery] int page)
@@ -47,9 +45,10 @@ public class PublicModel : PageModel
     }
 
     public List<CheepDTO> GetCheeps()
-    {
-        return Cheeps;
-    }
+        => Cheeps;
+
+    public PaginationModel GetPagination()
+        => Pagination;
 
     public IActionResult OnPostCheep(string message)
     {

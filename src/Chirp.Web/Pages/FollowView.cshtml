@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "Chirp!";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
     var author = HttpContext.GetRouteValue("author")!.ToString();
     var followType = HttpContext.GetRouteValue("followType")!.ToString();
 }
@@ -21,8 +21,23 @@
                     {
                         <li>
                             <p>
+                                 @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
+                                     <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                                 }
+                                 else
+                                 {
+                                     <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
+                                     
+                                 }
                                 <strong>
-                                    <a href="/@user.Name">@user.Name</a>
+                                    @if (string.IsNullOrEmpty(user.DisplayName))
+                                    {
+                                        <a href="/@user.Name">@user.Name</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/@user.Name">@user.DisplayName</a>
+                                    }
                                 </strong>
                             </p>
                         </li>
@@ -43,14 +58,24 @@
                     {
                         <li>
                             <p>
+                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
+                                    <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                                }
+                                else
+                                {
+                                    <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
+                                    
+                                }
                                 <strong>
-                                    @if (user.DisplayName != "")
+                                    @if (string.IsNullOrEmpty(user.DisplayName))
                                     {
-                                        <a href="/@user.Name">@user.DisplayName</a>
+                                        <a href="/@user.Name">@user.Name</a>
+
                                     }
                                     else
                                     {
-                                        <a href="/@user.Name">@user.Name</a>
+                                        <a href="/@user.Name">@user.DisplayName</a>
+
                                     }
                                 </strong>
                             </p>

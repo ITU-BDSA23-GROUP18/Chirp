@@ -266,7 +266,6 @@ textarea.aboutme{
     outline: none;
     border: 0;
     resize: none;
-    
 }
 
 button.delete{
@@ -575,7 +574,14 @@ div.page h1 {
     font-size: 80px;
 }
 
-form {
-    display: inline;
+#pagination_ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#pagination_ul li {
+    display: inline-block;
 }
 

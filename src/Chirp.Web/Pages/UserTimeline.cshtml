@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "Chirp!";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
     var user = HttpContext.GetRouteValue("author")!.ToString();
 }
 
@@ -14,8 +14,9 @@
             @if (user == User.Identity!.Name)
             {
                 <div class="profilePicture-container">
-                    <form method="post" asp-page-handler="UploadProfilePicture" class="UploadProfilePicture" enctype="multipart/form-data">
-                        <input type="file" id="fileInput" style="display:none" name="profilePicture"/>
+                    <form method="post" asp-page-handler="UploadProfilePicture" class="UploadProfilePicture"
+                        enctype="multipart/form-data">
+                        <input type="file" id="fileInput" style="display:none" name="profilePicture" />
                         <label for="fileInput">
                             <img alt="profilePicture" class="profilePicture_img" src="@Model.ProfilePictureUrl">
                             <div class="change-text">Change</div>
@@ -23,10 +24,12 @@
                         </label>
                     </form>
                 </div>
-            }else
+            }
+            else
             {
                 <div class="profilePicture-container-others">
-                    <img style="cursor: default" class="profilePicture_img" src="@Model.AuthorProfilePictureUrl" alt="profile picture">
+                    <img style="cursor: default" class="profilePicture_img" src="@Model.AuthorProfilePictureUrl"
+                        alt="profile picture">
                 </div>
             }
         </li>
@@ -57,21 +60,16 @@
             }
         }
     }
-    @if (Model.Cheeps.Any())
+    @if (Model.GetCheeps().Any())
     {
         <ul id="messagelist" class="cheeps">
-            @foreach (var cheep in Model.Cheeps)
+            @foreach (var cheep in Model.GetCheeps())
             {
                 <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
-                            <small>&mdash; @cheep.Timestamp</small>
-                        </strong>
-                        <br />
-                        @cheep.Message
-
-                    </p>
+                    @{
+                        ViewData["Cheep"] = cheep;
+                    }
+                    <partial name="CheepBox" view-data="ViewData"/>
                 </li>
             }
         </ul>
@@ -81,9 +79,8 @@
         <em>There are no cheeps so far.</em>
     }
     <br/>
-    @{
-        await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-    }
+    
+    <partial name="Pagination" model="@Model.GetPagination()"/>
 </div>
 
 <script>

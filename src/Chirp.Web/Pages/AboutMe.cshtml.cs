@@ -48,6 +48,7 @@ public class AboutMeModel : PageModel
         Email = author.Email != User.Identity?.Name! ? author.Email : "Email...";
 
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
@@ -156,11 +157,9 @@ public class AboutMeModel : PageModel
 
         if (scale < 1 || scale > 2)
         {
-            Console.WriteLine($"Invalid scale: {scale}");
             return RedirectToPage();
         }
 
-        Console.WriteLine(scale);
         await _authorRepository.SetFontSizeScale(User.Identity?.Name!, scale);
         return RedirectToPage();
     }
