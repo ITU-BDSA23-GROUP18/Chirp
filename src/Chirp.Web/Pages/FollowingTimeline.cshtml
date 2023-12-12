@@ -11,34 +11,16 @@
     {
         <h2> Following Timeline </h2>
 
-        if (Model.Cheeps.Any())
+        if (Model.GetCheeps().Any())
         {
             <ul id="messagelist" class="cheeps">
-                @foreach (var cheep in Model.Cheeps)
+                @foreach (var cheep in Model.GetCheeps())
                 {
                     <li>
-                        <p>
-                            @if (cheep.ProfilePictureUrl != ""){
-                            
-                                <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
-                            } else {
-                                <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
-                            }
-                            <strong>
-                            @if (cheep.DisplayName != "")
-                            {
-                                <a href="/@cheep.Author">@cheep.DisplayName</a>
-                            }
-                            else
-                            {
-                                <a href="/@cheep.Author">@cheep.Author</a>
-                            }
-                                <small>&mdash; @cheep.Timestamp</small>
-                            </strong>
-                            <br />
-                            @cheep.Message
-
-                        </p>
+                        @{
+                            ViewData["Cheep"] = cheep;
+                        }
+                        <partial name="CheepBox" view-data="ViewData"/>
                     </li>
                 }
             </ul>
@@ -48,9 +30,8 @@
             <em>You are not following anybody!.</em>
         }
         <br/>
-        {
-                await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
-        }
+        
+        <partial name="Pagination" model="@Model.GetPagination()"/>
     }
 </div>
     
