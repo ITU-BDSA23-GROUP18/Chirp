@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "Chirp!";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
     var author = HttpContext.GetRouteValue("author")!.ToString();
     var followType = HttpContext.GetRouteValue("followType")!.ToString();
 }

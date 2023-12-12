@@ -3,7 +3,7 @@
 @model FollowingTimelineModel
 @{
     ViewData["Title"] = "Chirp! - Following Timeline";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
 }
 
 <div>
@@ -18,21 +18,24 @@
                 {
                     <li>
                         <p>
-                            @if (cheep.ProfilePictureUrl != ""){
-                            
-                                <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
-                            } else {
-                                <img src="../images/defualt_user_pic.png" width="30" alt="Avatar" class="avatar">
-                            }
-                            <strong>
-                            @if (cheep.DisplayName != "")
+                            @if (cheep.ProfilePictureUrl != "")
                             {
-                                <a href="/@cheep.Author">@cheep.DisplayName</a>
+
+                                <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
                             }
                             else
                             {
-                                <a href="/@cheep.Author">@cheep.Author</a>
+                                <img src="../images/defualt_user_pic.png" width="30" alt="Avatar" class="avatar">
                             }
+                            <strong>
+                                @if (cheep.DisplayName != "")
+                                {
+                                    <a href="/@cheep.Author">@cheep.DisplayName</a>
+                                }
+                                else
+                                {
+                                    <a href="/@cheep.Author">@cheep.Author</a>
+                                }
                                 <small>&mdash; @cheep.Timestamp</small>
                             </strong>
                             <br />
@@ -47,10 +50,9 @@
         {
             <em>You are not following anybody!.</em>
         }
-        <br/>
+        <br />
         {
-                await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+            await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
         }
     }
 </div>
-    
