@@ -3,7 +3,7 @@
 @model AboutMeModel
 @{
     ViewData["Title"] = "Chirp! - About Me";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
 }
 
 @if (User.Identity?.IsAuthenticated ?? false)
@@ -144,7 +144,6 @@
 
             let element = document.getElementById("changeemail");
             
-
         var obj = document.getElementById("email");
 
         if (document.activeElement === obj) {
@@ -159,7 +158,6 @@
 
             let element = document.getElementById("changename");
             
-
         var obj = document.getElementById("username");
 
         if (document.activeElement === obj) {

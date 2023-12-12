@@ -3,7 +3,7 @@
 @model FollowingTimelineModel
 @{
     ViewData["Title"] = "Chirp! - Following Timeline";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
 }
 
 <div>
@@ -34,4 +34,3 @@
         <partial name="Pagination" model="@Model.GetPagination()"/>
     }
 </div>
-    
