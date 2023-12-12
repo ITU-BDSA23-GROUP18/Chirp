@@ -23,7 +23,7 @@ public class ReactionRepository_Tests
     public async Task TestCreateReaction(string reactionString)
     {
         var cheep = _context.Cheeps.FirstOrDefault();
-        _repository.CreateReaction( cheep.CheepId.ToString() , cheep.Author.Name.ToString(), "Good");
+        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), "Good");
         var reaction = _context.Reactions.FirstOrDefault();
         Assert.NotNull(reaction);
         Assert.Equal(cheep.CheepId.ToString() , reaction.CheepId.ToString());
