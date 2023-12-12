@@ -6,8 +6,6 @@
     Layout = "Shared/_Layout";
 }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     @if (User.Identity?.IsAuthenticated ?? false)
     {
         <h2> Write a cheep! </h2>
@@ -61,5 +59,4 @@
     <br/>
     
     <partial name="Pagination" model="@Model.GetPagination()"/>
-
 
