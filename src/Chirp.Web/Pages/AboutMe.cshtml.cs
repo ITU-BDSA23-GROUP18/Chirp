@@ -72,7 +72,7 @@ public class AboutMeModel : PageModel
     }
 
     /// <summary>
-    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// Changes the email of the author with the given currentUserName to the given newEmail.
     /// </summary>
     /// <param name="newEmail"></param>
     /// <returns></returns>
@@ -105,7 +105,7 @@ public class AboutMeModel : PageModel
     }
 
     /// <summary>
-    /// Follows the author with the given followName from the author with the given currentUserName
+    /// Follows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="authorName"></param>
     /// <returns></returns>

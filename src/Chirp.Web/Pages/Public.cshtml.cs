@@ -7,7 +7,6 @@ namespace Chirp.Web.Pages;
 public class PublicModel : PageModel
 {
     public static PaginationModel Pagination { get; private set; } = new(1, 1);
-    public IEnumerable<(string Key, string Value)> ReactionTypes { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
     public bool IsDarkMode { get; private set; }
     public float FontSizeScale { get; private set; }

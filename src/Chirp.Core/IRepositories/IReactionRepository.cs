@@ -6,7 +6,7 @@ namespace Chirp.Core.IRepositories;
 public interface IReactionRepository
 {
     /// <summary>
-    /// Creates a reaction with the given cheepId, authorName and reactionType
+    /// Creates a reaction with the given cheepId, authorName and reactionType.
     /// </summary>
     /// <param name="cheepId"></param>
     /// <param name="authorName"></param>

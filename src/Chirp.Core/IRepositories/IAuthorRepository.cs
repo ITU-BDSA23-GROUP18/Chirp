@@ -3,7 +3,7 @@
 namespace Chirp.Core.IRepositories;
 
 /// <summary>
-/// The IAuthorRepository interface is used to define the methods that the AuthorRepository class must implement
+/// The IAuthorRepository interface is used to define the methods that the AuthorRepository class must implement.
 /// </summary>
 public interface IAuthorRepository
 {
@@ -45,7 +45,7 @@ public interface IAuthorRepository
     public Task<bool> CreateAuthor(string name, string email, string displayName);
 
     /// <summary>
-    /// Follows the author with the given followName from the author with the given currentUserName
+    /// Follows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
@@ -53,7 +53,7 @@ public interface IAuthorRepository
     public Task<bool> FollowAuthor(string followName, string currentUserName);
 
     /// <summary>
-    /// Unfollows the author with the given followName from the author with the given currentUserName
+    /// Unfollows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
@@ -61,7 +61,7 @@ public interface IAuthorRepository
     public Task<bool> UnfollowAuthor(string followName, string currentUserName);
 
     /// <summary>
-    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// Changes the email of the author with the given currentUserName to the given newEmail.
     /// </summary>
     /// <param name="newEmail"></param>
     /// <param name="currentUserName"></param>

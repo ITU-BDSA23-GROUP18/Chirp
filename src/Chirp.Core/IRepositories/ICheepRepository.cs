@@ -1,7 +1,7 @@
 namespace Chirp.Core.IRepositories;
 
 /// <summary>
-/// The ICheepRepository interface is used to define the methods that the CheepRepository class must implement
+/// The ICheepRepository interface is used to define the methods that the CheepRepository class must implement.
 /// </summary>
 public interface ICheepRepository
 {
@@ -34,7 +34,7 @@ public interface ICheepRepository
     public Task<int> CountCheepsFromAuthor(string authorName);
 
     /// <summary>
-    /// Creates a cheep with the given message and username
+    /// Creates a cheep with the given message and username.
     /// </summary>
     /// <param name="message"></param>
     /// <param name="username"></param>

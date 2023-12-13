@@ -3,18 +3,17 @@ using Microsoft.AspNetCore.Http;
 namespace Chirp.Infrastructure.Repositories;
 
 /// <summary>
-/// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
+/// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table.
 /// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpContext _authorDb;
 
     /// <summary>
-    /// Constructor for the AuthorRepository class
-    /// If seedDatabase is true, the database will be seeded with data
+    /// Initializes a new instance of the <see cref="AuthorRepository"/> class.
     /// </summary>
     /// <param name="authorDb"></param>
-    /// <param name="seedDatabase"></param>
+    /// <param name="seedDatabase">If seedDatabase is true, the database will be seeded with data.</param>
     public AuthorRepository(ChirpContext authorDb, bool seedDatabase = true)
     {
         _authorDb = authorDb;
@@ -22,7 +21,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Gets the author from the database with the given name
+    /// Gets the author from the database with the given name.
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
@@ -33,7 +32,7 @@ public class AuthorRepository : IAuthorRepository
              .ToListAsync();
 
     /// <summary>
-    /// Gets the author from the database with the given email
+    /// Gets the author from the database with the given email.
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
@@ -44,12 +43,12 @@ public class AuthorRepository : IAuthorRepository
             .ToListAsync();
 
     /// <summary>
-    /// Creates an author with the given name and email
+    /// Creates an author with the given name and email.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="email"></param>
     /// <param name="displayName"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">If any of the parameters are in use.</exception>
     public async Task<bool> CreateAuthor(string name, string email, string displayName)
     {
         if (_authorDb.Authors.Any(a => a.Name == name))
@@ -77,11 +76,11 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Follows the author with the given followName from the author with the given currentUserName
+    /// Follows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">Author to follow or user does not exist.</exception>
     public async Task<bool> FollowAuthor(string followName, string currentUserName)
     {
         var authorToFollow = await _authorDb.Authors.SingleAsync(a => a.Name == followName);
@@ -103,11 +102,11 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Gets the authors from the database that are following the given pageUserName
+    /// Gets the authors from the database that are following the given pageUserName.
     /// </summary>
     /// <param name="pageUser"></param>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">User does not exist.</exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
         var user = await _authorDb.Authors.Include(author => author.Followers).FirstOrDefaultAsync(a => a.Name == pageUser);
@@ -131,11 +130,11 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Gets the authors from the database that the given pageUserName is following
+    /// Gets the authors from the database that the given pageUserName is following.
     /// </summary>
     /// <param name="userName"></param>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">User does not exist.</exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
     {
         var user = await _authorDb.Authors.Include(author => author.Following).FirstOrDefaultAsync(a => a.Name == userName);
@@ -159,11 +158,11 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Unfollows the author with the given followName from the author with the given currentUserName
+    /// Unfollows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">Author to unfollow does not exist.</exception>
     public async Task<bool> UnfollowAuthor(string followName, string currentUserName)
     {
         var followAuthor = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == followName);
@@ -182,7 +181,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     /// <summary>
-    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// Changes the email of the author with the given currentUserName to the given newEmail.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="newEmail"></param>

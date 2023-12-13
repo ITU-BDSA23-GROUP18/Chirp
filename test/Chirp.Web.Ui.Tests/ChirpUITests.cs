@@ -176,7 +176,7 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
 
     /// <summary>
     /// This test is used to see if the number of followers is correct.
-    /// We know that the user "Wendell Ballan" follows 3 users by default
+    /// We know that the user "Wendell Ballan" follows 3 users by default.
     /// </summary>
     [Fact]
     public async Task SeeAUserThatFollowsOtherUsersTest()

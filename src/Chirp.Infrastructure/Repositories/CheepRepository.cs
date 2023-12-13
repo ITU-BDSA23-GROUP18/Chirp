@@ -114,7 +114,7 @@ public class CheepRepository : ICheepRepository
     }
 
     /// <summary>
-    /// Class used to validate the cheep to insure that the message is not empty and is less than 160 characters
+    /// Class used to validate the cheep to insure that the message is not empty and is less than 160 characters.
     /// </summary>
     private class CheepValidator : AbstractValidator<string>
     {

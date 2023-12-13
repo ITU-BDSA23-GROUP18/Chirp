@@ -1,7 +1,7 @@
 namespace Chirp.Core.DTOs;
 
 /// <summary>
-/// The CheepDTO class is used to transfer data from the CheepRepository class to the UI
+/// The CheepDTO class is used to transfer data from the CheepRepository class to the UI.
 /// </summary>
 public record CheepDTO
 {
