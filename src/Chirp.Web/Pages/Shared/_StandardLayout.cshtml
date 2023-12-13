@@ -71,11 +71,32 @@
         Chirp &mdash; An ASP.NET Application by group 18
     </div>
 </div>
+<div id="error-notification" hidden onclick="hideErrorNotification()">
+    <h2>Error:</h2>
+    <p id="error-message"></p>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", required: false)
 
+<script>
+    const hideErrorNotification = () => {document.getElementById('error-notification').hidden = true}
+    (() => {
+        const errorMsg = new URLSearchParams(window.location.search).get("error")
+        const currentUrl = window.location.href;
+        const newUrl = currentUrl.replace(/[?&]error=[^&]+/, '');
+        window.history.replaceState({}, document.title, newUrl);
+        if (errorMsg != null) {
+            document.getElementById("error-message").innerHTML = errorMsg;
+            document.getElementById("error-notification").hidden = false;
+            setTimeout(function () {
+                document.getElementById("error-notification").hidden = true;
+            }, 5000);
+        }
+    })();
+</script>
 </body>
 </html>
