@@ -348,4 +348,13 @@ public class AuthorRepository : IAuthorRepository
         }
         return author.FontSizeScale;
     }
+    public async Task<bool> EnsureAuthorExists(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            await CreateAuthor(name, name, name);
+        }
+        return true;
+    }
 }

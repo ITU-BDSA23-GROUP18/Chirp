@@ -35,6 +35,7 @@ public class PublicModel : PageModel
         
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
+            await _authorRepository.EnsureAuthorExists(User.Identity.Name!);
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
             FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
