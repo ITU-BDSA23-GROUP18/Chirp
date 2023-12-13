@@ -4,11 +4,7 @@ namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
 {
-    private readonly ICheepRepository _repository;
     public readonly IAuthorRepository _authorRepository;
-    public List<CheepDTO> Cheeps { get; private set; }
-    public List<AuthorDTO> Followers { get; private set; }
-    public PaginationModel? Pagination { get; private set; }
     public string? Email { get; private set; }
     public string? DisplayName { get; private set; }   
     public string? ProfilePictureUrl { get; private set; }
@@ -17,11 +13,8 @@ public class AboutMeModel : PageModel
     public bool IsDarkMode { get; private set; }
     public float FontSizeScale { get; private set; }
     
-    public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
+    public AboutMeModel(IAuthorRepository authorRepository)
     {
-        Cheeps = new List<CheepDTO>();
-        Followers = new List<AuthorDTO>();
-        _repository = repository;
         _authorRepository = authorRepository;
     }
     
@@ -30,11 +23,8 @@ public class AboutMeModel : PageModel
     /// </summary>
     /// <param name="page"></param>
     /// <returns></returns>
-    public async Task<ActionResult> OnGet([FromQuery] int page)
+    public async Task<ActionResult> OnGet()
     {
-        //If a page query is not given in the url set the page=1
-        page = page <= 1 ? 1 : page;
-
         var authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
         var author = authors.FirstOrDefault();
         if (author == null || User.Identity == null || !User.Identity.IsAuthenticated) {
@@ -42,15 +32,7 @@ public class AboutMeModel : PageModel
         }
         DisplayName = author.DisplayName;
         Email = author.Email != author.Name ? author.Email : "Email...";
-
-        var followersList = (await _authorRepository.GetFollowers(author.Name)).ToList();
-        var cheepsList = (await _repository.GetCheepFromAuthor(author.Name, page)).ToList();
-        Cheeps.AddRange(cheepsList);
-        Followers.AddRange(followersList);
         
-        var nCheeps = Cheeps.Count;
-        Pagination = new PaginationModel(nCheeps, page);
-
         ProfilePictureUrl = await _authorRepository.GetProfilePicture(author.Name);
         IsDarkMode = await _authorRepository.IsDarkMode(User.Identity?.Name!);
         FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity?.Name!);
@@ -110,18 +92,7 @@ public class AboutMeModel : PageModel
             return RedirectToPage();
         }
     }
-    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
-    {
-        try
-        {
-            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
-            return RedirectToPage();
-        }
-        catch 
-        {
-            return RedirectToPage();
-        }
-    }
+    
     public async Task<IActionResult> OnPostSetDarkMode()
     {
         var isDarkMode = !await _authorRepository.IsDarkMode(User.Identity?.Name!);
