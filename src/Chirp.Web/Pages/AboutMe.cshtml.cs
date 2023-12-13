@@ -4,24 +4,17 @@ namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
 {
-    private readonly ICheepRepository _repository;
     public readonly IAuthorRepository _authorRepository;
-    public List<CheepDTO> yourCheeps { get; private set; }
-    public List<AuthorDTO> Followers { get; private set; }
-    public PaginationModel? Pagination { get; private set; }
-    public string ?Email { get; private set; }
-    public string ?DisplayName { get; private set; }   
+    public string? Email { get; private set; }
+    public string? DisplayName { get; private set; }   
     public string? ProfilePictureUrl { get; private set; }
     
     // for individual user/"Author" preferences:
     public bool IsDarkMode { get; private set; }
     public float FontSizeScale { get; private set; }
     
-    public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
+    public AboutMeModel(IAuthorRepository authorRepository)
     {
-        yourCheeps = new List<CheepDTO>();
-        Followers = new List<AuthorDTO>();
-        _repository = repository;
         _authorRepository = authorRepository;
     }
     
@@ -30,38 +23,17 @@ public class AboutMeModel : PageModel
     /// </summary>
     /// <param name="page"></param>
     /// <returns></returns>
-    public async Task<ActionResult> OnGet([FromQuery] int page)
+    public async Task<ActionResult> OnGet()
     {
-        //If a page query is not given in the url set the page=1
-        page = page <= 1 ? 1 : page;
-
-        var Authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
-        var Author = Authors.FirstOrDefault();
-        if (Author == null || User.Identity == null) {
+        var authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
+        var author = authors.FirstOrDefault();
+        if (author == null || User.Identity == null || !User.Identity.IsAuthenticated) {
             return RedirectToPage("public");
         }
-
-        DisplayName = Author.DisplayName != User.Identity?.Name! ? Author.DisplayName : Author.Name;
-        Email = Author.Email != User.Identity?.Name! ? Author.Email : "Email...";
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        DisplayName = author.DisplayName;
+        Email = author.Email != author.Name ? author.Email : "Email...";
         
-        if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
-        }
-        
-        foreach (var author in Authors)
-        {
-            var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
-            var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
-            yourCheeps.AddRange(cheeps);
-            this.Followers.AddRange(Followers);
-        }
-        
-        var nCheeps = yourCheeps.Count;
-        Pagination = new PaginationModel(nCheeps, page);
-
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(author.Name);
         IsDarkMode = await _authorRepository.IsDarkMode(User.Identity?.Name!);
         FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity?.Name!);
         
@@ -123,18 +95,7 @@ public class AboutMeModel : PageModel
             return RedirectToPage("aboutme", new { error = "Could not delete user. Author " + authorName + " does not exist" });
         }
     }
-    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
-    {
-        try
-        {
-            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
-            return RedirectToPage();
-        }
-        catch 
-        {
-            return RedirectToPage();
-        }
-    }
+    
     public async Task<IActionResult> OnPostSetDarkMode()
     {
         var isDarkMode = !await _authorRepository.IsDarkMode(User.Identity?.Name!);
