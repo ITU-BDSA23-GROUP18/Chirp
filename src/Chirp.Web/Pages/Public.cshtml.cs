@@ -54,10 +54,13 @@ public class PublicModel : PageModel
     public IActionResult OnPostCheep(string message)
     {
         if (message.IsNullOrEmpty()) return RedirectToPage("Public", new { error = "Cheep must not be empty" });
-        try {
+        try
+        {
             _cheepRepository.CreateCheep(message, User.Identity?.Name!);
             return RedirectToPage("Public");
-        } catch {
+        }
+        catch
+        {
             return RedirectToPage("Public", new { error = "Error posting cheep" });
         }
     }

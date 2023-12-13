@@ -320,7 +320,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "")
         {
-            profilePictureUrl = "../images/default_user_pic.png";
+            profilePictureUrl = "/images/default_user_pic.png";
         }
 
         return profilePictureUrl;
@@ -371,6 +371,7 @@ public class AuthorRepository : IAuthorRepository
 
         return author.FontSizeScale;
     }
+
     public async Task<bool> EnsureAuthorExists(string name)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -378,6 +379,7 @@ public class AuthorRepository : IAuthorRepository
         {
             await CreateAuthor(name, name, name);
         }
+
         return true;
     }
 }

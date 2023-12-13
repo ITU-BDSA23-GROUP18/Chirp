@@ -1,7 +1,7 @@
 namespace Chirp.Core.DTOs;
 
 /// <summary>
-/// The AuthorDTO class is used to transfer data from the AuthorRepository class to the UI
+/// The AuthorDTO class is used to transfer data from the AuthorRepository class to the UI.
 /// </summary>
 public record AuthorDTO
 {
