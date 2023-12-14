@@ -19,21 +19,62 @@ public class ReactionRepository_Tests
         _cheep_repository = new CheepRepository(_context);
     }
     [Theory]
-    [InlineData("reactionString")]
-    public async Task TestCreateReaction(string reactionString)
+    [InlineData("Good")]
+    [InlineData("Ish")]
+    [InlineData("Bad")]
+
+    public void TestCreateReaction(string reactionString)
     {
-        var cheep = _context.Cheeps.FirstOrDefault();
-        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), "Good");
-        var reaction = _context.Reactions.FirstOrDefault();
+        var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine");
+        var cheep = cheepList.FirstOrDefault();
+        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), reactionString);
+        var reaction = _context.Reactions.Where(r => r.CheepId == cheep.CheepId).FirstOrDefault();
         Assert.NotNull(reaction);
         Assert.Equal(cheep.CheepId.ToString() , reaction.CheepId.ToString());
-        Assert.Equal(cheep.CheepId.ToString(), reaction.AuthorName);
-        Assert.Equal(ReactionType.Good, reaction.ReactionType);
+        Assert.Equal(cheep.Author.Name, reaction.AuthorName);
+        switch (reactionString)
+        {
+            case "Good":
+                Assert.Equal(ReactionType.Good, reaction.ReactionType);
+                break;
+            case "Ish":
+                Assert.Equal(ReactionType.Ish, reaction.ReactionType);
+                break;
+            case "Bad":
+                Assert.Equal(ReactionType.Bad, reaction.ReactionType);
+                break;
+            default:
+                break;
+        }
+        //remove the reaction
+        _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString());
     }
     [Fact]
     public async Task TestGetReaction()
     {
-
+        var cheepList = await _cheep_repository.GetCheep();
+        foreach (var cheep in cheepList)
+        {
+            var reactionList = cheep.Reactions;
+            //should not be null but can be empty if no reactions are present
+            Assert.NotNull(reactionList);
+        }
     }
 
+
+    [Theory]
+    [InlineData("Good")]
+    [InlineData("Ish")]
+    [InlineData("Bad")]
+    public void TestRemoveReaction(string reactionString){
+        var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine");
+        var cheep = cheepList.FirstOrDefault();
+        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), reactionString);
+        var reaction = _context.Reactions.Where(r => r.CheepId == cheep.CheepId).FirstOrDefault();
+        //remove the reaction
+        _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString());
+        //check if the reaction is removed
+        var reactionList = _context.Reactions.Where(r => r.CheepId == cheep.CheepId).ToList();
+        Assert.DoesNotContain(reaction, reactionList);
+    }
 }
