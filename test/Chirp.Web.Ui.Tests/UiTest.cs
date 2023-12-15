@@ -42,8 +42,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             // Disable for debugging, and optionally use slowMo.
-            //SlowMo = 400,
-            Headless = true //false if you want to see the browser
+            SlowMo = 400,
+            Headless = false //false if you want to see the browser
         });
         _context = await CreateBrowserContextAsync(_browser);
     }
@@ -164,7 +164,73 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
     }
-    
+    [Theory]
+    [InlineData("TestUser1")]
+    [InlineData("TestUser2")]
+    [InlineData("TestUser3")]
+    public async Task TestChangeUsername(string newName)
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        var usernameField = Page.Locator("#username");
+        var changeNameButton = Page.Locator("#changename");
+
+        await usernameField.ClickAsync();
+        await usernameField.FillAsync(newName);
+
+        await changeNameButton.ClickAsync();
+        //go to home page and cheep
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
+        //look for the new name
+        await Page.GetByPlaceholder(new Regex(newName, RegexOptions.IgnoreCase)).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        usernameField = Page.Locator("#username");
+        changeNameButton = Page.Locator("#changename");
+
+        //change the name back to TestUser
+        await usernameField.ClickAsync();
+        await usernameField.FillAsync("TestUser");
+
+        await changeNameButton.ClickAsync();
+    }
+    [Theory]
+    [InlineData("TestUser1@Test.Test")]
+    [InlineData("TestUser2@Test.Test")]
+    [InlineData("TestUser3@Test.Test")]
+    public async Task TestChangeEmail(string newEmail)
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        var emailField = Page.Locator("#email");
+        var changeEmailButton = Page.Locator("#changeemail");
+
+        await emailField.ClickAsync();
+        await emailField.FillAsync(newEmail);
+
+        await changeEmailButton.ClickAsync();
+
+        //change the email back to TestUser@Test.Test
+        await emailField.ClickAsync();
+        await emailField.FillAsync("TestUser@Test.Test");
+
+        await changeEmailButton.ClickAsync();
+    }
     /// <summary>
     /// This test is used to see if the number of followers is correct.
     /// We know that the user "Wendell Ballan" follows 3 users by default

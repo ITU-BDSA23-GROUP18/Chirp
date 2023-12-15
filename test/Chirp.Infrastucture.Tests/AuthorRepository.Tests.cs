@@ -121,6 +121,13 @@ public class AuthorRepositoryTests
         var author = authors.FirstOrDefault();
         //check if name is name
         Assert.Equal(name, author?.Name);
+        //check in the database
+        var authors2 = await _context.Authors.Where(a => a.Name == name).ToListAsync();
+        Assert.Single(authors2);
+        var author2 = authors2.FirstOrDefault();
+        //we know that the name is the same therefore we can check the email
+        Assert.Equal(author?.Email, author2?.Email);
+
     }
     [Theory]
     [InlineData("TestName1@Test.Test")]
@@ -136,5 +143,11 @@ public class AuthorRepositoryTests
         var author = authors.FirstOrDefault();
         //check if email is email
         Assert.Equal(email, author?.Email);
+        //check in the database
+        var authors2 = await _context.Authors.Where(a => a.Email == email).ToListAsync();
+        Assert.Single(authors2);
+        var author2 = authors2.FirstOrDefault();
+        //we know that the email is the same therefore we can check the name
+        Assert.Equal(author?.Name, author2?.Name);
     }
 }
