@@ -42,8 +42,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             // Disable for debugging, and optionally use slowMo.
-            SlowMo = 400,
-            Headless = false //false if you want to see the browser
+            //SlowMo = 400,
+            Headless = true //false if you want to see the browser
         });
         _context = await CreateBrowserContextAsync(_browser);
     }
