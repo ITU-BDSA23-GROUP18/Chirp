@@ -289,7 +289,6 @@ button.changer{
 	outline: inherit;
 }
 
-
 div.cheep button.share{
     align-items: end;
     cursor: pointer;
@@ -318,7 +317,6 @@ textarea{
     margin-right: 0.5rem;
     display: inline;
 }
-
 
 .dropbtn {
     visibility: hidden;
@@ -447,7 +445,6 @@ textarea{
         cursor: pointer;
     }
 
-
     .dropdown {
         position: relative;
         display: inline-block;
@@ -477,7 +474,6 @@ textarea{
     .show {
         display: block;
     }
-
 
 .switch {
     position: relative;
