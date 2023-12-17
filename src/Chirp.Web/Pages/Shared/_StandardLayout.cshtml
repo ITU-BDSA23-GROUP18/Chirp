@@ -5,10 +5,34 @@
     <title>@ViewData["Title"]</title>
     
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="~/css/style.css" rel="stylesheet" type="text/css"/>    
-    <link href="~/css/fontSize1x.css" rel="stylesheet" type="text/css"/>
-    <link rel="icon" type="image/png" href="/favicon/favicon.ico">
+    @if (Model.IsDarkMode)
+    {
+        <link href="~/css/darkmode.css" rel="stylesheet" type="text/css"/>
+    }
+    else
+    {
+        <link href="~/css/style.css" rel="stylesheet" type="text/css"/>    
+    }
+    
+    @{
+        var cssLink = "";
+    }
+    
+    @if (Model.FontSizeScale == 2)
+    {
+        cssLink = "/css/fontSize2x.css";
+    }
+    else if (Model.FontSizeScale == 1.5)
+    {
+        cssLink = "/css/fontSize1_5x.css";
+    }
+    else
+    {
+        cssLink = "/css/fontSize1x.css";
+    }
+    <link href="@cssLink" rel="stylesheet" type="text/css"/>
     <link href="~/lib/font-awesome/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>
 <div class=page>

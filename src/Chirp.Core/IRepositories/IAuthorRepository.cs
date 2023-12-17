@@ -67,7 +67,7 @@ public interface IAuthorRepository
     
     public Task DeleteProfilePicture(string name);
     
-    public Task<string?> GetProfilePicture(string name);
+    public Task<string> GetProfilePicture(string name);
     
     /// <summary>
     /// The 4 methods below are for individual user/"Author" preferences:
