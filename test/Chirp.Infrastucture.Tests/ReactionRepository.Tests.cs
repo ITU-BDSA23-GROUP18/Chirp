@@ -25,10 +25,13 @@ public class ReactionRepository_Tests
 
     public void TestCreateReaction(string reactionString)
     {
-        var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine");
+        var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine").OrderByDescending(c => c.TimeStamp);
         var cheep = cheepList.FirstOrDefault();
+        if (cheep == null) throw new ArgumentException($"No cheep found");
         _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), reactionString);
-        var reaction = _context.Reactions.Where(r => r.CheepId == cheep.CheepId).FirstOrDefault();
+        var reactions = _context.Reactions.Where(r => r.CheepId == cheep.CheepId);
+        var reaction = reactions.FirstOrDefault();
+        Assert.Equal(1, reactions.Count());
         Assert.NotNull(reaction);
         Assert.Equal(cheep.CheepId.ToString() , reaction.CheepId.ToString());
         Assert.Equal(cheep.Author.Name, reaction.AuthorName);
@@ -61,16 +64,18 @@ public class ReactionRepository_Tests
         }
     }
 
-
     [Theory]
     [InlineData("Good")]
     [InlineData("Ish")]
     [InlineData("Bad")]
     public void TestRemoveReaction(string reactionString){
-        var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine");
+        var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine").OrderByDescending(c => c.TimeStamp);
         var cheep = cheepList.FirstOrDefault();
+        if (cheep == null) throw new ArgumentException($"No cheep found");
         _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), reactionString);
-        var reaction = _context.Reactions.Where(r => r.CheepId == cheep.CheepId).FirstOrDefault();
+        var reactions = _context.Reactions.Where(r => r.CheepId == cheep.CheepId);
+        var reaction = reactions.FirstOrDefault();
+        Assert.Equal(1, reactions.Count());
         //remove the reaction
         _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString());
         //check if the reaction is removed
