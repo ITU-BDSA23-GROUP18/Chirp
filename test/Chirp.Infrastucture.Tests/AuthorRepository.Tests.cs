@@ -106,6 +106,7 @@ public class AuthorRepositoryTests
             Assert.Contains(follower.Name, new List<string>() { "Jane Doe", "Jack Doe", "jill Doe" });
         }
     }
+    
     [Theory]
     [InlineData("Test1Name")]
     [InlineData("Test2Name")]
@@ -127,8 +128,8 @@ public class AuthorRepositoryTests
         var author2 = authors2.FirstOrDefault();
         //we know that the name is the same therefore we can check the email
         Assert.Equal(author?.Email, author2?.Email);
-
     }
+    
     [Theory]
     [InlineData("TestName1@Test.Test")]
     [InlineData("TestName2@Test.Test")]
@@ -150,6 +151,5 @@ public class AuthorRepositoryTests
         //we know that the email is the same therefore we can check the name
         Assert.Equal(author?.Email,author2?.Email);
         Assert.Equal(author?.Name, author2?.Name);
-        
     }
 }
