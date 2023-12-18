@@ -200,8 +200,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.Locator("body").ClickAsync();
     }
     [Fact]
-    public async Task Test1dot5TextSize(){
-
+    public async Task Test1dot5TextSize()
+    {
         var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
@@ -233,8 +233,8 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.Locator("body").ClickAsync();
     }
     [Fact]
-    public async Task Test2TextSize(){
-
+    public async Task Test2TextSize()
+    {
         var Page = await _context!.NewPageAsync();
 
         await Page.GotoAsync(_serverAddress);
@@ -295,8 +295,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
             throw new Exception("The page url is not correct expected: " + expectedUrl + " but was: " + url + "");
         }
     }
-
-
     /// <summary>
     /// Creates the Browser context for each test
     /// </summary>
@@ -312,8 +310,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         return context;
     }
-
-    
     /// <summary>
     /// Disposes the browser and context after each test
     /// </summary>
