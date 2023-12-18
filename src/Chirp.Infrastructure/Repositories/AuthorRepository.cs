@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 
 namespace Chirp.Infrastructure.Repositories;
+
 /// <summary>
 /// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
 /// </summary>
@@ -18,6 +19,7 @@ public class AuthorRepository : IAuthorRepository
         _authorDb = authorDb;
         _authorDb.InitializeDatabase(seedDatabase);
     }
+    
     /// <summary>
     /// Gets the author from the database with the given name
     /// </summary>
@@ -28,6 +30,7 @@ public class AuthorRepository : IAuthorRepository
              .Where(a => a.Name == name)
              .Select(a => a.ToDTO())
              .ToListAsync();
+    
     /// <summary>
     /// Gets the author from the database with the given email
     /// </summary>
@@ -71,6 +74,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+    
     /// <summary>
     /// Follows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -95,6 +99,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+    
     /// <summary>
     /// Gets the authors from the database that are following the given pageUserName
     /// </summary>
@@ -114,11 +119,12 @@ public class AuthorRepository : IAuthorRepository
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followerListDto.Add(authorDto);
         }
         return followerListDto;
     }
+    
     /// <summary>
     /// Gets the authors from the database that the given pageUserName is following
     /// </summary>
@@ -138,11 +144,12 @@ public class AuthorRepository : IAuthorRepository
         var followingListDto = new List<AuthorDTO>();
         foreach (var author in followingList)
         {
-            var authorDto = new AuthorDTO(author.Name, author.Email, author.ProfilePictureUrl, author.DisplayName);
+            var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followingListDto.Add(authorDto);
         }
         return followingListDto;
     }
+    
     /// <summary>
     /// Unfollows the author with the given followName from the author with the given currentUserName
     /// </summary>
@@ -164,6 +171,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
         return true;
     }
+    
     /// <summary>
     /// Changes the email of the author with the given currentUserName to the given newEmail
     /// </summary>
@@ -172,7 +180,7 @@ public class AuthorRepository : IAuthorRepository
     /// <exception cref="ArgumentException"></exception>
     public async Task<bool> ChangeEmail(string name, string newEmail)
     {
-        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -186,7 +194,7 @@ public class AuthorRepository : IAuthorRepository
     }
 
     public async Task<bool> ChangeName(string name, string newName){
-        var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
@@ -268,7 +276,6 @@ public class AuthorRepository : IAuthorRepository
             await file.CopyToAsync(stream);
         }
         
-
         // Set the user's profile picture URL
         user.ProfilePictureUrl = $"/{relativeFilePath}";
         
@@ -286,7 +293,7 @@ public class AuthorRepository : IAuthorRepository
         await _authorDb.SaveChangesAsync();
     }
     
-    public async Task<string?> GetProfilePicture(string name)
+    public async Task<string> GetProfilePicture(string name)
     {
         var author = (await GetAuthorByName(name)).FirstOrDefault();
         if (author == null)
@@ -298,7 +305,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl =="")
         {
-            return "images/defualt_user_pic.png";
+            profilePictureUrl = "../images/default_user_pic.png";
         }
         return profilePictureUrl;
     }
@@ -313,7 +320,6 @@ public class AuthorRepository : IAuthorRepository
         author.IsDarkMode = isDarkMode;
         await _authorDb.SaveChangesAsync();
     }
-    
 
     public async Task<bool> IsDarkMode(string name)
     {
@@ -345,5 +351,4 @@ public class AuthorRepository : IAuthorRepository
         }
         return author.FontSizeScale;
     }
-    
 }

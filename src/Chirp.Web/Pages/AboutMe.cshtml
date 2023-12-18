@@ -3,7 +3,7 @@
 @model AboutMeModel
 @{
     ViewData["Title"] = "Chirp! - About Me";
-    Layout = "Shared/_Layout";
+    Layout = "Shared/_StandardLayout";
 }
 
 @if (User.Identity?.IsAuthenticated ?? false)
@@ -19,14 +19,14 @@
             <div style="margin-left: 1.5rem">
                 <h5>Username:</h5>
                 <form method="post">
-                    <textarea onclick =toggleName() class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
-                    <button id = "changename" hidden class="changer" asp-page-handler="ChangeName"> Change</button>
+                    <textarea onfocus=show('username') class="aboutme" id="username" rows="1" maxlength="20" name="newName" placeholder= @Model.DisplayName></textarea>
+                    <button id="changeusername" hidden class="changer" asp-page-handler="ChangeName">Change</button>
                 </form>
                 <br/>
                 <h5>Email:</h5>
                 <form method="post">
-                    <textarea onclick =toggleEmail() class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
-                    <button id = "changeemail" hidden class="changer" asp-page-handler="changeemail"> Change</button>
+                    <textarea onfocus=show('email') class="aboutme" id="email" rows="1" maxlength="20" name="newEmail" placeholder= @Model.Email></textarea>
+                    <button id="changeemail" hidden class="changer" asp-page-handler="changeemail">Change</button>
                 </form>
                 <br/>
             </div>
@@ -129,7 +129,7 @@
         </ul>
 }
 
-        <script>
+<script>
     function clickDarkMode() {
         document.getElementById("darkmode_btn").click();
     }
@@ -137,37 +137,19 @@
     function clickFontSize() {
         document.getElementById("submit_btn").click();
     }
+    let show = (objectID) => {
+        let buttonid = "change" + objectID
+        document.getElementById(buttonid).removeAttribute("hidden");
+        const eventHandler = (e) => hideOnClickOutside(e, buttonid, eventHandler, objectID)
+        document.addEventListener("click", eventHandler)
+    };
+
+    let hideOnClickOutside = (event, elementToHide, eventHandler, ...exceptIDs) => {
+        let exceptObjects = exceptIDs.map((id) => document.getElementById(id))
+        if (!exceptObjects.includes(event.target)) {
+            document.getElementById(elementToHide).setAttribute("hidden", "hidden")
+            document.removeEventListener('click', eventHandler);
+        };
+    }
 </script>
 
-<script>
-        let toggleEmail = () => {
-
-            let element = document.getElementById("changeemail");
-            
-
-        var obj = document.getElementById("email");
-
-        if (document.activeElement === obj) {
-            element.removeAttribute("hidden");
-            
-        } else {
-            element.setAttribute("hidden", "hidden");
-        // focus is currently not in my textarea
-        }
-    }
-    let toggleName = () => {
-
-            let element = document.getElementById("changename");
-            
-
-        var obj = document.getElementById("username");
-
-        if (document.activeElement === obj) {
-            element.removeAttribute("hidden");
-            
-        } else {
-            element.setAttribute("hidden", "hidden");
-        // focus is currently not in my textarea
-        }
-    }
-    </script>

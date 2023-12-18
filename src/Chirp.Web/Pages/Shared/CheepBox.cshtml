@@ -1,0 +1,35 @@
+﻿@{
+    CheepDTO cheep;
+    if (ViewData["Cheep"] is CheepDTO c) cheep = c;
+    else throw new AggregateException("Cheep is not of type CheepDTO");
+}
+
+<p>
+    @if (cheep.ProfilePictureUrl != null && cheep.ProfilePictureUrl != ""){
+        <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+    }
+    else
+    {
+        <img src="../../images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
+    }
+
+    <strong>
+        @if (cheep.DisplayName != "")
+        {
+            <a href="/@cheep.Author">@cheep.DisplayName</a>
+        }
+        else
+        {
+            <a href="/@cheep.Author">@cheep.Author</a>
+        }
+        <small>&mdash; @cheep.Timestamp</small>
+    </strong>
+    <br/>
+    @cheep.Message
+    <br>
+
+    @{
+        ViewData["Cheep"] = cheep;
+    }
+    <partial name="ReactionBox" view-data="ViewData"/>
+</p>
