@@ -117,12 +117,12 @@ public class AuthorRepositoryTests
 
         await _repository.ChangeName("TestName"+name, name);
         
-        var authors = await _repository.GetAuthorByName(name);
+        var authors = await _repository.GetAuthorByName("TestName"+name);
         var author = authors.FirstOrDefault();
         //check if name is name
-        Assert.Equal(name, author?.Name);
+        Assert.Equal(name, author?.DisplayName);
         //check in the database
-        var authors2 = await _context.Authors.Where(a => a.Name == name).ToListAsync();
+        var authors2 = await _context.Authors.Where(a => a.Name == "TestName"+name).ToListAsync();
         Assert.Single(authors2);
         var author2 = authors2.FirstOrDefault();
         //we know that the name is the same therefore we can check the email
