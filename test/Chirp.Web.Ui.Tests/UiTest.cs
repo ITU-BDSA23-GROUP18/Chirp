@@ -67,7 +67,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         {
             var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
             //await page.GetByText(" Chirp!").ClickAsync();
-            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
+            await Page.GetByPlaceholder(new Regex("What's on your heart",RegexOptions.IgnoreCase)).FillAsync(currentTime);
             await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
             //see the cheep in the timeline
             await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
@@ -99,7 +99,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
             var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
             ListOfCheeps.Add(currentTime);
             //await page.GetByText(" Chirp!").ClickAsync();
-            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
+            await Page.GetByPlaceholder(new Regex("What's on your heart",RegexOptions.IgnoreCase)).FillAsync(currentTime);
             await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
             //see the cheep in the timeline
             await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
@@ -128,7 +128,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByText("You are not following anybody!.").ClickAsync();
     }
-
     [Fact]
     public async Task FollowUsersTest()
     {
@@ -272,8 +271,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     [InlineData("Bad")]
     public async Task TestReactionsOnOff(string reaction){
         var Page = await _context!.NewPageAsync();
-        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
-        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Jacqualine Gilcoine" }).Nth(0);
         await Page.GotoAsync(_serverAddress);
         switch (reaction){
             case "Good":
@@ -297,8 +295,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GotoAsync(_serverAddress);
         //the idea behind this test is that we can only react once per cheep,
         //therefore it should only be possible to see the change in the button if we click it last.
-        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
-        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Jacqualine Gilcoine" }).Nth(0);
         await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
         await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
         await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
@@ -312,6 +309,71 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
         await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 1" }).ClickAsync();
     }    
+    [Theory]
+    [InlineData("aaa")]
+    [InlineData("bbb")]
+    [InlineData("ccc")]
+    public async Task TestChangeUsername(string newName)
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        var usernameField = Page.Locator("#username");
+        
+        await usernameField.ClickAsync();
+        await usernameField.FillAsync(newName);
+        var changeNameButton = Page.Locator("#changeusername");
+        await changeNameButton.ClickAsync();
+        //go to home page and cheep
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
+        //look for the new name
+        await Page.GetByPlaceholder(new Regex(newName, RegexOptions.IgnoreCase)).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        usernameField = Page.Locator("#username");
+
+        //change the name back to TestUser
+        await usernameField.ClickAsync();
+        await usernameField.FillAsync("TestUser");
+        changeNameButton = Page.Locator("#changeusername");
+        await changeNameButton.ClickAsync();
+    }
+    
+    [Theory]
+    [InlineData("TestUser1@Test.Test")]
+    [InlineData("TestUser2@Test.Test")]
+    [InlineData("TestUser3@Test.Test")] 
+    public async Task TestChangeEmail(string newEmail)
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        var emailField = Page.Locator("#email");
+        
+        await emailField.ClickAsync();
+        await emailField.FillAsync(newEmail);
+        var changeEmailButton = Page.Locator("#changeemail");
+        await changeEmailButton.ClickAsync();
+
+        //change the email back to TestUser@Test.Test
+        await emailField.ClickAsync();
+        await emailField.FillAsync("TestUser@Test.Test");
+        changeEmailButton = Page.Locator("#changeemail");
+        await changeEmailButton.ClickAsync();
+    }
     /// <summary>
     /// This test is used to see if the number of followers is correct.
     /// We know that the user "Wendell Ballan" follows 3 users by default

@@ -106,4 +106,50 @@ public class AuthorRepositoryTests
             Assert.Contains(follower.Name, new List<string>() { "Jane Doe", "Jack Doe", "jill Doe" });
         }
     }
+    
+    [Theory]
+    [InlineData("Test1Name")]
+    [InlineData("Test2Name")]
+    [InlineData("Test3Name")]
+    //test change name
+    public async Task TestChangeName(string name)
+    {
+        await _repository.CreateAuthor("TestName"+name, "TestName@Test.Test"+name, "TestName");
+
+        await _repository.ChangeName("TestName"+name, name);
+        
+        var authors = await _repository.GetAuthorByName("TestName"+name);
+        var author = authors.FirstOrDefault();
+        //check if name is name
+        Assert.Equal(name, author?.DisplayName);
+        //check in the database
+        var authors2 = await _context.Authors.Where(a => a.Name == "TestName"+name).ToListAsync();
+        Assert.Single(authors2);
+        var author2 = authors2.FirstOrDefault();
+        //we know that the name is the same therefore we can check the email
+        Assert.Equal(author?.Email, author2?.Email);
+    }
+    
+    [Theory]
+    [InlineData("TestName1@Test.Test")]
+    [InlineData("TestName2@Test.Test")]
+    [InlineData("TestName3@Test.Test")]
+    public async Task TestChangeEmail(string email)
+    {
+        await _repository.CreateAuthor("TestNameEmail"+email, "TestName@Test.Test"+email, "TestName");
+        
+        await _repository.ChangeEmail("TestNameEmail"+email, email);
+
+        var authors = await _repository.GetAuthorByName("TestNameEmail"+email);
+        var author = authors.FirstOrDefault();
+        //check if email is email
+        Assert.Equal(email, author?.Email);
+        //check in the database
+        var authors2 = await _context.Authors.Where(a => a.Email == email).ToListAsync();
+        Assert.Single(authors2);
+        var author2 = authors2.FirstOrDefault();
+        //we know that the email is the same therefore we can check the name
+        Assert.Equal(author?.Email,author2?.Email);
+        Assert.Equal(author?.Name, author2?.Name);
+    }
 }
