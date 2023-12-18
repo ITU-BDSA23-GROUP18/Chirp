@@ -135,9 +135,9 @@ public class AuthorRepositoryTests
     [InlineData("TestName3@Test.Test")]
     public async Task TestChangeEmail(string email)
     {
-        await _repository.CreateAuthor("TestName", "TestName@Test.Test", "TestName");
+        await _repository.CreateAuthor("TestNameEmail", "TestName@Test.Test", "TestName");
         
-        await _repository.ChangeEmail("TestName", email);
+        await _repository.ChangeEmail("TestNameEmail", email);
 
         var authors = await _repository.GetAuthorByEmail(email);
         var author = authors.FirstOrDefault();
