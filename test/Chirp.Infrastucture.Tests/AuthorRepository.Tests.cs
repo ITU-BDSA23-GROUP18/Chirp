@@ -113,9 +113,9 @@ public class AuthorRepositoryTests
     //test change name
     public async Task TestChangeName(string name)
     {
-        await _repository.CreateAuthor("TestName", "TestName@Test.Test", "TestName");
+        await _repository.CreateAuthor("TestName"+name, "TestName@Test.Test"+name, "TestName");
 
-        await _repository.ChangeName("TestName", name);
+        await _repository.ChangeName("TestName"+name, name);
         
         var authors = await _repository.GetAuthorByName(name);
         var author = authors.FirstOrDefault();
@@ -135,11 +135,11 @@ public class AuthorRepositoryTests
     [InlineData("TestName3@Test.Test")]
     public async Task TestChangeEmail(string email)
     {
-        await _repository.CreateAuthor("TestNameEmail", "TestName@Test.Test", "TestName");
+        await _repository.CreateAuthor("TestNameEmail"+email, "TestName@Test.Test"+email, "TestName");
         
-        await _repository.ChangeEmail("TestNameEmail", email);
+        await _repository.ChangeEmail("TestNameEmail"+email, email);
 
-        var authors = await _repository.GetAuthorByEmail(email);
+        var authors = await _repository.GetAuthorByName("TestNameEmail"+email);
         var author = authors.FirstOrDefault();
         //check if email is email
         Assert.Equal(email, author?.Email);
@@ -148,6 +148,8 @@ public class AuthorRepositoryTests
         Assert.Single(authors2);
         var author2 = authors2.FirstOrDefault();
         //we know that the email is the same therefore we can check the name
+        Assert.Equal(author?.Email,author2?.Email);
         Assert.Equal(author?.Name, author2?.Name);
+        
     }
 }
