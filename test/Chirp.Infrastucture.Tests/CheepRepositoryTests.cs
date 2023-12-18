@@ -2,7 +2,8 @@ using Xunit;
 using Microsoft.Data.Sqlite;
 
 namespace Chirp.Infrastructure.Tests;
-// Using same repository in 2 test files run in parallel, even if it is a in-memory database, 
+
+// Using same repository in 2 test files run in parallel, even if it is a in-memory database,
 // can cause concurrency issues, sometimes. So, we need to run the tests sequentially.
 [Collection("Cheep Repository Collection")]
 public class CheepRepositoryTests
