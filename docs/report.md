@@ -2,11 +2,11 @@
 title: _Chirp!_ Project Report
 subtitle: ITU BDSA 2023 Group 18
 author:
-- "Benjamin von Barner Altenburg <beal@itu.dk>"
-- "David Alexander Feldner <dafe@itu.dk>"
-- "Jack Kryger Sørensen <jkrs@itu.dk>"
-- "Mads Valentin Jensen <mvje@itu.dk>"
-- "Severin Ernst Bøjelund Madsen <sevm@itu.dk>"
+  - "Benjamin von Barner Altenburg <beal@itu.dk>"
+  - "David Alexander Feldner <dafe@itu.dk>"
+  - "Jack Kryger Sørensen <jkrs@itu.dk>"
+  - "Mads Valentin Jensen <mvje@itu.dk>"
+  - "Severin Ernst Bøgelund Madsen <sevm@itu.dk>"
 numbersections: true
 ---
 
@@ -17,13 +17,14 @@ numbersections: true
 ![Class diagram showing the types used in the application and stored in the database.](https://hackmd.io/_uploads/ryOdgqTIT.png)
 
 ## Architecture — In the small
-![Architecture.drawio (10)](https://hackmd.io/_uploads/HJWpZT6Up.png)
+![Architecture.drawio (12)](https://hackmd.io/_uploads/HkMmf6aIp.png)
+
 
 
 ## Architecture of deployed application
 
-Our application is hosted on Azure App Service where the component Chirp.Web handles the GUI and Chirp.Infrastructure is the repository handling the model.
-A user connects their machine to Chirp.Web through Azure App Service. Reading or writing data will make Chirp.Web read from the repositories in Chirp.Infrastructure, that will call the database in Azure SQL Server. When logging in, Chirp.Web calls GitHub Authentication.
+Our application is hosted Azures App Service where the component Chirp.Web handles the GUI and Chirp.Infrastructure handles the repositories and database model.
+A user connects their machine to Chirp.Web through the Azure App Service. Reading or writing data will make Chirp.Web read from the repositories in Chirp.Infrastructure, that will call the Azure SQL Server database. When logging in, Chirp.Web calls GitHub Authentication.
 
 ![Component diagram showing the architecture of the deployed Chirp application.](https://hackmd.io/_uploads/HJeeXcTUp.png)
 
@@ -44,8 +45,8 @@ A user connects their machine to Chirp.Web through Azure App Service. Reading or
 All issues in the project backlog are solved/closed, which includes all the required features and additional features.
 ![ProjectBoard](https://hackmd.io/_uploads/BJmexpaI6.png)
 
-#### Optimizing profile-picture handling
-In this version of Chirp
+#### Optimize profile-picture handling
+In this version of Chirp, Author profile pictures are stored as a reference string to an image stored locally in the `wwwroot/images` folder. This means that you have to push your image to GitHub each time you change profile picture. We have therefore discussed that if we had more unpaid space in the database we would store the whole image under each Author, hence have a more scalable and secure solution.
 
 ### From issue to main
 The following flowchart illustrates how group 18 creates issues (green box), develops solutions (red box), and merges the solutions into the `main` branch (purple box). The flowchart also shows how different decisions/statements are made through the flow, such as "Is the task understood".
@@ -109,5 +110,4 @@ Both LLMs were a bit more helpful when debugging, as they in many cases were abl
 
 ### CodeFactor
 
-CodeFactor was used on each pull request, automatically checking the cleanliness and readability of the pushed code. If CodeFactor found any unclean or irregular code in the pull request, it would either issue or apply fixes.   
-
+CodeFactor was used on each pull request, automatically checking the cleanliness and readability of the pushed code. If CodeFactor found any unclean or irregular code in the pull request, it would either issue or apply fixes.
