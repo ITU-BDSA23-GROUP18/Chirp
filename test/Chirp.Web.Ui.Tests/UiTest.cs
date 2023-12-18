@@ -10,7 +10,7 @@ using Xunit;
 /// <summary>
 /// The UiTest class is used to test the UI of the application.
 /// </summary>
-public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>, IDisposable
+public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDisposable
 {
     private readonly string _serverAddress;
     private readonly CustomWebApplicationFactory _fixture;
@@ -20,9 +20,9 @@ public class ChirpUITests : PageTest, IClassFixture<CustomWebApplicationFactory>
     private IBrowserContext? _context;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ChirpUITests"/> class.
+    /// Initializes a new instance of the <see cref="UiTest"/> class.
     /// </summary>
-    public ChirpUITests(CustomWebApplicationFactory fixture)
+    public UiTest(CustomWebApplicationFactory fixture)
     {
         _serverAddress = fixture.ServerAddress;
         _fixture = fixture;
