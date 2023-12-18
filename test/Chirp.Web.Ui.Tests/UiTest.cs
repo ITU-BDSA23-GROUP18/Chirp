@@ -128,7 +128,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByText("You are not following anybody!.").ClickAsync();
     }
-
     [Fact]
     public async Task FollowUsersTest()
     {
@@ -180,7 +179,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         var usernameField = Page.Locator("#username");
         
-
         await usernameField.ClickAsync();
         await usernameField.FillAsync(newName);
         var changeNameButton = Page.Locator("#changeusername");
@@ -195,7 +193,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
 
         usernameField = Page.Locator("#username");
-        
 
         //change the name back to TestUser
         await usernameField.ClickAsync();
