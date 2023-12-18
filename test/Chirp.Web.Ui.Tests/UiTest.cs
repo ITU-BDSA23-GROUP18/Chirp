@@ -164,6 +164,108 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
     }
+    [Fact]
+    public async Task TurnOnDarkModeAndTestEveryPage()
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.List).Filter(new() { HasText = "Dark mode Enable dark mode" }).Locator("span").ClickAsync();
+        //we are just looking to see if the body is there if any errors occur it will be caught by the test and it will fail
+        await Page.Locator("body").ClickAsync();
+        //see if a user timeline is still working
+        await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "Helge");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "FollowingTimeline");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "?page=2");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "TestUser");
+
+        await Page.Locator("body").ClickAsync();
+    }
+    [Fact]
+    public async Task Test1dot5TextSize()
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        await Page.Locator("#scale").SelectOptionAsync(new[] { "1.5" });
+
+         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "Helge");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "FollowingTimeline");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "?page=2");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "TestUser");
+
+        await Page.Locator("body").ClickAsync();
+    }
+    [Fact]
+    public async Task Test2TextSize()
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        await Page.Locator("#scale").SelectOptionAsync(new[] { "2" });
+
+         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "Helge");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "FollowingTimeline");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "?page=2");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "TestUser");
+
+        await Page.Locator("body").ClickAsync();
+    }
+
     [Theory]
     [InlineData("Good")]
     [InlineData("Ish")]
@@ -254,7 +356,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         return context;
     }
-    
     /// <summary>
     /// Disposes the browser and context after each test
     /// </summary>
