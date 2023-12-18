@@ -164,7 +164,52 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
     }
-    
+    [Theory]
+    [InlineData("Good")]
+    [InlineData("Ish")]
+    [InlineData("Bad")]
+    public async Task TestReactionsOnOff(string reaction){
+        var Page = await _context!.NewPageAsync();
+        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        await Page.GotoAsync(_serverAddress);
+        switch (reaction){
+            case "Good":
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 1" }).ClickAsync();
+                break;
+            case "Ish":
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 1" }).ClickAsync();
+                break;
+            case "Bad":
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 1" }).ClickAsync();
+                break;
+        }
+    }
+    [Fact]
+    public async Task TestReactionNoMoreThanOneReactionPerCheep(){
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+        //the idea behind this test is that we can only react once per cheep,
+        //therefore it should only be possible to see the change in the button if we click it last.
+        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 1" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 1" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 1" }).ClickAsync();
+    }    
     /// <summary>
     /// This test is used to see if the number of followers is correct.
     /// We know that the user "Wendell Ballan" follows 3 users by default
