@@ -67,7 +67,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         {
             var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
             //await page.GetByText(" Chirp!").ClickAsync();
-            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
+            await Page.GetByPlaceholder(new Regex("What's on your heart",RegexOptions.IgnoreCase)).FillAsync(currentTime);
             await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
             //see the cheep in the timeline
             await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
@@ -99,7 +99,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
             var currentTime = DateTime.Now.ToString("HH.mm.ss.ffffff dd.MM.yyyy");
             ListOfCheeps.Add(currentTime);
             //await page.GetByText(" Chirp!").ClickAsync();
-            await Page.GetByPlaceholder("What's on your heart, TestUser?").FillAsync(currentTime);
+            await Page.GetByPlaceholder(new Regex("What's on your heart",RegexOptions.IgnoreCase)).FillAsync(currentTime);
             await Page.GetByRole(AriaRole.Button, new() { Name = " Cheep!" }).ClickAsync();
             //see the cheep in the timeline
             await Page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
