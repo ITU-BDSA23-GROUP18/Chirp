@@ -148,6 +148,7 @@ div.page ul.cheeps li {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   min-height: 48px;
+  word-wrap: break-word;
 }
 
 div.page ul.cheeps p {
@@ -581,3 +582,16 @@ div.page h1 {
     display: inline-block;
 }
 
+#error-notification {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background: #DD6F6F;
+  color: white;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 5px;
+  box-shadow: 0.1px 0.1px 10px rgba(0, 0, 0, 0.2);
+  max-width: min(30em, 100vw);
+
+}

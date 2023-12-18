@@ -52,10 +52,13 @@ public class AboutMeModel : PageModel
             await _authorRepository.ChangeEmail(User.Identity?.Name!,newEmail );
             return RedirectToPage();
         }
-        catch 
+        catch (ArgumentException e)
         {
-            Console.WriteLine("Email: " + newEmail + " is already taken");
-            return RedirectToPage();
+            return RedirectToPage("aboutme", new { error = e.Message ?? "Email Already in use." });
+        } 
+        catch
+        {
+            return RedirectToPage("aboutme", new { error = "Error Chaning Email" });
         }
     }
     public async Task<IActionResult> OnPostChangeName(string newName){
@@ -64,10 +67,13 @@ public class AboutMeModel : PageModel
             await _authorRepository.ChangeName(User.Identity?.Name!, newName);
             return RedirectToPage();
         }
-        catch 
+        catch (ArgumentException e)
         {
-            Console.WriteLine("Name: " + newName + " is already taken");
-            return RedirectToPage();
+            return RedirectToPage("aboutme", new { error = e.Message ?? "Username Already in use." });
+        } 
+        catch
+        {
+            return RedirectToPage("aboutme", new { error = "Error Chaning Username" });
         }
     }
     /// <summary>
@@ -79,7 +85,6 @@ public class AboutMeModel : PageModel
     {
         try
         {
-            Console.WriteLine("the author name is:"+authorName);
             await _authorRepository.DeleteAuthor(authorName);
 
             //Need to signout the user
@@ -87,9 +92,7 @@ public class AboutMeModel : PageModel
         }
         catch 
         {
-            Console.WriteLine("the author name is:"+authorName);
-            Console.WriteLine("Author"+ authorName+"does not exist");
-            return RedirectToPage();
+            return RedirectToPage("aboutme", new { error = "Could not delete user. Author " + authorName + " does not exist" });
         }
     }
     

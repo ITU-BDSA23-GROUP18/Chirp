@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Chirp.Web.Pages;
 
@@ -34,6 +35,7 @@ public class PublicModel : PageModel
         
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
+            await _authorRepository.EnsureAuthorExists(User.Identity.Name!);
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
             FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
@@ -52,14 +54,19 @@ public class PublicModel : PageModel
     
     public IActionResult OnPostCheep(string message)
     {
-        _cheepRepository.CreateCheep(message, User.Identity?.Name!);
-        return RedirectToPage("Public");
+        if (message.IsNullOrEmpty()) return RedirectToPage("Public", new { error = "Cheep must not be empty" });
+        try {
+            _cheepRepository.CreateCheep(message, User.Identity?.Name!);
+            return RedirectToPage("Public");
+        } catch {
+            return RedirectToPage("Public", new { error = "Error posting cheep" });
+        }
     }
 
-    public void OnPostChangeReaction(string cheepId, string reactionType)
+    public IActionResult OnPostChangeReaction(string cheepId, string reactionType)
     {
         var author = User.Identity?.Name!;
-        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return;
+        if (!(User.Identity?.IsAuthenticated ?? false) || author == "") return RedirectToPage("Public", new { error = "You must be logged in to react" });
 
         var cheepReactions = Cheeps.First(c => c.CheepId == cheepId).Reactions;
         if (cheepReactions.Any(r => r.Author == author))
@@ -67,11 +74,12 @@ public class PublicModel : PageModel
             var prevReaction = cheepReactions.First(r => r.Author == author);
             cheepReactions.Remove(prevReaction);
             _reactionRepository.RemoveReaction(cheepId, author);
-            if (prevReaction.ReactionType == reactionType) return;
+            if (prevReaction.ReactionType == reactionType) return RedirectToPage("Public");
         }
         
         cheepReactions.Add(new ReactionDTO(cheepId, author, reactionType));
         _reactionRepository.CreateReaction(cheepId, author, reactionType);
+        return RedirectToPage("Public");
     }
     
     public async Task<string?> GetProfilePicture(string name)
