@@ -372,6 +372,17 @@ public class AuthorRepository : IAuthorRepository
         return author.FontSizeScale;
     }
 
+    public async Task<string> GetDisplayName(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+
+        return author.DisplayName;
+    }
+
     public async Task<bool> EnsureAuthorExists(string name)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -382,4 +393,5 @@ public class AuthorRepository : IAuthorRepository
 
         return true;
     }
+
 }
