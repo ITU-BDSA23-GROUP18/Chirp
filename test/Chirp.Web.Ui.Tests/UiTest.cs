@@ -42,6 +42,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await page.GotoAsync(_serverAddress);
     }
+
     [Fact]
     public async Task CreateCheepTest()
     {
@@ -49,7 +50,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await page.GotoAsync(_serverAddress);
 
-        // The current time is used such that we avoid duplicate cheeps 
+        // The current time is used such that we avoid duplicate cheeps.
         // And make a uniq finger pirnt for this cheep
         for (int i = 0; i < 10; i++)
         {
@@ -61,6 +62,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
             await page.GetByText(new Regex(currentTime, RegexOptions.IgnoreCase)).ClickAsync();
         }
     }
+
     [Fact]
     public async Task GoToNextPageTest()
     {
@@ -387,17 +389,17 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
     /// <summary>
     /// This test is used to see if the number of followers is correct.
-    /// We know that the user "Wendell Ballan" follows 3 users by default
+    /// We know that the user "Wendell Ballan" follows 3 users by default.
     /// </summary>
     [Fact]
-    public async Task seeAUserThatFollowsOtherUsersTest()
+    public async Task SeeAUserThatFollowsOtherUsersTest()
     {
         // Wendell Ballan follows 3 users by default if this is changed this test will fail
-        var Page = await _context!.NewPageAsync();
+        var page = await _context!.NewPageAsync();
 
-        await Page.GotoAsync(_serverAddress + "Wendell Ballan");
+        await page.GotoAsync(_serverAddress + "Wendell Ballan");
 
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Following: 3" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Following: 3" }).ClickAsync();
     }
 
     /// <summary>
