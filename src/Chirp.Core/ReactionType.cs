@@ -10,5 +10,5 @@ public enum ReactionType
     Ish,
 
     [Description("💩")]
-    Bad
+    Bad,
 }

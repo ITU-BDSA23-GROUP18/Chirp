@@ -3,25 +3,25 @@ using Microsoft.AspNetCore.Http;
 namespace Chirp.Infrastructure.Repositories;
 
 /// <summary>
-/// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table
+/// The AuthorRepository class is used to interact with the database and perform CRUD operations on the Author table.
 /// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpContext _authorDb;
+
     /// <summary>
-    /// Constructor for the AuthorRepository class
-    /// If seedDatabase is true, the database will be seeded with data
+    /// Initializes a new instance of the <see cref="AuthorRepository"/> class.
     /// </summary>
     /// <param name="authorDb"></param>
-    /// <param name="seedDatabase"></param>
+    /// <param name="seedDatabase">If seedDatabase is true, the database will be seeded with data.</param>
     public AuthorRepository(ChirpContext authorDb, bool seedDatabase = true)
     {
         _authorDb = authorDb;
         _authorDb.InitializeDatabase(seedDatabase);
     }
-    
+
     /// <summary>
-    /// Gets the author from the database with the given name
+    /// Gets the author from the database with the given name.
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
@@ -30,9 +30,9 @@ public class AuthorRepository : IAuthorRepository
              .Where(a => a.Name == name)
              .Select(a => a.ToDTO())
              .ToListAsync();
-    
+
     /// <summary>
-    /// Gets the author from the database with the given email
+    /// Gets the author from the database with the given email.
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
@@ -43,12 +43,12 @@ public class AuthorRepository : IAuthorRepository
             .ToListAsync();
 
     /// <summary>
-    /// Creates an author with the given name and email
+    /// Creates an author with the given name and email.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="email"></param>
     /// <param name="displayName"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">If any of the parameters are in use.</exception>
     public async Task<bool> CreateAuthor(string name, string email, string displayName)
     {
         if (_authorDb.Authors.Any(a => a.Name == name))
@@ -62,25 +62,25 @@ public class AuthorRepository : IAuthorRepository
 
         var author = new Author
         {
-            AuthorId = Guid.NewGuid(),  
+            AuthorId = Guid.NewGuid(),
             Name = name,
             DisplayName = displayName,
             Email = email,
             Cheeps = new List<Cheep>(),
             Following = new List<Author>(),
-            Followers = new List<Author>()
+            Followers = new List<Author>(),
         };
         _authorDb.Authors.Add(author);
         await _authorDb.SaveChangesAsync();
         return true;
     }
-    
+
     /// <summary>
-    /// Follows the author with the given followName from the author with the given currentUserName
+    /// Follows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">Author to follow or user does not exist.</exception>
     public async Task<bool> FollowAuthor(string followName, string currentUserName)
     {
         var authorToFollow = await _authorDb.Authors.SingleAsync(a => a.Name == followName);
@@ -94,27 +94,30 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Current user does not exist");
         }
+
         signedInUser.Following.Add(authorToFollow);
         authorToFollow.Followers.Add(signedInUser);
         await _authorDb.SaveChangesAsync();
         return true;
     }
-    
+
     /// <summary>
-    /// Gets the authors from the database that are following the given pageUserName
+    /// Gets the authors from the database that are following the given pageUserName.
     /// </summary>
     /// <param name="pageUser"></param>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">User does not exist.</exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowers(string pageUser)
     {
         var user = await _authorDb.Authors.Include(author => author.Followers).FirstOrDefaultAsync(a => a.Name == pageUser);
-        //return list of authors in following
+
+        // Return list of authors in following
         if (user == null)
         {
             throw new ArgumentException("User does not exist");
         }
-        // return list of authors in following
+
+        // Return list of authors in following
         var followerList = user.Followers.ToList();
         var followerListDto = new List<AuthorDTO>();
         foreach (var author in followerList)
@@ -122,23 +125,26 @@ public class AuthorRepository : IAuthorRepository
             var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followerListDto.Add(authorDto);
         }
+
         return followerListDto;
     }
-    
+
     /// <summary>
-    /// Gets the authors from the database that the given pageUserName is following
+    /// Gets the authors from the database that the given pageUserName is following.
     /// </summary>
     /// <param name="userName"></param>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">User does not exist.</exception>
     public async Task<IEnumerable<AuthorDTO>> GetFollowing(string userName)
     {
         var user = await _authorDb.Authors.Include(author => author.Following).FirstOrDefaultAsync(a => a.Name == userName);
-        //return list of authors in following
+
+        // Return list of authors in following
         if (user == null)
         {
             throw new ArgumentException("User does not exist");
         }
+
         // return list of authors in following
         var followingList = user.Following.ToList();
         var followingListDto = new List<AuthorDTO>();
@@ -147,15 +153,16 @@ public class AuthorRepository : IAuthorRepository
             var authorDto = new AuthorDTO(author.Name, author.Email, author.DisplayName, author.ProfilePictureUrl);
             followingListDto.Add(authorDto);
         }
+
         return followingListDto;
     }
-    
+
     /// <summary>
-    /// Unfollows the author with the given followName from the author with the given currentUserName
+    /// Unfollows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="followName"></param>
     /// <param name="currentUserName"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">Author to unfollow does not exist.</exception>
     public async Task<bool> UnfollowAuthor(string followName, string currentUserName)
     {
         var followAuthor = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == followName);
@@ -165,19 +172,20 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {followName} does not exist");
         }
+
         currentUser.Following.Remove(followAuthor);
         followAuthor.Followers.Remove(currentUser);
 
         await _authorDb.SaveChangesAsync();
         return true;
     }
-    
+
     /// <summary>
-    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// Changes the email of the author with the given currentUserName to the given newEmail.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="newEmail"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ArgumentException">If the author is not found, or the email is in use.</exception>
     public async Task<bool> ChangeEmail(string name, string newEmail)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -185,80 +193,86 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException();
         }
-        if (_authorDb.Authors.Any(a => a.Email == newEmail)){
+
+        if (_authorDb.Authors.Any(a => a.Email == newEmail))
+        {
             throw new ArgumentException($"{"email"} is already used!");
         }
+
         author.Email = newEmail;
         await _authorDb.SaveChangesAsync();
         return true;
     }
 
-    public async Task<bool> ChangeName(string name, string newName){
+    public async Task<bool> ChangeName(string name, string newName)
+    {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException();
         }
-        if (_authorDb.Authors.Any(a => a.DisplayName == newName)){
+
+        if (_authorDb.Authors.Any(a => a.DisplayName == newName) || _authorDb.Authors.Any(a => a.Name == newName))
+        {
             throw new ArgumentException($"{"name"} is already used!");
         }
+
         author.DisplayName = newName;
         await _authorDb.SaveChangesAsync();
         return true;
     }
 
     /// <summary>
-    /// Deletes the author with the given name
+    /// Deletes the author with the given name.
     /// </summary>
     /// <param name="name"></param>
-    /// <exception cref="ArgumentException"></exception>
-    public async Task<bool> DeleteAuthor(string name){
+    /// <exception cref="ArgumentException">If the given author is not found.</exception>
+    public async Task<bool> DeleteAuthor(string name)
+    {
         var author = _authorDb.Authors.FirstOrDefault(a => a.Name == name);
         if (author == null)
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         Console.WriteLine("Deleting author: " + author.Name);
         _authorDb.Authors.Remove(author);
         await _authorDb.SaveChangesAsync();
         return true;
     }
-    
+
     public async Task UploadProfilePicture(string name, IFormFile file)
     {
         var user = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (user == null)
         {
-            Console.WriteLine($"User with Id {name} not found.");
-            return;
+            throw new ArgumentException($"User with Id {name} not found.");
         }
 
         // Check file size (10MB limit)
         if (file.Length > 10 * 1024 * 1024)
         {
-            Console.WriteLine("File size exceeds the limit of 10MB.");
-            return;
+            throw new ArgumentException("File size exceeds the limit of 10MB.");
         }
-        
+
         // Check file type (jpeg, png, gif)
         var allowedExtensions = new[] { ".jpeg", ".jpg", ".png", ".gif" };
         var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
         if (!allowedExtensions.Contains(fileExtension))
         {
-            Console.WriteLine("Invalid file type. Accepted file types: jpeg, png, gif.");
-            return;
+            throw new ArgumentException("Invalid file type. Accepted file types: jpeg, png, gif.");
         }
 
         // Generate unique name for the file
         var fileName = $"{Guid.NewGuid()}{fileExtension}";
-    
+
         // Build the relative file path within the wwwroot/images directory
         var relativeFilePath = Path.Combine("images", fileName);
-    
+
         // Combine with the absolute path of the wwwroot folder
         var absoluteFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativeFilePath);
-        
+
         // Remove/delete old profile picture if it exists
         if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
         {
@@ -269,19 +283,19 @@ public class AuthorRepository : IAuthorRepository
                 File.Delete(oldFilePath);
             }
         }
-        
+
         // Save the image on the server with the new file name
         await using (var stream = new FileStream(absoluteFilePath, FileMode.Create))
         {
             await file.CopyToAsync(stream);
         }
-        
+
         // Set the user's profile picture URL
         user.ProfilePictureUrl = $"/{relativeFilePath}";
-        
+
         await _authorDb.SaveChangesAsync();
     }
-    
+
     public async Task DeleteProfilePicture(string name)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -289,10 +303,11 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         author.ProfilePictureUrl = null;
         await _authorDb.SaveChangesAsync();
     }
-    
+
     public async Task<string> GetProfilePicture(string name)
     {
         var author = (await GetAuthorByName(name)).FirstOrDefault();
@@ -300,16 +315,17 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
-        
+
         var profilePictureUrl = author.ProfilePictureUrl;
 
-        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl =="")
+        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "")
         {
-            profilePictureUrl = "../images/default_user_pic.png";
+            profilePictureUrl = "/images/default_user_pic.png";
         }
+
         return profilePictureUrl;
     }
-    
+
     public async Task SetDarkMode(string name, bool isDarkMode)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -317,6 +333,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         author.IsDarkMode = isDarkMode;
         await _authorDb.SaveChangesAsync();
     }
@@ -328,9 +345,10 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         return author.IsDarkMode;
     }
-    
+
     public async Task SetFontSizeScale(string name, float fontSizeScale)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -338,10 +356,11 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         author.FontSizeScale = fontSizeScale;
         await _authorDb.SaveChangesAsync();
     }
-    
+
     public async Task<float> GetFontSizeScale(string name)
     {
         var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
@@ -349,6 +368,29 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException($"Author {name} does not exist");
         }
+
         return author.FontSizeScale;
+    }
+
+    public async Task<string> GetDisplayName(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            throw new ArgumentException($"Author {name} does not exist");
+        }
+
+        return author.DisplayName;
+    }
+
+    public async Task<bool> EnsureAuthorExists(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            await CreateAuthor(name, name, name);
+        }
+
+        return true;
     }
 }

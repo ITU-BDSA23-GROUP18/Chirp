@@ -5,10 +5,34 @@
     <title>@ViewData["Title"]</title>
     
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="~/css/style.css" rel="stylesheet" type="text/css"/>    
-    <link href="~/css/fontSize1x.css" rel="stylesheet" type="text/css"/>
-    <link rel="icon" type="image/png" href="/favicon/favicon.ico">
+    @if (Model.IsDarkMode)
+    {
+        <link href="~/css/darkmode.css" rel="stylesheet" type="text/css"/>
+    }
+    else
+    {
+        <link href="~/css/style.css" rel="stylesheet" type="text/css"/>    
+    }
+    
+    @{
+        var cssLink = "";
+    }
+    
+    @if (Model.FontSizeScale == 2)
+    {
+        cssLink = "/css/fontSize2x.css";
+    }
+    else if (Model.FontSizeScale == 1.5)
+    {
+        cssLink = "/css/fontSize1_5x.css";
+    }
+    else
+    {
+        cssLink = "/css/fontSize1x.css";
+    }
+    <link href="@cssLink" rel="stylesheet" type="text/css"/>
     <link href="~/lib/font-awesome/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>
 <div class=page>
@@ -47,11 +71,32 @@
         Chirp &mdash; An ASP.NET Application by group 18
     </div>
 </div>
+<div id="error-notification" hidden onclick="hideErrorNotification()">
+    <h2>Error:</h2>
+    <p id="error-message"></p>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", required: false)
 
+<script>
+    const hideErrorNotification = () => {document.getElementById('error-notification').hidden = true}
+    (() => {
+        const errorMsg = new URLSearchParams(window.location.search).get("error")
+        const currentUrl = window.location.href;
+        const newUrl = currentUrl.replace(/[?&]error=[^&]+/, '');
+        window.history.replaceState({}, document.title, newUrl);
+        if (errorMsg != null) {
+            document.getElementById("error-message").innerHTML = errorMsg;
+            document.getElementById("error-notification").hidden = false;
+            setTimeout(function () {
+                document.getElementById("error-notification").hidden = true;
+            }, 5000);
+        }
+    })();
+</script>
 </body>
 </html>

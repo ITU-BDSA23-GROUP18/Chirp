@@ -15,6 +15,7 @@ public class CheepDTOTests
         Assert.Equal(cheepDTO.Message, cheepDTO.Message);
         Assert.Equal(cheepDTO.Timestamp, cheepDTO.Timestamp);
     }
+
     [Theory]
     [InlineData(null, "test2", "test3", null)]
     [InlineData("test2", null, "test4", null)]
@@ -28,7 +29,7 @@ public class CheepDTOTests
 
         Assert.Throws(exceptionType, () =>
         {
-            var CheepDTO = new CheepDTO("", author!, message!, timestamp!, reactions!, author!);
+            var cheepDTO = new CheepDTO("", author!, message!, timestamp!, reactions!, author!);
         });
     }
 }

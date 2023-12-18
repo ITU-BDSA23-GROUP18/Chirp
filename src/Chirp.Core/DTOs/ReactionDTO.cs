@@ -1,6 +1,7 @@
 namespace Chirp.Core.DTOs;
+
 /// <summary>
-/// The ReactionDTO class is used to transfer data from the ReactionRepository class to the UI
+/// The ReactionDTO class is used to transfer data from the ReactionRepository class to the UI.
 /// </summary>
 /// <param name="CheepId"></param>
 /// <param name="Author"></param>

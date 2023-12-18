@@ -1,75 +1,52 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Chirp.Web.Pages;
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:FileNameMustMatchTypeName", Justification = "Razor Page")]
 
 public class AboutMeModel : PageModel
 {
-    private readonly ICheepRepository _repository;
-    public readonly IAuthorRepository _authorRepository;
-    public List<CheepDTO> yourCheeps { get; private set; }
-    public List<AuthorDTO> Followers { get; private set; }
-    public PaginationModel? Pagination { get; private set; }
-    public string ?Email { get; private set; }
-    public string ?DisplayName { get; private set; }   
+    public string? Email { get; private set; }
+    public string? DisplayName { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
-    
+
     // for individual user/"Author" preferences:
     public bool IsDarkMode { get; private set; }
     public float FontSizeScale { get; private set; }
-    
-    public AboutMeModel(ICheepRepository repository, IAuthorRepository authorRepository)
+    private readonly IAuthorRepository _authorRepository;
+
+    public AboutMeModel(IAuthorRepository authorRepository)
     {
-        yourCheeps = new List<CheepDTO>();
-        Followers = new List<AuthorDTO>();
-        _repository = repository;
         _authorRepository = authorRepository;
     }
-    
+
     /// <summary>
-    /// Gets the cheeps from the author with the given currentUserName
+    /// Gets the cheeps from the author with the given currentUserName.
     /// </summary>
     /// <param name="page"></param>
     /// <returns></returns>
-    public async Task<ActionResult> OnGet([FromQuery] int page)
+    public async Task<ActionResult> OnGet()
     {
-        //If a page query is not given in the url set the page=1
-        page = page <= 1 ? 1 : page;
-
-        var Authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
-        var Author = Authors.FirstOrDefault();
-        if (Author == null || User.Identity == null) {
+        var authors = await _authorRepository.GetAuthorByName(User.Identity?.Name!);
+        var author = authors.FirstOrDefault();
+        if (author == null || User.Identity == null || !User.Identity.IsAuthenticated)
+        {
             return RedirectToPage("public");
         }
 
-        DisplayName = Author.DisplayName != User.Identity?.Name! ? Author.DisplayName : Author.Name;
-        Email = Author.Email != User.Identity?.Name! ? Author.Email : "Email...";
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
-        
-        if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
-        }
-        
-        foreach (var author in Authors)
-        {
-            var Followers = _authorRepository.GetFollowers(author.Name).Result.ToList();
-            var cheeps = _repository.GetCheepFromAuthor(author.Name, page).Result.ToList();
-            yourCheeps.AddRange(cheeps);
-            this.Followers.AddRange(Followers);
-        }
-        
-        var nCheeps = yourCheeps.Count;
-        Pagination = new PaginationModel(nCheeps, page);
+        DisplayName = author.DisplayName;
+        Email = author.Email != author.Name ? author.Email : "Email...";
 
-        ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity?.Name!);
+        ProfilePictureUrl = await _authorRepository.GetProfilePicture(author.Name);
         IsDarkMode = await _authorRepository.IsDarkMode(User.Identity?.Name!);
+
         FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity?.Name!);
-        
+
         return Page();
     }
-    
+
     /// <summary>
-    /// Changes the email of the author with the given currentUserName to the given newEmail
+    /// Changes the email of the author with the given currentUserName to the given newEmail.
     /// </summary>
     /// <param name="newEmail"></param>
     /// <returns></returns>
@@ -77,29 +54,38 @@ public class AboutMeModel : PageModel
     {
         try
         {
-            await _authorRepository.ChangeEmail(User.Identity?.Name!,newEmail );
+            await _authorRepository.ChangeEmail(User.Identity?.Name!, newEmail);
             return RedirectToPage();
         }
-        catch 
+        catch (ArgumentException e)
         {
-            Console.WriteLine("Email: " + newEmail + " is already taken");
-            return RedirectToPage();
+            return RedirectToPage("aboutme", new { error = e.Message ?? "Email Already in use." });
+        }
+        catch
+        {
+            return RedirectToPage("aboutme", new { error = "Error Chaning Email" });
         }
     }
-    public async Task<IActionResult> OnPostChangeName(string newName){
+
+    public async Task<IActionResult> OnPostChangeName(string newName)
+    {
         try
         {
             await _authorRepository.ChangeName(User.Identity?.Name!, newName);
             return RedirectToPage();
         }
-        catch 
+        catch (ArgumentException e)
         {
-            Console.WriteLine("Name: " + newName + " is already taken");
-            return RedirectToPage();
+            return RedirectToPage("aboutme", new { error = e.Message ?? "Username Already in use." });
+        }
+        catch
+        {
+            return RedirectToPage("aboutme", new { error = "Error Chaning Username" });
         }
     }
+
     /// <summary>
-    /// Follows the author with the given followName from the author with the given currentUserName
+    /// Follows the author with the given followName from the author with the given currentUserName.
     /// </summary>
     /// <param name="authorName"></param>
     /// <returns></returns>
@@ -107,49 +93,37 @@ public class AboutMeModel : PageModel
     {
         try
         {
-            Console.WriteLine("the author name is:"+authorName);
             await _authorRepository.DeleteAuthor(authorName);
 
-            //Need to signout the user
+            // Need to signout the user
             return Redirect("MicrosoftIdentity/Account/SignOut");
         }
-        catch 
+        catch
         {
-            Console.WriteLine("the author name is:"+authorName);
-            Console.WriteLine("Author"+ authorName+"does not exist");
-            return RedirectToPage();
+            return RedirectToPage("aboutme", new { error = "Could not delete user. Author " + authorName + " does not exist" });
         }
     }
-    public async Task<IActionResult> OnPostUploadProfilePicture(IFormFile profilePicture)
-    {
-        try
-        {
-            await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
-            return RedirectToPage();
-        }
-        catch 
-        {
-            return RedirectToPage();
-        }
-    }
+
     public async Task<IActionResult> OnPostSetDarkMode()
     {
         var isDarkMode = !await _authorRepository.IsDarkMode(User.Identity?.Name!);
-        
+
         await _authorRepository.SetDarkMode(User.Identity?.Name!, isDarkMode);
         return RedirectToPage();
     }
-    
+
     public async Task<IActionResult> OnPostSetFontSizeScale(float scale)
     {
         if (scale == 15)
         {
-            scale = (float) 1.5;
+            scale = 1.5F;
         }
+
         if (scale < 1 || scale > 2)
         {
             return RedirectToPage();
         }
+
         await _authorRepository.SetFontSizeScale(User.Identity?.Name!, scale);
         return RedirectToPage();
     }
