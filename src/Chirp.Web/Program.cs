@@ -37,23 +37,6 @@ public class Program
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
         
-        // add user on signin if they do not exists
-        builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
-        {
-            options.Events.OnTokenValidated = async context =>
-            {
-                var authorRepository = context.HttpContext.RequestServices.GetRequiredService<IAuthorRepository>();
-                if (context.Principal == null) return;
-                var authorName = context.Principal.Identity?.Name;
-                if (authorName == null) return;
-                var author = await authorRepository.GetAuthorByName(authorName);
-                if (!author.Any())
-                {
-                    await authorRepository.CreateAuthor(authorName, authorName, authorName);
-                }
-            };
-        });
-
         var app = builder.Build();
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

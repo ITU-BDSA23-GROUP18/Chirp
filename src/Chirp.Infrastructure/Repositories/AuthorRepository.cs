@@ -199,7 +199,7 @@ public class AuthorRepository : IAuthorRepository
         {
             throw new ArgumentException();
         }
-        if (_authorDb.Authors.Any(a => a.DisplayName == newName)){
+        if (_authorDb.Authors.Any(a => a.DisplayName == newName) || _authorDb.Authors.Any(a => a.Name == newName)){
             throw new ArgumentException($"{"name"} is already used!");
         }
         author.DisplayName = newName;
@@ -229,15 +229,13 @@ public class AuthorRepository : IAuthorRepository
         var user = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
         if (user == null)
         {
-            Console.WriteLine($"User with Id {name} not found.");
-            return;
+            throw new ArgumentException($"User with Id {name} not found.");
         }
 
         // Check file size (10MB limit)
         if (file.Length > 10 * 1024 * 1024)
         {
-            Console.WriteLine("File size exceeds the limit of 10MB.");
-            return;
+            throw new ArgumentException("File size exceeds the limit of 10MB.");
         }
         
         // Check file type (jpeg, png, gif)
@@ -246,8 +244,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (!allowedExtensions.Contains(fileExtension))
         {
-            Console.WriteLine("Invalid file type. Accepted file types: jpeg, png, gif.");
-            return;
+            throw new ArgumentException("Invalid file type. Accepted file types: jpeg, png, gif.");
         }
 
         // Generate unique name for the file
@@ -360,4 +357,16 @@ public class AuthorRepository : IAuthorRepository
         }
         return author.DisplayName;
     }
+    public async Task<bool> EnsureAuthorExists(string name)
+    {
+        var author = await _authorDb.Authors.FirstOrDefaultAsync(a => a.Name == name);
+        if (author == null)
+        {
+            await CreateAuthor(name, name, name);
+        }
+        return true;
+    }
+
+
+
 }

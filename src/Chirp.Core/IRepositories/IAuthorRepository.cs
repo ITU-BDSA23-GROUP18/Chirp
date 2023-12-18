@@ -76,4 +76,5 @@ public interface IAuthorRepository
     public Task<bool> IsDarkMode(string name);
     public Task SetDarkMode(string name, bool isDarkMode);
     public Task<string> GetDisplayName(string name);
+    public Task<bool> EnsureAuthorExists(string name);
 }

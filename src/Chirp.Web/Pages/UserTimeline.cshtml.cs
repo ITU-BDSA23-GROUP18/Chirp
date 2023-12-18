@@ -111,9 +111,13 @@ public class UserTimelineModel : PageModel
             await _authorRepository.UploadProfilePicture(User.Identity?.Name!, profilePicture);
             return RedirectToPage();
         }
-        catch 
+        catch (ArgumentException e)
         {
-            return RedirectToPage();
+            return RedirectToPage("usertimeline", new { error = e.Message ?? "Invalid File" });
+        }
+        catch
+        {
+            return RedirectToPage("usertimeline", new { error = "Error Uploading Profile Picture" });
         }
     }
     

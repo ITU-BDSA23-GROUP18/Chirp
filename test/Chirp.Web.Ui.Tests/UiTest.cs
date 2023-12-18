@@ -163,6 +163,154 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
     }
+    [Fact]
+    public async Task TurnOnDarkModeAndTestEveryPage()
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.List).Filter(new() { HasText = "Dark mode Enable dark mode" }).Locator("span").ClickAsync();
+        //we are just looking to see if the body is there if any errors occur it will be caught by the test and it will fail
+        await Page.Locator("body").ClickAsync();
+        //see if a user timeline is still working
+        await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "Helge");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "FollowingTimeline");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "?page=2");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "TestUser");
+
+        await Page.Locator("body").ClickAsync();
+    }
+    [Fact]
+    public async Task Test1dot5TextSize()
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        await Page.Locator("#scale").SelectOptionAsync(new[] { "1.5" });
+
+         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "Helge");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "FollowingTimeline");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "?page=2");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "TestUser");
+
+        await Page.Locator("body").ClickAsync();
+    }
+    [Fact]
+    public async Task Test2TextSize()
+    {
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+
+        await Page.GetByRole(AriaRole.Img, new() { Name = "profile picture" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
+
+        await Page.Locator("#scale").SelectOptionAsync(new[] { "2" });
+
+         await Page.GotoAsync(_serverAddress + "Jacqualine Gilcoine");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "Helge");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "FollowingTimeline");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "?page=2");
+
+        await Page.Locator("body").ClickAsync();
+
+        await Page.GotoAsync(_serverAddress + "TestUser");
+
+        await Page.Locator("body").ClickAsync();
+    }
+
+    [Theory]
+    [InlineData("Good")]
+    [InlineData("Ish")]
+    [InlineData("Bad")]
+    public async Task TestReactionsOnOff(string reaction){
+        var Page = await _context!.NewPageAsync();
+        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        await Page.GotoAsync(_serverAddress);
+        switch (reaction){
+            case "Good":
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 1" }).ClickAsync();
+                break;
+            case "Ish":
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 1" }).ClickAsync();
+                break;
+            case "Bad":
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+                await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 1" }).ClickAsync();
+                break;
+        }
+    }
+    [Fact]
+    public async Task TestReactionNoMoreThanOneReactionPerCheep(){
+        var Page = await _context!.NewPageAsync();
+
+        await Page.GotoAsync(_serverAddress);
+        //the idea behind this test is that we can only react once per cheep,
+        //therefore it should only be possible to see the change in the button if we click it last.
+        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 1" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 1" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
+        await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 1" }).ClickAsync();
+    }    
     [Theory]
     [InlineData("aaa")]
     [InlineData("bbb")]
@@ -200,10 +348,11 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         changeNameButton = Page.Locator("#changeusername");
         await changeNameButton.ClickAsync();
     }
+    
     [Theory]
     [InlineData("TestUser1@Test.Test")]
     [InlineData("TestUser2@Test.Test")]
-    [InlineData("TestUser3@Test.Test")]
+    [InlineData("TestUser3@Test.Test")] 
     public async Task TestChangeEmail(string newEmail)
     {
         var Page = await _context!.NewPageAsync();
@@ -271,7 +420,6 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
 
         return context;
     }
-    
     /// <summary>
     /// Disposes the browser and context after each test
     /// </summary>
