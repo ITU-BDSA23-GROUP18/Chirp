@@ -11,6 +11,7 @@ public class PublicModel : PageModel
     private static List<CheepDTO> Cheeps { get; set; } = new();
     public static PaginationModel Pagination { get; private set; } = new(1, 1);
     public string? ProfilePictureUrl { get; private set; }
+    public string displayName { get; private set; } 
 
     public bool IsDarkMode { get; private set; }
     
@@ -37,7 +38,10 @@ public class PublicModel : PageModel
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
             FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
+            displayName = await _authorRepository.GetDisplayName(User.Identity.Name!);
+            
         }
+
 
         Cheeps = _cheepRepository.GetCheep(page).Result.ToList();
         

@@ -75,4 +75,5 @@ public interface IAuthorRepository
     public Task SetFontSizeScale(string name, float fontSizeScale);
     public Task<bool> IsDarkMode(string name);
     public Task SetDarkMode(string name, bool isDarkMode);
+    public Task<string> GetDisplayName(string name);
 }
