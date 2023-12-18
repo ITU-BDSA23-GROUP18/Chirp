@@ -165,9 +165,9 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByRole(AriaRole.Button, new() { Name = "Unfollow" }).ClickAsync();
     }
     [Theory]
-    [InlineData("TestUser1")]
-    [InlineData("TestUser2")]
-    [InlineData("TestUser3")]
+    [InlineData("aaa")]
+    [InlineData("bbb")]
+    [InlineData("ccc")]
     public async Task TestChangeUsername(string newName)
     {
         var Page = await _context!.NewPageAsync();
@@ -179,11 +179,11 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
 
         var usernameField = Page.Locator("#username");
-        var changeNameButton = Page.Locator("#changename");
+        
 
         await usernameField.ClickAsync();
         await usernameField.FillAsync(newName);
-
+        var changeNameButton = Page.Locator("#changeusername");
         await changeNameButton.ClickAsync();
         //go to home page and cheep
         await Page.GetByRole(AriaRole.Link, new() { Name = "Home" }).ClickAsync();
@@ -195,12 +195,12 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
 
         usernameField = Page.Locator("#username");
-        changeNameButton = Page.Locator("#changename");
+        
 
         //change the name back to TestUser
         await usernameField.ClickAsync();
         await usernameField.FillAsync("TestUser");
-
+        changeNameButton = Page.Locator("#changeusername");
         await changeNameButton.ClickAsync();
     }
     [Theory]
@@ -218,17 +218,16 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GetByRole(AriaRole.Link, new() { Name = " Settings" }).ClickAsync();
 
         var emailField = Page.Locator("#email");
-        var changeEmailButton = Page.Locator("#changeemail");
-
+        
         await emailField.ClickAsync();
         await emailField.FillAsync(newEmail);
-
+        var changeEmailButton = Page.Locator("#changeemail");
         await changeEmailButton.ClickAsync();
 
         //change the email back to TestUser@Test.Test
         await emailField.ClickAsync();
         await emailField.FillAsync("TestUser@Test.Test");
-
+        changeEmailButton = Page.Locator("#changeemail");
         await changeEmailButton.ClickAsync();
     }
     /// <summary>
