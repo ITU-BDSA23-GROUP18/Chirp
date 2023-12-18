@@ -271,8 +271,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
     [InlineData("Bad")]
     public async Task TestReactionsOnOff(string reaction){
         var Page = await _context!.NewPageAsync();
-        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
-        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Jacqualine Gilcoine" }).Nth(0);
         await Page.GotoAsync(_serverAddress);
         switch (reaction){
             case "Good":
@@ -296,8 +295,7 @@ public class UiTest : PageTest, IClassFixture<CustomWebApplicationFactory>, IDis
         await Page.GotoAsync(_serverAddress);
         //the idea behind this test is that we can only react once per cheep,
         //therefore it should only be possible to see the change in the button if we click it last.
-        var filterString = "Jacqualine Gilcoine — 13:17:39 01/08/2023 Starbuck now is what we hear the worst";
-        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = filterString });
+        var cheep = Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = "Jacqualine Gilcoine" }).Nth(0);
         await cheep.GetByRole(AriaRole.Button, new() { Name = "❤️ : 0" }).ClickAsync();
         await cheep.GetByRole(AriaRole.Button, new() { Name = "🕶️ : 0" }).ClickAsync();
         await cheep.GetByRole(AriaRole.Button, new() { Name = "💩 : 0" }).ClickAsync();
