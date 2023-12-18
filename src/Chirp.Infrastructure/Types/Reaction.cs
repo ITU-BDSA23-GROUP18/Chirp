@@ -6,6 +6,7 @@ public class Reaction
     public required Guid CheepId { get; set; }
     public required Cheep Cheep { get; set; }
     public required string AuthorName { get; set; }
+
     // public required Author Author { get; set; }
     public ReactionType ReactionType { get; set; }
 }

@@ -17,7 +17,7 @@ namespace Chirp.Infrastructure.Migrations
                 {
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,7 @@ namespace Chirp.Infrastructure.Migrations
                 columns: table => new
                 {
                     FollowersAuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FollowingAuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FollowingAuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -54,7 +54,7 @@ namespace Chirp.Infrastructure.Migrations
                     CheepId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -73,7 +73,7 @@ namespace Chirp.Infrastructure.Migrations
                 {
                     ReactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CheepId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReactionType = table.Column<int>(type: "int", nullable: false)
+                    ReactionType = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {

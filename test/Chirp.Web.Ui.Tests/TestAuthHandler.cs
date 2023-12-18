@@ -12,7 +12,8 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
     public TestAuthHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
-        UrlEncoder encoder) : base(options, logger, encoder)
+        UrlEncoder encoder)
+            : base(options, logger, encoder)
     {
     }
 
@@ -21,7 +22,7 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, "TestUser"),
-            new Claim(ClaimTypes.NameIdentifier, "TestUser")
+            new Claim(ClaimTypes.NameIdentifier, "TestUser"),
         };
 
         var identity = new ClaimsIdentity(claims, AuthenticationScheme);

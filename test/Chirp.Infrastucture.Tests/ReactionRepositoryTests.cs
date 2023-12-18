@@ -1,17 +1,18 @@
 ﻿using Microsoft.Data.Sqlite;
 
 namespace Chirp.Infrastructure.Tests;
-// Using same repository in 2 test files run in parallel, even if it is a in-memory database, 
+
+// Using same repository in 2 test files run in parallel, even if it is a in-memory database,
 // can cause concurrency issues, sometimes. So, we need to run the tests sequentially.
 [Collection("Cheep Repository Collection")]
-public class ReactionRepository_Tests
+public class ReactionRepositoryTests
 {
     private readonly ChirpContext _context;
     private readonly ReactionRepository _repository;
 
     private readonly CheepRepository _cheep_repository;
 
-    public ReactionRepository_Tests()
+    public ReactionRepositoryTests()
     {
         var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
@@ -20,6 +21,7 @@ public class ReactionRepository_Tests
         _repository = new ReactionRepository(_context);
         _cheep_repository = new CheepRepository(_context);
     }
+
     [Theory]
     [InlineData("Good")]
     [InlineData("Ish")]
@@ -35,7 +37,7 @@ public class ReactionRepository_Tests
         var reaction = reactions.FirstOrDefault();
         Assert.Equal(1, reactions.Count());
         Assert.NotNull(reaction);
-        Assert.Equal(cheep.CheepId.ToString() , reaction.CheepId.ToString());
+        Assert.Equal(cheep.CheepId.ToString(), reaction.CheepId.ToString());
         Assert.Equal(cheep.Author.Name, reaction.AuthorName);
         switch (reactionString)
         {
@@ -51,9 +53,11 @@ public class ReactionRepository_Tests
             default:
                 break;
         }
-        //remove the reaction
+
+        // Remove the reaction
         _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString());
     }
+
     [Fact]
     public async Task TestGetReaction()
     {
@@ -61,7 +65,8 @@ public class ReactionRepository_Tests
         foreach (var cheep in cheepList)
         {
             var reactionList = cheep.Reactions;
-            //should not be null but can be empty if no reactions are present
+
+            // Should not be null but can be empty if no reactions are present
             Assert.NotNull(reactionList);
         }
     }
@@ -70,7 +75,8 @@ public class ReactionRepository_Tests
     [InlineData("Good")]
     [InlineData("Ish")]
     [InlineData("Bad")]
-    public void TestRemoveReaction(string reactionString){
+    public void TestRemoveReaction(string reactionString)
+    {
         var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine").OrderByDescending(c => c.TimeStamp);
         var cheep = cheepList.FirstOrDefault();
         if (cheep == null) throw new ArgumentException($"No cheep found");
@@ -78,9 +84,11 @@ public class ReactionRepository_Tests
         var reactions = _context.Reactions.Where(r => r.CheepId == cheep.CheepId);
         var reaction = reactions.FirstOrDefault();
         Assert.Equal(1, reactions.Count());
-        //remove the reaction
+
+        // Remove the reaction
         _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString());
-        //check if the reaction is removed
+
+        // Check if the reaction is removed
         var reactionList = _context.Reactions.Where(r => r.CheepId == cheep.CheepId).ToList();
         Assert.DoesNotContain(reaction, reactionList);
     }

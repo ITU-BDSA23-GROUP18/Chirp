@@ -7,5 +7,5 @@ public class Cheep
     public required Author Author { get; set; }
     public required string Message { get; set; }
     public DateTime TimeStamp { get; set; } = DateTime.Now;
-    public List<Reaction> Reactions { get; set; } = new ();
+    public List<Reaction> Reactions { get; set; } = new();
 }
