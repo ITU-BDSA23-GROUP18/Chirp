@@ -55,11 +55,11 @@ public class UserTimelineModel : PageModel
         {
             return Page();
         }
-        
-        var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name);
+
+        var myFollowing = await _authorRepository.GetFollowing(User.Identity!.Name);
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
-        
+
         if (User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
