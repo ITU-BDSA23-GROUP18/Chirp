@@ -14,26 +14,31 @@ numbersections: true
 
 ## Domain model
 
-![Class diagram showing the types used in the application and stored in the database.](https://hackmd.io/_uploads/ryOdgqTIT.png)
+![Class diagram showing the types used in the application and stored in the database.](images/DomainModel.png)
+<br>
 
 ## Architecture — In the small
 
-![Diagram showing our onion architecture.](https://hackmd.io/_uploads/HJ4TrT6LT.png)
+![Diagram showing our onion architecture.](images/architecture.png)
+<br>
 
 ## Architecture of deployed application
 
 Our application is hosted on Azures App Service where the component Chirp.Web handles the GUI and Chirp.Infrastructure handles both the repositories and database model.
 A user connects their machine to Chirp.Web through the Azure App Service. Reading or writing data will make Chirp.Web read from the repositories in Chirp.Infrastructure, that will then call the Azure SQL Server database. To log in, Chirp.Web calls GitHub Authentication.
 
-![Component diagram showing the architecture of the deployed Chirp application.](https://hackmd.io/_uploads/HJeeXcTUp.png)
+![Component diagram showing the architecture of the deployed Chirp application.](images/Architecture_deployed.png)
+<br>
 
 ## User activities
 
-![Diagram showing all possible user activities from any given action.](https://hackmd.io/_uploads/HyrLkj6Lp.png)
+![Diagram showing all possible user activities from any given action.](images/userActivity.png)
+<br>
 
 ## Sequence of functionality/calls through _Chirp!_
 
-![UML Sequence Diagram of calls through Chirp](https://hackmd.io/_uploads/HJmGbqaIp.png)
+![UML Sequence Diagram of calls through Chirp](images/sequence.png)
+<br>
 
 # Process
 
@@ -41,21 +46,22 @@ A user connects their machine to Chirp.Web through the Azure App Service. Readin
 
 We use 3 GitHub workflows to manage automatic building, testing, releasing, and deployment of our application.
 
-#### Test workflow
+### Test workflow
 
 The first workflow is our test workflow, which runs on every push to any branch, and on changes to a pull-request. The workflow runs through all of our tests and ensures that they always pass.
 
-#### Release workflow
+### Release workflow
 
 Our second workflow is the release workflow which runs on every closed pull request to the main branch and firstly checks that the pull request was merged and not just closed. The workflow then runs our tests in the same way as our test workflow. It then tries to increment the version tag for the release by getting the latest tag from GitHub and using labels on the pull request to determine the importance of the pull request.
 
 After setting the correct tag it goes through each platform we want to release to, where it publishes and creates a zip file with all the correct files. After creating zip files for all platforms, it releases them all to GitHub in a new release with the previously set tag.
 
-#### Deployment workflow
+### Deployment workflow
 
 Lastly our deployment workflow is very similar to the auto-generated deployment workflow from Azure. It runs when there is a push to the main branch, and similarly to the other workflows, it sets up and tests our code. It then publishes and uploads the program artifacts such that the next job can download them and push them to our Azure web app.
 
-![UML Activity diagram of GitHub Action Workflows.](https://hackmd.io/_uploads/B1XGKT6IT.png)
+![UML Activity diagram of GitHub Action Workflows.](images/process.png)
+<br>
 
 ## Teamwork
 
@@ -63,7 +69,8 @@ Lastly our deployment workflow is very similar to the auto-generated deployment 
 
 All issues in the project backlog are solved/closed, which includes all the required features and additional features.
 
-![Project oard of our issues.](https://hackmd.io/_uploads/BJmexpaI6.png)
+![Project oard of our issues.](images/projectBoard.png)
+<br>
 
 #### Future Issue: optimize profile-picture handling
 
@@ -73,8 +80,8 @@ In this version of Chirp, Author profile pictures are stored as a reference stri
 
 The following flowchart illustrates how group 18 creates issues (green box), develops solutions (red box), and merges the solutions into the `main` branch (purple box). The flowchart also shows how different decisions/statements are made through the flow, such as "Is the task understood".
 
-![FlowChart From Issue To main.](https://hackmd.io/_uploads/rJTvtaT8a.jpg)
-
+![FlowChart From Issue To main.](images/FlowFromIssue2Main.jpg)
+<br>
 
 ## How to make _Chirp!_ work locally
 
