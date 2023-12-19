@@ -49,17 +49,17 @@ public class UserTimelineModel : PageModel
 
         var followers = await _authorRepository.GetFollowers(author);
         FollowersCount = followers.Count();
+        AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
 
         if (User.Identity == null || User.Identity.Name == null)
         {
             return Page();
         }
 
-        var myFollowing = await _authorRepository.GetFollowing(User.Identity.Name);
+        var myFollowing = await _authorRepository.GetFollowing(User.Identity!.Name);
         var pageUser = await _authorRepository.GetAuthorByName(author);
         IsFollowingAuthor = myFollowing.Contains(pageUser.FirstOrDefault());
 
-        AuthorProfilePictureUrl = await _authorRepository.GetProfilePicture(author);
         if (User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);

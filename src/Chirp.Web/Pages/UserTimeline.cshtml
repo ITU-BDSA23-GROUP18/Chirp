@@ -83,9 +83,12 @@
     <partial name="Pagination" model="@Model.GetPagination()"/>
 </div>
 
-<script>
+@if (user == User.Identity.Name)
+{
+    <script>
     document.getElementById("fileInput").addEventListener("change", function () {
         document.getElementById("ChangeProfilePicture_btn").click();
     });
 
 </script>
+}

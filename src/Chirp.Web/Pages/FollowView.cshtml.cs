@@ -25,15 +25,15 @@ public class FollowViewModel : PageModel
 
     public async Task<ActionResult> OnGet([FromQuery] int page, string author, string followType)
     {
-        // If a page query is not given in the url set the page=1
-        page = page <= 1 ? 1 : page;
-
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
             IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
             FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
         }
+
+        // If a page query is not given in the url set the page=1
+        page = page <= 1 ? 1 : page;
 
         var myFollowing = await _authorRepository.GetFollowing(author);
         var followingDtos = myFollowing.ToList();

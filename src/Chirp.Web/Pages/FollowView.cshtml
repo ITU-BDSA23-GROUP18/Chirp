@@ -10,8 +10,7 @@
 }
 
 <div>
-    @if (User.Identity?.IsAuthenticated ?? false)
-    {
+    @{
         if (followType == "following")
         {
             if (Model.FollowingList.Any())
@@ -64,7 +63,7 @@
                                 else
                                 {
                                     <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
-                                    
+
                                 }
                                 <strong>
                                     @if (string.IsNullOrEmpty(user.DisplayName))
@@ -88,9 +87,9 @@
                 <em>No followers here :(</em>
             }
         }
-        <br />
+        <br/>
         {
-            await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
+        await Html.RenderPartialAsync("Shared/Pagination", Model.Pagination);
         }
     }
 </div>

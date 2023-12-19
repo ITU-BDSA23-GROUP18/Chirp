@@ -324,7 +324,7 @@ public class AuthorRepository : IAuthorRepository
 
         if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "")
         {
-            profilePictureUrl = "/images/default_user_pic.png";
+            profilePictureUrl = "../../images/default_user_pic.png";
         }
 
         return profilePictureUrl;
