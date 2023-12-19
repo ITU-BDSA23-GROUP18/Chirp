@@ -22,7 +22,7 @@
                         <li>
                             <p>
                                  @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
-                                     <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                                     <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar"  onerror="this.src='/images/default_user_pic.png';">
                                  }
                                  else
                                  {
@@ -59,7 +59,7 @@
                         <li>
                             <p>
                                 @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
-                                    <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                                    <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar"  onerror="this.src='/images/default_user_pic.png';">
                                 }
                                 else
                                 {

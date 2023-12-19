@@ -1,6 +1,5 @@
 namespace Chirp.Infrastructure.Tests;
 
-using Xunit;
 using Microsoft.Data.Sqlite;
 
 public class AuthorRepositoryTests
