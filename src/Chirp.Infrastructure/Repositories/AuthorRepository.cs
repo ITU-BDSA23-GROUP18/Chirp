@@ -235,7 +235,11 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException($"Author {name} does not exist");
         }
 
-        Console.WriteLine("Deleting author: " + author.Name);
+        foreach (var follower in await GetFollowers(author.Name))
+        {
+            await UnfollowAuthor(follower.Name, author.Name);
+        }
+
         _authorDb.Authors.Remove(author);
         await _authorDb.SaveChangesAsync();
         return true;
