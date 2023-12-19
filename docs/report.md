@@ -70,16 +70,16 @@ dotnet watch --project src/Chirp.Web
 ## How to run the test suite locally
 
 ### Our tests
-We are testing our systems functionalities by the use of; **End to end tests, Intergration tests, and Unit tests** for the different projects in our onion architecture.
+We are testing our systems functionalities by the use of; **End-to-end tests, Integration tests, and Unit tests** for the different projects in our onion architecture.
 
 #### Chirp.Infrastructure.Tests
-The tests for Chirp.Infrastructure, test all the different repositories. This is done using a combination of unit and intergration tests.
+The tests for Chirp.Infrastructure, test all the different repositories. This is done using a combination of unit and integration tests.
 
 #### Chirp.Web.Tests/Chirp.Web.Ui.Tests
-We use Playwright for our UI, which functions as our end to end tests. The tests go through our different features acting as a user would, assessing if the features work as intended. We also have some unit tests, testing the most basic things.
+We use Playwright for our UI, which functions as our end-to-end tests. The tests go through our different features acting as a user would, assessing if the features work as intended. We also have some unit tests, testing the most basic things.
 
 #### Chirp.Core.Tests
-For the Chirp.Core, we have some simple tests for the DTO's ensuring that their parameters can't be null.
+For the Chirp.Core, we have some simple tests for the DTO's, ensuring that their parameters can't be null.
 
 ### How to run the test
 
@@ -94,7 +94,7 @@ pwsh bin/Debug/netX/playwright.ps1 install
 
 #### macOS (Apple)
 
-*We have not found a way to successfully run the playwright test on macOS (Apple). If you want to see the result of the tests, look on GitHub.*
+*We have not found a way to successfully run the playwright test on macOS (Apple). If you want to see the results of the tests, look on GitHub.*
 
 ### Running the tests
 
@@ -119,7 +119,7 @@ CoPilot and ChatGPT were both used for:
 - Code generation and auto-completion.
 - Debugging and understanding errors.
 
-For writing code, both LLMs were only helpful to a minor degree, for increasing the development speed and code readability when knowing what to prompt or via CoPilot auto-completion. However, in many cases it was faster to read the documentation and manually implement the code, especially when not knowing exactly what to prompt. Mainly, it was ChatGPT that had such cases as it only relies on the prompt and has no code base knowledge. CoPilots auto-completion also suggested old and incorrect code a few times, once again making it faster to manually write the code.
+For writing code, both LLMs were only helpful to a minor degree in increasing the development speed and code readability when knowing what to prompt or via CoPilot auto-completion. However, in many cases, it was faster to read the documentation and manually implement the code, especially when not knowing exactly what to prompt. Mainly, it was ChatGPT that had such cases as it only relies on the prompt and has no code base knowledge. CoPilots auto-completion also suggested old and incorrect code a few times, making it faster to manually write the function.
 
 Both LLMs were a bit more helpful when debugging, as they in many cases were able to quickly give suggestions to fix the use and an explanation of the error without having to read through many long error stacks containing confusing commands and methods.
 
