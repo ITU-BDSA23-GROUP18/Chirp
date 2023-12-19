@@ -212,7 +212,7 @@ public class AuthorRepository : IAuthorRepository
             throw new ArgumentException();
         }
 
-        if (_authorDb.Authors.Any(a => a.DisplayName == newName) || _authorDb.Authors.Any(a => a.Name == newName))
+        if (_authorDb.Authors.Any(a => a.DisplayName == newName))
         {
             throw new ArgumentException($"{"name"} is already used!");
         }
