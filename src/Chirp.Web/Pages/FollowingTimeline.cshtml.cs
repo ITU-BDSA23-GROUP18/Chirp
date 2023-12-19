@@ -35,7 +35,7 @@ public class FollowingTimelineModel : PageModel
     {
         // If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
-        
+
         Cheeps = new List<CheepDTO>();
         var myFollowing = await _authorRepository.GetFollowing(User.Identity?.Name!);
         foreach (var author in myFollowing)
