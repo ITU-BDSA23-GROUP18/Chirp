@@ -20,15 +20,14 @@
                     {
                         <li>
                             <p>
-                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
-                                {
-                                    <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
-                                }
-                                else
-                                {
-                                    <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
-
-                                }
+                                 @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
+                                     <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar"  onerror="this.src='/images/default_user_pic.png';">
+                                 }
+                                 else
+                                 {
+                                     <img src="~/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
+                                     
+                                 }
                                 <strong>
                                     @if (string.IsNullOrEmpty(user.DisplayName))
                                     {
@@ -58,9 +57,8 @@
                     {
                         <li>
                             <p>
-                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
-                                {
-                                    <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl)){
+                                    <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar"  onerror="this.src='/images/default_user_pic.png';">
                                 }
                                 else
                                 {

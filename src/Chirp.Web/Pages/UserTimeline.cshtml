@@ -18,7 +18,7 @@
                         enctype="multipart/form-data">
                         <input type="file" id="fileInput" style="display:none" name="profilePicture" />
                         <label for="fileInput">
-                            <img alt="profilePicture" class="profilePicture_img" src="@Model.ProfilePictureUrl">
+                            <img alt="profilePicture" class="profilePicture_img" src="@Model.ProfilePictureUrl"  onerror="this.src='/images/default_user_pic.png';">
                             <div class="change-text">Change</div>
                             <button id="ChangeProfilePicture_btn" style="display: none"></button>
                         </label>
@@ -29,7 +29,7 @@
             {
                 <div class="profilePicture-container-others">
                     <img style="cursor: default" class="profilePicture_img" src="@Model.AuthorProfilePictureUrl"
-                        alt="profile picture">
+                        alt="profile picture"  onerror="this.src='/images/default_user_pic.png';">
                 </div>
             }
         </li>

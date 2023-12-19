@@ -5,12 +5,12 @@
 }
 
 <p>
-    @if (!string.IsNullOrEmpty(cheep.ProfilePictureUrl) && "wwroot/images".Contains(cheep.ProfilePictureUrl)){
-        <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
+    @if (!string.IsNullOrEmpty(cheep.ProfilePictureUrl){
+        <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar" onerror="this.src='/images/default_user_pic.png';">
     }
     else
     {
-        <img src="../../images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
+        <img src="/images/default_user_pic.png" width="30" alt="Avatar" class="avatar">
     }
 
     <strong>
