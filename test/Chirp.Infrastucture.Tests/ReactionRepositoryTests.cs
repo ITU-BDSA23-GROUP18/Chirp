@@ -10,7 +10,7 @@ public class ReactionRepositoryTests
     private readonly ChirpContext _context;
     private readonly ReactionRepository _repository;
 
-    private readonly CheepRepository _cheep_repository;
+    private readonly CheepRepository _cheepRepository;
 
     public ReactionRepositoryTests()
     {
@@ -19,7 +19,7 @@ public class ReactionRepositoryTests
         var builder = new DbContextOptionsBuilder<ChirpContext>().UseSqlite(connection);
         _context = new ChirpContext(builder.Options);
         _repository = new ReactionRepository(_context);
-        _cheep_repository = new CheepRepository(_context);
+        _cheepRepository = new CheepRepository(_context);
     }
 
     [Theory]
@@ -32,7 +32,7 @@ public class ReactionRepositoryTests
         var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine").OrderByDescending(c => c.TimeStamp);
         var cheep = cheepList.FirstOrDefault();
         if (cheep == null) throw new ArgumentException($"No cheep found");
-        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), reactionString);
+        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name, reactionString);
         var reactions = _context.Reactions.Where(r => r.CheepId == cheep.CheepId);
         var reaction = reactions.FirstOrDefault();
         Assert.Equal(1, reactions.Count());
@@ -55,13 +55,13 @@ public class ReactionRepositoryTests
         }
 
         // Remove the reaction
-        _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString());
+        _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name);
     }
 
     [Fact]
     public async Task TestGetReaction()
     {
-        var cheepList = await _cheep_repository.GetCheep();
+        var cheepList = await _cheepRepository.GetCheep();
         foreach (var cheep in cheepList)
         {
             var reactionList = cheep.Reactions;
@@ -80,13 +80,13 @@ public class ReactionRepositoryTests
         var cheepList = _context.Cheeps.Where(c => c.Author.Name == "Jacqualine Gilcoine").OrderByDescending(c => c.TimeStamp);
         var cheep = cheepList.FirstOrDefault();
         if (cheep == null) throw new ArgumentException($"No cheep found");
-        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString(), reactionString);
+        _repository.CreateReaction(cheep.CheepId.ToString(), cheep.Author.Name, reactionString);
         var reactions = _context.Reactions.Where(r => r.CheepId == cheep.CheepId);
         var reaction = reactions.FirstOrDefault();
         Assert.Equal(1, reactions.Count());
 
         // Remove the reaction
-        _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name.ToString());
+        _repository.RemoveReaction(cheep.CheepId.ToString(), cheep.Author.Name);
 
         // Check if the reaction is removed
         var reactionList = _context.Reactions.Where(r => r.CheepId == cheep.CheepId).ToList();
