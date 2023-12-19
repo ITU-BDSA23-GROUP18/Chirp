@@ -23,7 +23,7 @@ numbersections: true
 
 ## Architecture of deployed application
 
-Our application is hosted Azures App Service where the component Chirp.Web handles the GUI and Chirp.Infrastructure handles the repositories and database model.
+Our application is hosted by Azures App Service where the component Chirp.Web handles the GUI and Chirp.Infrastructure handles the repositories and database model.
 A user connects their machine to Chirp.Web through the Azure App Service. Reading or writing data will make Chirp.Web read from the repositories in Chirp.Infrastructure, that will call the Azure SQL Server database. When logging in, Chirp.Web calls GitHub Authentication.
 
 ![Component diagram showing the architecture of the deployed Chirp application.](https://hackmd.io/_uploads/HJeeXcTUp.png)
@@ -41,16 +41,17 @@ A user connects their machine to Chirp.Web through the Azure App Service. Readin
 
 ## Teamwork
 
-### Project board
+### Project Board
 All issues in the project backlog are solved/closed, which includes all the required features and additional features.
 ![ProjectBoard](https://hackmd.io/_uploads/BJmexpaI6.png)
 
 #### Optimize profile-picture handling
-In this version of Chirp, Author profile pictures are stored as a reference string to an image stored locally in the `wwwroot/images` folder. This means that you have to push your image to GitHub each time you change profile picture. We have therefore discussed that if we had more unpaid space in the database we would store the whole image under each Author, hence have a more scalable and secure solution.
+In this version of Chirp, Author profile pictures are stored as a reference string to an image stored locally in the `wwwroot/images` folder. This means you must push your image to GitHub each time you change your profile picture. Therefore, We have discussed that if we had more unpaid space in the database, we would store the whole image under each Author, hence having a more scalable and secure solution.
 
 ### From issue to main
 The following flowchart illustrates how group 18 creates issues (green box), develops solutions (red box), and merges the solutions into the `main` branch (purple box). The flowchart also shows how different decisions/statements are made through the flow, such as "Is the task understood".
-![FromIssueToMain](https://hackmd.io/_uploads/BJKn42TUT.jpg)
+
+![FromIssue2Main](https://hackmd.io/_uploads/rJTvtaT8a.jpg)
 
 ## How to make _Chirp!_ work locally
 OBS! .Net 8 is required for running Chirp locally
