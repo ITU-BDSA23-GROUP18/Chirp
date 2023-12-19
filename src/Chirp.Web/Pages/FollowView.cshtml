@@ -20,7 +20,7 @@
                     {
                         <li>
                             <p>
-                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl) && "wwroot/images".Contains(user.ProfilePictureUrl))
+                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
                                 {
                                     <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
                                 }
@@ -58,7 +58,7 @@
                     {
                         <li>
                             <p>
-                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl) && "wwroot/images".Contains(user.ProfilePictureUrl))
+                                @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
                                 {
                                     <img src="@user.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
                                 }

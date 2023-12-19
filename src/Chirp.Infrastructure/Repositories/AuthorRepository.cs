@@ -318,7 +318,7 @@ public class AuthorRepository : IAuthorRepository
 
         var profilePictureUrl = author.ProfilePictureUrl;
 
-        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "" || !File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", profilePictureUrl.TrimStart('/'))))
+        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "")
         {
             profilePictureUrl = "../../images/default_user_pic.png";
         }

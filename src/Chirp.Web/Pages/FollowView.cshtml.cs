@@ -25,6 +25,13 @@ public class FollowViewModel : PageModel
 
     public async Task<ActionResult> OnGet([FromQuery] int page, string author, string followType)
     {
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
+            IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
+            FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
+        }
+        
         // If a page query is not given in the url set the page=1
         page = page <= 1 ? 1 : page;
         
@@ -46,13 +53,6 @@ public class FollowViewModel : PageModel
         var nAuthors = followersDtos.Count;
         Pagination = new PaginationModel(nAuthors, page);
         
-        if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            ProfilePictureUrl = await _authorRepository.GetProfilePicture(User.Identity.Name!);
-            IsDarkMode = await _authorRepository.IsDarkMode(User.Identity.Name!);
-            FontSizeScale = await _authorRepository.GetFontSizeScale(User.Identity.Name!);
-        }
-
         return Page();
     }
 }
