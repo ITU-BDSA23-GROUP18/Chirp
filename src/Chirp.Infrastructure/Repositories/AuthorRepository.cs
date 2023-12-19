@@ -318,9 +318,9 @@ public class AuthorRepository : IAuthorRepository
 
         var profilePictureUrl = author.ProfilePictureUrl;
 
-        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "")
+        if (string.IsNullOrEmpty(profilePictureUrl) || profilePictureUrl == "" || !File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", profilePictureUrl.TrimStart('/'))))
         {
-            profilePictureUrl = "/images/default_user_pic.png";
+            profilePictureUrl = "../../images/default_user_pic.png";
         }
 
         return profilePictureUrl;

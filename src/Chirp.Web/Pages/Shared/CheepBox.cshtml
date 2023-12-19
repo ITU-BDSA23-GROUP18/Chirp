@@ -5,7 +5,7 @@
 }
 
 <p>
-    @if (cheep.ProfilePictureUrl != null && cheep.ProfilePictureUrl != ""){
+    @if (!string.IsNullOrEmpty(cheep.ProfilePictureUrl) && "wwroot/images".Contains(cheep.ProfilePictureUrl)){
         <img src="@cheep.ProfilePictureUrl" width="30" alt="Avatar" class="avatar">
     }
     else
