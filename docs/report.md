@@ -42,7 +42,7 @@ A user connects their machine to Chirp.Web through the Azure App Service. Readin
 ## Teamwork
 
 ### Project Board
-All issues in the project backlog are solved/closed, which includes all the required features and additional features.
+All issues in the project backlog are solved/closed, which includes the required features and additional features.
 ![ProjectBoard](https://hackmd.io/_uploads/BJmexpaI6.png)
 
 #### Optimize profile-picture handling
@@ -69,22 +69,36 @@ dotnet watch --project src/Chirp.Web
 
 ## How to run the test suite locally
 
-You have to install PowerShell in order for the playwright test to run
+### Our tests
+We are testing our systems functionalities by the use of; **End to end tests, Intergration tests, and Unit tests** for the different projects in our onion architecture.
 
-#### Installing
+#### Chirp.Infrastructure.Tests
+The tests for Chirp.Infrastructure, test all the different repositories. This is done using a combination of unit and intergration tests.
 
-##### Windows and Linux
+#### Chirp.Web.Tests/Chirp.Web.Ui.Tests
+We use Playwright for our UI, which functions as our end to end tests. The tests go through our different features acting as a user would, assessing if the features work as intended. We also have some unit tests, testing the most basic things.
+
+#### Chirp.Core.Tests
+For the Chirp.Core, we have some simple tests for the DTO's ensuring that their parameters can't be null.
+
+### How to run the test
+
+For the UI test to run, you must install Powershell if you are on a Linux system.
+
+#### Windows and Linux
 
 ```
 cd test/Chirp.Web.Ui.Tests
 pwsh bin/Debug/netX/playwright.ps1 install
 ```
 
-##### Mac
-We haven't found a way to run the playwright test on mac. If you want to look at the result of the tests, look on GitHub.
+#### macOS (Apple)
 
-#### Running
-go to the root of the project and run
+*We have not found a way to successfully run the playwright test on macOS (Apple). If you want to see the result of the tests, look on GitHub.*
+
+### Running the tests
+
+Go to the root of the project and run.
 
 ```
 dotnet test
