@@ -14,7 +14,7 @@
         <div class="dropdown">
             <button id="dropbtn" class="dropbtn" onclick="toogleFunction()"></button>
             <label for="dropbtn">
-                <img class="profilePicture_img_nav" src="@Model.ProfilePictureUrl" alt="profile picture">
+                <img class="profilePicture_img_nav" src="@Model.ProfilePictureUrl" alt="profile picture"  onerror="this.src='/images/default_user_pic.png';">
             </label>
             
             <div id="dropdown" class="dropdown-content">
